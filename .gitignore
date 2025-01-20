@@ -10,3 +10,4 @@ __pycache__
 *.log
 logs/
 docker-compose.override.yml
+db.sqlite3
