@@ -1,0 +1,20 @@
+{% extends 'videos/base.html' %}
+{% block content %}
+<main class="main-container">
+    {% for video in videos %}
+    <div class="video-card">
+        <img src="{{ video.thumbnail.url }}" alt="Video thumbnail">
+        <div class="info">
+            <a href="{{ video.get_absolute_url }}">
+                <h3>{{ video.title }}</h3>
+            </a>
+            <p>@{{ video.creator }}</p>
+            <div class="details">
+                <span>{{ video.views }} views</span>
+                <span>{{ video.created_at }}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</main>
+{% endblock content %}

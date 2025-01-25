@@ -1,0 +1,254 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #111;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+.header .burger-menu {
+    cursor: pointer;
+}
+
+.header .logo {
+    margin-left: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.header .search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+    display: flex;
+}
+
+.header .search-bar input {
+    flex-grow: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+}
+
+.header .actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header .actions i {
+    cursor: pointer;
+}
+
+.header .actions .avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #444;
+}
+
+.header a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #111;
+    overflow-y: auto;
+    transition: left 0.3s;
+    z-index: 999;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.side-menu ul li {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.side-menu ul li:hover {
+    background-color: #222;
+}
+
+.side-menu ul li i {
+    margin-right: 15px;
+}
+
+.side-menu ul li span {
+    font-size: 1rem;
+}
+
+.side-menu.open {
+    left: 0;
+}
+
+main {
+    margin-top: 70px;
+    padding: 20px;
+}
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #111;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container label {
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 5px;
+}
+
+.form-container p label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.form-container input[type="text"],
+.form-container textarea,
+.form-container select,
+.form-container input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-container textarea {
+    resize: none;
+    height: 150px;
+}
+
+.form-container button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+}
+
+.form-container input[type="file"]::-webkit-file-upload-button {
+    padding: 8px 12px;
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.main-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: #000;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.video-card {
+    background-color: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.video-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    max-height: 200px;
+}
+
+.video-card .info {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.video-card .info a {
+    text-decoration: none !important;
+}
+
+.video-card .info h3 {
+    font-size: 1rem;
+    margin: 0 0 5px;
+    color: #fff;
+}
+
+.video-card .info p {
+    font-size: 0.875rem;
+    margin: 0;
+    color: #ccc;
+}
+
+.video-card .info .details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    margin-top: 10px;
+    color: #aaa;
+}

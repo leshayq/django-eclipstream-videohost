@@ -1,0 +1,13 @@
+{% extends 'videos/base.html' %}
+{% block content %}
+<main>
+    <h1>{{ video.title }}</h1>
+    <video controls style="width: 100%; margin: 20px 0;" autoplay height="1080px" width="1920px">
+        <source src="{{ video.video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p>{{ video.description }}</p>
+    <p>Genre: {{ video.genre }}</p>
+    <p>Views: {{ video.views }}</p>
+</main>
+{% endblock content %}

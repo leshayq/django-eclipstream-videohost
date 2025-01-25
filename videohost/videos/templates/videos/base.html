@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Hosting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'videos/css/styles.css' %}?v=1">
+</head>
+<body>
+    <header class="header">
+        <div class="burger-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <a href="{% url 'videos:main-page' %}">
+            <div class="logo">Eclipse</div>
+        </a>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="actions">
+            <a href="{% url 'videos:upload-video'%}">
+                <i class="fas fa-video"></i>
+            </a>
+            <i class="fas fa-bell"></i>
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <nav class="side-menu" id="side-menu">
+        <ul>
+            <li><i class="fas fa-home"></i><span>Home</span></li>
+            <li><i class="fas fa-user-friends"></i><span>Subscriptions</span></li>
+            <li><i class="fas fa-history"></i><span>History</span></li>
+            <li><i class="fas fa-list"></i><span>Playlists</span></li>
+            <li><i class="fas fa-clock"></i><span>Watch Later</span></li>
+            <li><i class="fas fa-thumbs-up"></i><span>Liked Videos</span></li>
+        </ul>
+    </nav>
+
+    {% block content %}
+
+    {% endblock content%}
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('side-menu');
+            menu.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
