@@ -1,13 +1,61 @@
 {% extends 'videos/base.html' %}
+{% load static %}
 {% block content %}
 <main>
-    <h1>{{ video.title }}</h1>
-    <video controls style="width: 100%; margin: 20px 0;" autoplay height="1080px" width="1920px">
-        <source src="{{ video.video.url }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <p>{{ video.description }}</p>
-    <p>Genre: {{ video.genre }}</p>
-    <p>Views: {{ video.views }}</p>
+    <div class="video-page">
+        <div class="video-player">
+            <video controls>
+                <source src="{{ video.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="video-details">
+            <h1 class="video-title">{{ video.title }}</h1>
+            <div class="video-meta">
+                <div class="channel-info">
+                    <div class="avatar"></div>
+                    <div class="channel-text">
+                        <h3>@{{ video.creator }}</h3>
+                        <span class="upload-date">{{ video.created_at }}</span>
+                        <button class="subscribe-button">Подписаться</button>
+                    </div>
+                </div>
+                <div class="video-stats">
+                    <span class="views-count">{{ video.views }} просмотров</span>
+                    <button class="like-button">
+                        <i class="fas fa-thumbs-up"></i>
+                        Лайк
+                    </button>
+                </div>
+            </div>
+
+            <p class="video-description">
+                {{ video.description }}
+            </p>
+        </div>
+
+        <div class="comments-section">
+            <h2>Комментарии</h2>
+            <div class="comment">
+                <div class="avatar"></div>
+                <div class="comment-body">
+                    <h4>Имя пользователя</h4>
+                    <p>Это пример комментария к видео. Выглядит круто!</p>
+                </div>
+            </div>
+            <div class="comment">
+                <div class="avatar"></div>
+                <div class="comment-body">
+                    <h4>Второй пользователь</h4>
+                    <p>Я бы добавил больше информации в описание, но в целом всё супер!</p>
+                </div>
+            </div>
+            <form class="comment-form">
+                <textarea placeholder="Оставьте комментарий..." required></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
 </main>
 {% endblock content %}

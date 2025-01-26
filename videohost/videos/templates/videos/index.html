@@ -11,7 +11,7 @@
             <p>@{{ video.creator }}</p>
             <div class="details">
                 <span>{{ video.views }} views</span>
-                <span>{{ video.created_at }}</span>
+                <span>{{ video.created_at|timesince }} тому</span>
             </div>
         </div>
     </div>

@@ -16,4 +16,4 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["sh", "-c", "gunicorn videohost.wsgi:application --bind 0.0.0.0:8000"]
+ENTRYPOINT ["sh", "-c", "python3 manage.py collectstatic --noinput && gunicorn videohost.wsgi:application --bind 0.0.0.0:8000"]
