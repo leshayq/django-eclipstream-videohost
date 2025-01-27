@@ -23,10 +23,13 @@
                 </div>
                 <div class="video-stats">
                     <span class="views-count">{{ video.views }} просмотров</span>
-                    <button class="like-button">
-                        <i class="fas fa-thumbs-up"></i>
-                        Лайк
-                    </button>
+                    <form method="POST" action="{% url 'videos:likes-video' video.url %}" class="like-form">
+                        {% csrf_token %}
+                        <button class="like-button {% if user_has_liked %}liked{% else %}not-liked{% endif %}" type="submit" value="{{ video.url }}" name="video_url">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span class="like-count">{{ video.likes.count }}</span>
+                        </button>
+                    </form>
                 </div>
             </div>
 

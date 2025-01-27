@@ -79,11 +79,15 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='like_set')
 
     class Meta:
         verbose_name = 'Лайк'
         verbose_name_plural = 'Лайки'
+        unique_together = ('user', 'video')
+        
+    def __str__(self):
+        return f'Лайк от {self.user} на видео: {self.video.title}'
 
 class Subscriptions(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

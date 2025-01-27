@@ -93,7 +93,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = '/usr/src/videohost/media/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "videos/static"),
 ]
 
