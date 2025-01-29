@@ -24,11 +24,16 @@
                 <i class="fas fa-video"></i>
             </a>
             <i class="fas fa-bell"></i>
-            <div class="avatar"></div>
+            <a href="{% url 'users:channel-detail' request.user.username %}">
+                <i class="fas fa-user"></i>
+            </a>
         </div>
     </header>
 
     <nav class="side-menu" id="side-menu">
+        <div class="close-menu" onclick="toggleMenu()">
+            <i class="fas fa-times"></i>
+        </div>
         <ul>
             <li><i class="fas fa-home"></i><span>Home</span></li>
             <li><i class="fas fa-user-friends"></i><span>Subscriptions</span></li>
@@ -39,9 +44,10 @@
         </ul>
     </nav>
 
-    {% block content %}
-
-    {% endblock content%}
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
 
     <script>
         function toggleMenu() {

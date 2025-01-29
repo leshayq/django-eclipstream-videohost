@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Genre, Video, Like
+from .models import Genre, Video, Like, Subscriptions
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
@@ -18,3 +18,8 @@ class VideoAdmin(admin.ModelAdmin):
 class LikeAdmin(admin.ModelAdmin):
     list_display = ('user', 'video')
     readonly_fields = ('user', 'video')
+
+@admin.register(Subscriptions)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('follower', 'following', 'created_at',)
+    readonly_fields = ('follower', 'following', 'created_at',)

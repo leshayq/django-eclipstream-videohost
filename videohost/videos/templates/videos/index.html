@@ -8,7 +8,9 @@
             <a href="{{ video.get_absolute_url }}">
                 <h3>{{ video.title }}</h3>
             </a>
-            <p>@{{ video.creator }}</p>
+            <a href="{% url 'users:channel-detail' video.creator %}">
+                <p>@{{ video.creator }}</p>
+            </a>
             <div class="details">
                 <span>{{ video.views }} views</span>
                 <span>{{ video.created_at|timesince }} тому</span>

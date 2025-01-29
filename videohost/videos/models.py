@@ -128,7 +128,7 @@ class Saving(models.Model):
         if self.saving_playlist and self.saving_video:
             raise ValidationError('Вы не можете сохранить одновременно и плейлист и видео.')
         
-class WatchHistory:
+class WatchHistory(models.Model):
     videos = models.ManyToManyField(Video, blank=True)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

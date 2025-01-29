@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.db.models import F
 from django.db import transaction
 from django.http import JsonResponse
-import json
 
 User = get_user_model()
 
@@ -81,3 +80,4 @@ class VideoUploadView(TemplateView):
                 video.creator = request.user
                 video.save()
         return self.render_to_response({'form': form})
+    

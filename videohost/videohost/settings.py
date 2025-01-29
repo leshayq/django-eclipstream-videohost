@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'videos.apps.VideosConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
