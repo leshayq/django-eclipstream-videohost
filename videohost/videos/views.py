@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView, DetailView
-from .models import Video, Like
+from .models import Video, Like, Subscriptions
 from .forms import VideoUploadForm
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -44,7 +44,11 @@ class VideoDetailView(DetailView):
             context['user_has_liked'] = Like.objects.filter(user=self.request.user, video=video).exists()
         else:
             context['user_has_liked'] = False
-
+        
+        channel_name = self.object.creator
+        channel_object = User.objects.get(username=channel_name)
+        context['is_user_subscribed'] = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
+        
         return context
     
 def likes_video(request, url):

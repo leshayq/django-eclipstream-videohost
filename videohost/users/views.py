@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from videos.models import Video, Subscriptions
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
 
 class ChannelDetail(ListView):
@@ -40,5 +40,5 @@ def subscribe_to_channel(request, username):
         subscription, created = Subscriptions.objects.get_or_create(follower=request.user, following=channel_object)
         if not created:
             subscription.delete()
-        return HttpResponseRedirect(reverse('users:channel-detail', args=[str(channel_name)]))
+        return HttpResponse(f"<script>window.location.href=document.referrer;</script>")
     return HttpResponseBadRequest(f"Упс.. Помилка.")

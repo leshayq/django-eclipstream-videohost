@@ -4,7 +4,7 @@
 <main>
     <div class="video-page">
         <div class="video-player">
-            <video controls>
+            <video controls width="1920" height="1080">
                 <source src="{{ video.video.url }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -13,23 +13,42 @@
         <div class="video-details">
             <h1 class="video-title">{{ video.title }}</h1>
             <div class="video-meta">
-                <div class="channel-info">
-                    <div class="avatar"></div>
-                    <div class="channel-text">
-                        <h3>@{{ video.creator }}</h3>
-                        <span class="upload-date">{{ video.created_at }}</span>
-                        <button class="subscribe-button">Подписаться</button>
+
+                <div class="channel-row">
+                    <div class="channel-info">
+                        <div class="channel-text">
+                            <a href="{% url 'users:channel-detail' video.creator %}">
+                                <h3>@{{ video.creator }}</h3>
+                            </a>
+                            <form method="POST" action="{% url 'users:subscribe-to-channel' video.creator %}">
+                                {% csrf_token %}
+                                <button class="subscribe-button {% if is_user_subscribed %}subscribed {% else %} {%endif %}">
+                                    {% if is_user_subscribed %}✔ Ви підписані{% else %}Підписатися{% endif %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="views-count">{{ video.views }} переглядів</span>
                     </div>
                 </div>
-                <div class="video-stats">
-                    <span class="views-count">{{ video.views }} просмотров</span>
-                    <form method="POST" action="{% url 'videos:likes-video' video.url %}" class="like-form">
-                        {% csrf_token %}
-                        <button class="like-button {% if user_has_liked %}liked{% else %}not-liked{% endif %}" type="submit" value="{{ video.url }}" name="video_url">
-                            <i class="fas fa-thumbs-up"></i>
-                            <span class="like-count">{{ video.likes.count }}</span>
+
+                <div class="action-buttons">
+                    <div>
+                        <span class="upload-date">{{ video.created_at }}</span>
+                    </div>
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                        <form method="POST" action="{% url 'videos:likes-video' video.url %}" class="like-form">
+                            {% csrf_token %}
+                            <button class="like-button {% if user_has_liked %}liked{% else %}not-liked{% endif %}" type="submit" value="{{ video.url }}" name="video_url">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">{{ video.likes_count }}</span>
+                            </button>
+                        </form>
+                        <button class="save-button">
+                            <i class="fas fa-bookmark"></i> Зберегти
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
 

@@ -28,19 +28,7 @@
     <div class="tab-content" id="videos">
         <main class="main-container channel-view">
             {% for video in channel %}
-            <div class="video-card">
-                <img src="{{ video.thumbnail.url }}" alt="Video thumbnail">
-                <div class="info">
-                    <a href="{{ video.get_absolute_url }}">
-                        <h3>{{ video.title }}</h3>
-                    </a>
-                    <p>@{{ video.creator }}</p>
-                    <div class="details">
-                        <span>{{ video.views }} views</span>
-                        <span>{{ video.created_at|timesince }} тому</span>
-                    </div>
-                </div>
-            </div>
+            {% include 'videos/include/video_card.html' %}
             {% endfor %}
         </main>
     </div>

@@ -1,0 +1,15 @@
+<div class="video-card">
+    <img src="{{ video.thumbnail.url }}" alt="Video thumbnail">
+    <div class="info">
+        <a href="{{ video.get_absolute_url }}">
+            <h3>{{ video.title }}</h3>
+        </a>
+        <a href="{% url 'users:channel-detail' video.creator %}">
+            <p>@{{ video.creator }}</p>
+        </a>
+        <div class="details">
+            <span>{{ video.views }} views</span>
+            <span>{{ video.created_at|timesince }} тому</span>
+        </div>
+    </div>
+</div>
