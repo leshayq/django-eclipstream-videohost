@@ -58,26 +58,62 @@
         </div>
 
         <div class="comments-section">
-            <h2>Комментарии</h2>
+            <h2>Коментарі</h2>
+        
+            {% for comment in comments %}
             <div class="comment">
-                <div class="avatar"></div>
                 <div class="comment-body">
-                    <h4>Имя пользователя</h4>
-                    <p>Это пример комментария к видео. Выглядит круто!</p>
+                    <div class="comment-header">
+                        <h4>{{ comment.user.username }}</h4>
+                        <span class="comment-time">{{ comment.created_at|date:"H:i" }}</span>
+                    </div>
+                    <p>{{ comment.text }}</p>
+        
+                    <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
+                        <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=comment.id%}">
+                            {% csrf_token %}
+                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                            <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
+                            <button type="submit">Відправити</button>
+                        </form>
+                    </div>
+        
+                    {% for reply in comment.replies.all %}
+                    <div class="reply">
+                        <div class="comment-header">
+                            <h4>{{ reply.user.username }}</h4>
+                            <span class="comment-time">{{ reply.created_at|date:"H:i" }}</span>
+                        </div>
+                        <p>{{ reply.text }}</p>
+                    </div>
+                    {% endfor %}
+
                 </div>
             </div>
-            <div class="comment">
-                <div class="avatar"></div>
-                <div class="comment-body">
-                    <h4>Второй пользователь</h4>
-                    <p>Я бы добавил больше информации в описание, но в целом всё супер!</p>
-                </div>
-            </div>
-            <form class="comment-form">
-                <textarea placeholder="Оставьте комментарий..." required></textarea>
-                <button type="submit">Отправить</button>
+
+            <button class="reply-button" onclick="toggleReplyForm('{{ comment.id }}')">
+                Відповісти <span class="reply-count">({{ comment.replies.count }})</span>
+            </button>
+            {% endfor %}
+        
+            <form class="comment-form" method="POST" action="{% url 'videos:comment-video' video.url %}">
+                {% csrf_token %}
+                <textarea name="comment_text" placeholder="Залиште коментар..." required></textarea>
+                <button type="submit">Відправити</button>
             </form>
         </div>
     </div>
 </main>
+
+<script>
+    function toggleReplyForm(commentId) {
+        var form = document.getElementById("reply-form-" + commentId);
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>
+
 {% endblock content %}

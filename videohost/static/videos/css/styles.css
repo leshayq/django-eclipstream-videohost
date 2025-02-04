@@ -83,6 +83,7 @@ body {
   
   a {
     background-color: transparent;
+    text-decoration: none;
   }
   
   /**
@@ -457,6 +458,10 @@ body {
     font-size: 1rem;
 }
 
+.side-menu ul a {
+    color: #fff;
+}
+
 .side-menu.open {
     left: 0;
 }
@@ -614,7 +619,6 @@ main {
 }
 
 .video-page {
-    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
     color: #fff;
@@ -804,33 +808,44 @@ main {
 .comments-section h2 {
     font-size: 1.5rem;
     margin-bottom: 15px;
+    color: #fff;
 }
 
 .comment {
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
 }
 
-.comment .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #444;
+.comment-body {
+    display: flex;
+    flex-direction: column;
 }
 
-.comment-body h4 {
-    margin: 0;
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-header h4 {
     font-size: 1rem;
     color: #fff;
-    margin-bottom: 5px;
+    margin: 0;
+}
+
+.comment-time {
+    font-size: 0.8rem;
+    color: #aaa;
 }
 
 .comment-body p {
     font-size: 0.9rem;
     color: #ccc;
-    margin: 0;
+    margin: 5px 0;
 }
 
 .comment-form {
@@ -871,6 +886,67 @@ main {
     transform: translateY(-3px);
 }
 
+.reply-button {
+    font-size: 0.9rem;
+    color: #007BFF;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.reply-button:hover {
+    text-decoration: underline;
+}
+
+.reply-count {
+    color: #aaa;
+}
+
+.reply-form {
+    margin-top: 10px;
+    padding-left: 20px;
+    max-width: 80%;
+}
+
+.reply-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background-color: #222;
+    color: #fff;
+    font-size: 0.9rem;
+    resize: none;
+    height: 70px;
+    box-sizing: border-box;
+}
+
+.reply-form button {
+    margin-top: 5px;
+    padding: 8px 16px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.reply-form button:hover {
+    background-color: #0056b3;
+}
+
+.reply {
+    margin-left: 30px;
+    padding: 8px;
+    background-color: #252525;
+    border-left: 3px solid #007BFF;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
 
 /* USERS APP */
 .channel-container {
@@ -878,14 +954,13 @@ main {
     min-width: 95%;
     margin: auto;
     padding: 20px;
-    background: #111;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
     margin-top: 30px;
 }
 
 .channel-view {
-    background-color: #1c1c1c !important;
+    background-color: #040404 !important;
     border-radius: 10px;
 }
 
@@ -924,6 +999,10 @@ main {
 .subscribe-button.subscribed {
     background-color: #333;
     color: #aaa;
+}
+
+.channel-owner-btn {
+    background-color: #007BFF !important;
 }
 
 .channel-menu {

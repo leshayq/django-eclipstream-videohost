@@ -8,4 +8,5 @@ urlpatterns = [
     path('@<slug:username>/', ChannelDetail.as_view(), name='channel-detail'),
     #subscribe to channel
     path('subscribe/<slug:username>/', subscribe_to_channel, name='subscribe-to-channel'),
+
 ]

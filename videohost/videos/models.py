@@ -6,8 +6,8 @@ from django.urls import reverse
 import os
 
 VISIBILITY_CHOICES = [
-    ('Публичный', 'Публичный'),
-    ('Приватный', 'Приватный'),
+    ('Публічний', 'Публічний'),
+    ('Приватний', 'Приватний'),
 ]
 
 def user_directory_path(instance, filename):
@@ -28,11 +28,11 @@ def user_thumbnail_path(instance, filename):
 
 class Genre(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
-    icon = models.ImageField('Изображение', upload_to='icons/icons/%Y/%m/%d')
+    icon = models.ImageField('Зображення', upload_to='icons/icons/%Y/%m/%d')
 
     class Meta:
         verbose_name = 'Жанр'
-        verbose_name_plural = 'Жанры видео'
+        verbose_name_plural = 'Жанри відео'
 
     def __str__(self):
         return self.name
@@ -53,8 +53,8 @@ class Video(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = 'Видео'
-        verbose_name_plural = 'Видео'
+        verbose_name = 'Відео'
+        verbose_name_plural = 'Відео'
     
     def __str__(self):
         return self.title
@@ -66,14 +66,14 @@ class Comment(models.Model):
     text = models.TextField(max_length=5000, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified = models.BooleanField(default=False)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
 
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
+        verbose_name = 'Коментар'
+        verbose_name_plural = 'Коментарі'
 
 class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -87,7 +87,7 @@ class Like(models.Model):
         unique_together = ('user', 'video')
         
     def __str__(self):
-        return f'Лайк от {self.user} на видео: {self.video.title}'
+        return f'Лайк від {self.user} на відео: {self.video.title}'
 
 class Subscriptions(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -96,8 +96,8 @@ class Subscriptions(models.Model):
     following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
+        verbose_name = 'Підписка'
+        verbose_name_plural = 'Підписки'
 
 class Playlist(models.Model):
     title = models.CharField(max_length=80)
@@ -109,7 +109,7 @@ class Playlist(models.Model):
 
     class Meta:
         verbose_name = 'Плейлист'
-        verbose_name_plural = 'Плейлисты'
+        verbose_name_plural = 'Плейлисти'
 
 class Saving(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -119,14 +119,14 @@ class Saving(models.Model):
     saving_video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
 
     class Meta:
-        verbose_name = 'Сохранение'
-        verbose_name_plural = 'Сохранения'
+        verbose_name = 'Збереження'
+        verbose_name_plural = 'Збереження'
 
     def clean(self):
         if not self.saving_playlist and not self.saving_video:
-            raise ValidationError('Вы должны сохранить либо плейлист либо видео.')
+            raise ValidationError('Ви повинні зберегти або плейлист або відео.')
         if self.saving_playlist and self.saving_video:
-            raise ValidationError('Вы не можете сохранить одновременно и плейлист и видео.')
+            raise ValidationError('Ви не можете зберегти одночасно і плейлист і відео.')
         
 class WatchHistory(models.Model):
     videos = models.ManyToManyField(Video, blank=True)

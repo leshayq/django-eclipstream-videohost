@@ -24,7 +24,11 @@ class ChannelDetail(ListView):
         video_count = self.get_queryset().count()
         channel_object = User.objects.get(username=channel_name)
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
-        is_user_subscribed = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
+
+        if self.request.user.is_authenticated:
+            is_user_subscribed = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
+        else:
+            is_user_subscribed = False
         
         context['channel_name'] = channel_name
         context['video_count'] = video_count

@@ -7,17 +7,28 @@
             <h2>@{{ channel_name }}</h2>
             <p>{{ subscribers_count }} підписників · {{ video_count }} відео</p>
         </div>
-        <form method="POST" action="{% url 'users:subscribe-to-channel' channel_name %}">
-            {% csrf_token %}
-            <button 
-            class="subscribe-button {% if is_user_subscribed %}subscribed{% endif %}"
-            type="submit"
-            value="{{ channel_username }}"
-            name="{{ channel_username }}"
-            >
-            {% if is_user_subscribed %}✔ Ви підписані{% else %}Підписатися{% endif %}
-            </button>
-        </form>
+        {% if request.user.is_authenticated %}
+            {% if channel_name != request.user.username %}
+            <form method="POST" action="{% url 'users:subscribe-to-channel' channel_name %}">
+                {% csrf_token %}
+                <button 
+                class="subscribe-button {% if is_user_subscribed %}subscribed{% endif %}"
+                type="submit"
+                value="{{ channel_username }}"
+                name="{{ channel_username }}"
+                >
+                {% if is_user_subscribed %}✔ Ви підписані
+                {% else %} Підписатися
+                {% endif %}
+                </button>
+                
+            </form>
+            {% else %}
+            <button class="subscribe-button channel-owner-btn" onclick="window.location.href='#'">Редагувати</button>
+            {% endif %}
+        {% else %}
+        <button class="subscribe-button" onclick="window.location.href='#'">Підписатися</button>
+        {% endif %}
     </div>
 
     <div class="channel-menu">
@@ -40,18 +51,25 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const tabs = document.querySelectorAll(".menu-tab");
-    const contents = document.querySelectorAll(".tab-content");
+        const tabs = document.querySelectorAll(".menu-tab");
+        const contents = document.querySelectorAll(".tab-content");
 
-    tabs.forEach(tab => {
-        tab.addEventListener("click", function () {
-            tabs.forEach(t => t.classList.remove("active"));
-            contents.forEach(c => c.style.display = "none");
+        const defaultTab = document.querySelector("[data-tab='videos']");
+        const defaultContent = document.getElementById("videos");
 
-            this.classList.add("active");
-            document.getElementById(this.dataset.tab).style.display = "block";
+        defaultTab.classList.add("active");
+        defaultContent.style.display = "block";
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function () {
+                tabs.forEach(t => t.classList.remove("active"));
+                contents.forEach(c => c.style.display = "none");
+
+                this.classList.add("active");
+                document.getElementById(this.dataset.tab).style.display = "block";
+            });
         });
     });
-});
 </script>
+
 {% endblock %}

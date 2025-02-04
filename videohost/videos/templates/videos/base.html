@@ -24,9 +24,15 @@
                 <i class="fas fa-video"></i>
             </a>
             <i class="fas fa-bell"></i>
+            {% if request.user.is_authenticated %}
             <a href="{% url 'users:channel-detail' request.user.username %}">
                 <i class="fas fa-user"></i>
             </a>
+            {% else %}
+            <a href="#">
+                <i class="fas fa-user"></i>
+            </a>
+            {% endif %}
         </div>
     </header>
 
@@ -35,7 +41,9 @@
             <i class="fas fa-times"></i>
         </div>
         <ul>
-            <li><i class="fas fa-home"></i><span>Home</span></li>
+            <a href="{% url 'videos:main-page' %}">
+                <li><i class="fas fa-home"></i><span>Home</span></li>
+            </a>
             <li><i class="fas fa-user-friends"></i><span>Subscriptions</span></li>
             <li><i class="fas fa-history"></i><span>History</span></li>
             <li><i class="fas fa-list"></i><span>Playlists</span></li>
