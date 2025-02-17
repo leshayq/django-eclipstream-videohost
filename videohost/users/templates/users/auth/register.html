@@ -1,0 +1,33 @@
+{% extends 'videos/base.html' %}
+{% load static %}
+{% block content %}
+<div class="register-container">
+    <h2>Створіть акаунт</h2>
+    <form method="POST" action="{% url 'users:register-user' %}">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% for field in form %}
+            <div class="input-group">
+                {% if field.errors %}
+                    {{ field.label_tag }} {{ field }}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ field.label_tag }} {{ field }}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Зареєструватися</button>
+    </form>
+    <p class="login-link">Уже есть аккаунт? <a href="{% url 'users:login-user' %}">Увійти</a></p>
+</div>
+{% endblock content %}

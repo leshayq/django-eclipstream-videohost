@@ -1,9 +1,15 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from videos.models import Video, Subscriptions
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
+from .forms import UserRegisterForm, UserLoginForm
+from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login
+from django import forms
+
+User = get_user_model()
 
 class ChannelDetail(ListView):
     template_name = 'users/channel_detail.html'
@@ -46,3 +52,47 @@ def subscribe_to_channel(request, username):
             subscription.delete()
         return HttpResponse(f"<script>window.location.href=document.referrer;</script>")
     return HttpResponseBadRequest(f"Упс.. Помилка.")
+
+
+# Перенаправляє користувача на сторінку його каналу, якщо він авторизований
+def redirect_if_user_authenticated(request):
+    channel_object = User.objects.get(pk=request.user.pk)
+    return HttpResponseRedirect(reverse('users:channel-detail', args=[channel_object]))
+
+def register_user(request):
+    if request.user.is_authenticated:
+        redirect_if_user_authenticated()
+    else:
+        if request.method == 'POST':
+            form = UserRegisterForm(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.username = user.username.lower()
+                user.save()
+                
+                return redirect('videos:main-page')
+            else:
+                form.add_error_css()
+                return render(request, 'users/auth/register.html', {'form': form})
+        form = UserRegisterForm()
+        return render(request, 'users/auth/register.html', {'form': form})
+
+
+def login_user(request):
+    if request.user.is_authenticated:
+        redirect_if_user_authenticated()
+    else:
+        if request.method == 'POST':
+            form = UserLoginForm(request, data=request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                user = authenticate(request, username=cd['username'], password=cd['password'])
+                if user is not None:
+                    login(request, user)
+                    return redirect('videos:main-page')
+            else:
+                form.add_error_css()
+            return render(request, 'users/auth/login.html', {'form': form}) 
+
+        form = UserLoginForm()
+        return render(request, 'users/auth/login.html', {'form': form})

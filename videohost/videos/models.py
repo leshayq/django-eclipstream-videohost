@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.core.exceptions import ValidationError
 import uuid
 from django.urls import reverse
@@ -50,7 +50,7 @@ class Video(models.Model):
     thumbnail = models.FileField(upload_to=user_thumbnail_path)
 
     genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, blank=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Відео'
@@ -69,7 +69,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
 
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Коментар'
@@ -78,7 +78,7 @@ class Comment(models.Model):
 class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='like_set')
 
     class Meta:
@@ -92,8 +92,8 @@ class Like(models.Model):
 class Subscriptions(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
-    follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
-    following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
+    follower = models.ForeignKey(CustomUser, related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey(CustomUser, related_name='followers', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Підписка'
@@ -105,7 +105,7 @@ class Playlist(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Плейлист'
@@ -114,7 +114,7 @@ class Playlist(models.Model):
 class Saving(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     saving_playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, null=True)
     saving_video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
 
@@ -131,4 +131,4 @@ class Saving(models.Model):
 class WatchHistory(models.Model):
     videos = models.ManyToManyField(Video, blank=True)
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

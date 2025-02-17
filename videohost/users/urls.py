@@ -8,5 +8,8 @@ urlpatterns = [
     path('@<slug:username>/', ChannelDetail.as_view(), name='channel-detail'),
     #subscribe to channel
     path('subscribe/<slug:username>/', subscribe_to_channel, name='subscribe-to-channel'),
-
+    #register new user
+    path('register/', register_user, name='register-user'),
+    #login user
+    path('login/', login_user, name='login-user'),
 ]
