@@ -46,7 +46,15 @@
             </a>
             <li><i class="fas fa-user-friends"></i><span>Subscriptions</span></li>
             <li><i class="fas fa-history"></i><span>History</span></li>
-            <li><i class="fas fa-list"></i><span>Playlists</span></li>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'videos:playlist-list' request.user.username %}">
+                <li><i class="fas fa-list"></i><span>Playlists</span></li>
+            </a>
+            {% else %}
+            <a href="{% url 'users:login-user' %}">
+                <li><i class="fas fa-list"></i><span>Playlists</span></li>
+            </a>
+            {% endif %}
             <li><i class="fas fa-clock"></i><span>Watch Later</span></li>
             <li><i class="fas fa-thumbs-up"></i><span>Liked Videos</span></li>
         </ul>

@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 import uuid
 from django.urls import reverse
 import os
+from django.template.defaultfilters import slugify
+from unidecode import unidecode
 
 VISIBILITY_CHOICES = [
     ('Публічний', 'Публічний'),
@@ -99,17 +101,54 @@ class Subscriptions(models.Model):
         verbose_name = 'Підписка'
         verbose_name_plural = 'Підписки'
 
+
 class Playlist(models.Model):
     title = models.CharField(max_length=80)
     visibility = models.CharField(max_length=15, default=VISIBILITY_CHOICES[1][1], choices=VISIBILITY_CHOICES)
+    slug = models.SlugField('URL', max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    videos = models.ManyToManyField(Video, blank=True, related_name='playlists')
 
     class Meta:
         verbose_name = 'Плейлист'
         verbose_name_plural = 'Плейлисти'
+        unique_together = ('slug', 'creator')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(unidecode(self.title))
+            new_slug = base_slug
+            counter = 1
+
+            while Playlist.objects.filter(slug=new_slug, creator=self.creator).exists():
+                new_slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = new_slug 
+
+        super().save(*args, **kwargs)   
+    
+
+    # def delete(self, using = ..., keep_parents = ...):
+    #     pass
+    #   TODO: restrict deleting basic playlists
+
+    def get_absolute_url(self):
+        return reverse('videos:playlist-detail', args=[str(self.creator.username), str(self.slug)])
+    
+    def get_first_video_thumbnail(self):
+        first_video = self.videos.first()
+        if first_video:
+            return first_video.thumbnail 
+        else:
+            return None
+
+    def count_videos(self):
+        return self.videos.all().count()
+            
 
 class Saving(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

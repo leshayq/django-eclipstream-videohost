@@ -22,9 +22,20 @@
                             </a>
                             <form method="POST" action="{% url 'users:subscribe-to-channel' video.creator %}">
                                 {% csrf_token %}
-                                <button class="subscribe-button {% if is_user_subscribed %}subscribed {% else %} {%endif %}">
-                                    {% if is_user_subscribed %}✔ Ви підписані{% else %}Підписатися{% endif %}
+                                {% if request.user.is_authenticated %}
+                                    {% if not is_owner %}
+                                    <button class="subscribe-button {% if is_user_subscribed %}subscribed {% else %} {%endif %}">
+                                        {% if is_user_subscribed %}✔ Ви підписані{% else %}Підписатися{% endif %}
+                                    </button>
+
+                                    {% else %}
+                                    <button class="subscribe-button channel-owner-btn" onclick="window.location.href='/u/manage/'">Редагувати</button>
+                                    {% endif %}
+                                {% else %}
+                                <button class="subscribe-button">
+                                    Підписатися
                                 </button>
+                                {% endif %}
                             </form>
                         </div>
                     </div>
@@ -45,9 +56,34 @@
                                 <span class="like-count">{{ video.likes_count }}</span>
                             </button>
                         </form>
-                        <button class="save-button">
+                        {% if not user_is_owner %}
+                        <button class="save-button" onclick="openPlaylistModal()">
                             <i class="fas fa-bookmark"></i> Зберегти
                         </button>
+
+                        <div id="playlistSelectModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closePlaylistModal()">&times;</span>
+                                <h2>Оберіть плейлист</h2>
+                                <form id="playlistForm" method="POST" action="{% url 'videos:add-video-to-playlist' url=video.url %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="video_id" value="{{ video.id }}">
+                                    <ul>
+                                        {% for playlist in created_by_user_playlists %}
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="playlist_slug" value="{{ playlist.slug }}"> {{ playlist.title }}
+                                            </label>
+                                        </li>
+                                        {% empty %}
+                                        <p class="no-playlists">У вас ще немає плейлистів.</p>
+                                        {% endfor %}
+                                    </ul>
+                                    <button type="submit">Додати</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -59,16 +95,28 @@
 
         <div class="comments-section">
             <h2>Коментарі</h2>
-        
+            
             {% for comment in comments %}
-            <div class="comment">
+            <div class="comment" id="comment-{{ comment.id }}">
                 <div class="comment-body">
                     <div class="comment-header">
                         <h4>{{ comment.user.username }}</h4>
                         <span class="comment-time">{{ comment.created_at|date:"H:i" }}</span>
                     </div>
                     <p>{{ comment.text }}</p>
-        
+                    
+                    <div class="comment-actions">
+                        <button class="reply-button" onclick="toggleReplyForm('{{ comment.id }}')">
+                            Відповісти
+                        </button>
+                        
+                        {% if comment.replies.all %}
+                        <button class="toggle-replies" onclick="toggleReplies('{{ comment.id }}')">
+                            Показати відповіді ({{ comment.replies.count }})
+                        </button>
+                        {% endif %}
+                    </div>
+                    
                     <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
                         <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=comment.id%}">
                             {% csrf_token %}
@@ -77,42 +125,70 @@
                             <button type="submit">Відправити</button>
                         </form>
                     </div>
-        
-                    {% for reply in comment.replies.all %}
-                    <div class="reply">
-                        <div class="comment-header">
-                            <h4>{{ reply.user.username }}</h4>
-                            <span class="comment-time">{{ reply.created_at|date:"H:i" }}</span>
+                    
+                    <div class="replies" id="replies-{{ comment.id }}" style="display: none;">
+                        {% for reply in comment.replies.all %}
+                        <div class="reply" id="reply-{{ reply.id }}">
+                            <div class="comment-header">
+                                <h4>{{ reply.user.username }}</h4>
+                                <span class="comment-time">{{ reply.created_at|date:"H:i" }}</span>
+                            </div>
+                            <p>{{ reply.text }}</p>
+                            
+                            <div class="comment-actions">
+                                <button class="reply-button" onclick="toggleReplyForm('{{ reply.id }}')">
+                                    Відповісти
+                                </button>
+                            </div>
+                            
+                            <div class="reply-form" id="reply-form-{{ reply.id }}" style="display: none;">
+                                <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=reply.id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="parent_id" value="{{ reply.id }}">
+                                    <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
+                                    <button type="submit">Відправити</button>
+                                </form>
+                            </div>
                         </div>
-                        <p>{{ reply.text }}</p>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-
                 </div>
             </div>
-
-            <button class="reply-button" onclick="toggleReplyForm('{{ comment.id }}')">
-                Відповісти <span class="reply-count">({{ comment.replies.count }})</span>
-            </button>
             {% endfor %}
-        
-            <form class="comment-form" method="POST" action="{% url 'videos:comment-video' video.url %}">
+            
+            <form class="comment-form" method="POST" action="{% url 'videos:comment-video' url=video.url %}">
                 {% csrf_token %}
                 <textarea name="comment_text" placeholder="Залиште коментар..." required></textarea>
                 <button type="submit">Відправити</button>
             </form>
         </div>
-    </div>
 </main>
 
 <script>
     function toggleReplyForm(commentId) {
-        var form = document.getElementById("reply-form-" + commentId);
-        if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block";
+        let form = document.getElementById('reply-form-' + commentId);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleReplies(commentId) {
+        let replies = document.getElementById('replies-' + commentId);
+        let button = document.querySelector(`#comment-${commentId} .toggle-replies`);
+        
+        if (replies.style.display === 'none') {
+            replies.style.display = 'block';
+            button.textContent = `Скрити відповіді (${replies.children.length})`;
         } else {
-            form.style.display = "none";
+            replies.style.display = 'none';
+            button.textContent = `Показати відповіді (${replies.children.length})`;
         }
+    }
+
+    function openPlaylistModal() {
+        document.getElementById('playlistSelectModal').style.display = 'block';
+    }
+
+    function closePlaylistModal() {
+        document.getElementById('playlistSelectModal').style.display = 'none';
     }
 </script>
 

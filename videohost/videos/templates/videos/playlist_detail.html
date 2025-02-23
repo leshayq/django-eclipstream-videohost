@@ -1,0 +1,66 @@
+{% extends 'videos/base.html' %}
+{% load static %}
+{% block content %}
+<div class="channel-container">
+    <div class="video-page">
+        <div class="playlist-header">
+            <div class="playlist-spc-btwn-title">
+                <h1 class="playlist-title">
+                    {{ playlist.title }}
+                    {% if user_is_owner %}
+                    <div class="options-container">
+                        <button class="options-button" onclick="toggleOptions(event)">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="options-dropdown">
+                            <button class="modify-button">Редагувати</button>
+                            <button class="remove-button">Видалити</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                </h1>
+                
+                {% if not user_is_owner %}
+                <form method="POST" action="{% url 'videos:save-playlist-to-favorites' slug=playlist.slug %}">
+                    {% csrf_token %}
+                    <button class="save-button">
+                        <i class="fas fa-bookmark"></i> Зберегти
+                    </button>
+                </form>
+                {% endif %}
+
+            </div>
+
+            <div class="playlist-meta">
+                <p>Кількість відео: {{ playlist.count_videos }}</p>
+                <p>Видимість: {{ playlist.visibility|lower }}</p>
+            </div>
+        </div>
+
+        <div class="main-container">
+            {% for video in videos%}
+                {% include 'videos/include/video_card.html' %}
+            {% empty %}
+                <h4>Плейлист порожній.</h4>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleOptions(event) {
+        var container = event.target.closest(".options-container");
+        var dropdown = container.querySelector(".options-dropdown");
+        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+    }
+
+    document.addEventListener("click", function(event) {
+        var containers = document.querySelectorAll(".options-container");
+        var isClickInside = Array.from(containers).some(container => container.contains(event.target));
+        
+        if (!isClickInside) {
+            document.querySelectorAll(".options-dropdown").forEach(dropdown => dropdown.style.display = "none");
+        }
+    });
+</script>
+{% endblock content %}

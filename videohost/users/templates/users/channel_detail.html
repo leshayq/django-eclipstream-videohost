@@ -7,9 +7,9 @@
             <h2>@{{ channel_name }}</h2>
             <p>{{ subscribers_count }} підписників · {{ video_count }} відео</p>
         </div>
+        <form method="POST" action="{% url 'users:subscribe-to-channel' channel_name %}">
         {% if request.user.is_authenticated %}
-            {% if channel_name != request.user.username %}
-            <form method="POST" action="{% url 'users:subscribe-to-channel' channel_name %}">
+            {% if not is_owner %}
                 {% csrf_token %}
                 <button 
                 class="subscribe-button {% if is_user_subscribed %}subscribed{% endif %}"
@@ -22,13 +22,13 @@
                 {% endif %}
                 </button>
                 
-            </form>
             {% else %}
-            <button class="subscribe-button channel-owner-btn" onclick="window.location.href='#'">Редагувати</button>
+            <button class="subscribe-button channel-owner-btn" onclick="window.location.href='/u/manage/'">Редагувати</button>
             {% endif %}
-        {% else %}
-        <button class="subscribe-button" onclick="window.location.href='#'">Підписатися</button>
-        {% endif %}
+            {% else %}
+            <button class="subscribe-button" onclick="window.location.href='#'">Підписатися</button>
+            {% endif %}
+        </form>
     </div>
 
     <div class="channel-menu">

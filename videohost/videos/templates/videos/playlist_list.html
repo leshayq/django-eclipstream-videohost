@@ -1,0 +1,107 @@
+{% extends 'videos/base.html' %}
+{% load static %}
+{% block content %}
+<div class="playlists-container">
+    <div class="playlist-spc-btwn-title">
+        <div>
+            <h2 class="section-title">Мої плейлисти</h2>
+        </div>
+        <div>
+            <button class="save-button" onclick="newPlaylistModal()"">
+                <i class="fa-solid fa-plus"></i> Додати
+            </button>
+
+
+
+
+            <div id="newPlaylistModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeNewPlaylistModal()">&times;</span>
+                    <h2>Новий плейлист</h2>
+                    <form id="newPlaylistForm" method="POST" action="{% url 'videos:create-playlist' %}">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                        <ul class="errorlist">
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        <ul>
+                        {% for field in form %}
+                            <div class="input-group">
+                                {% if field.errors %}
+                                    {{ field.label_tag }} {{ field }}
+                                    <ul class="errorlist">
+                                        {% for error in field.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {{ field.label_tag }} {{ field }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        </ul>
+                        <button type="submit">Створити</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    
+    <div class="playlists-grid">
+        {% for playlist in created_by_user_playlists %}
+        <div class="playlist-card">
+            <a href="{{ playlist.get_absolute_url }}" class="playlist-thumbnail">
+                {% if playlist.get_first_video_thumbnail %}
+                    <img src="{{ playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.title }}">
+                {% else %}
+                    <img src="{% static 'videos/images/default.png' %}" alt="{{ playlist.title }}">
+                {% endif %}
+            </a>
+            <div class="playlist-info">
+                <h3 class="playlist-title">{{ playlist.title }}</h3>
+                <p class="playlist-meta">{{ playlist.count_videos }} відео</p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="no-playlists">У вас ще немає плейлистів.</p>
+        {% endfor %}
+    </div>
+    
+    <h2 class="section-title">Збережені плейлисти</h2>
+    <div class="playlists-grid">
+        {% for playlist in saved_by_user_playlists %}
+        <div class="playlist-card">
+            <a href="{{ playlist.saving_playlist.get_absolute_url }}" class="playlist-thumbnail">
+                {% if playlist.saving_playlist.get_first_video_thumbnail %}
+                    <img src="{{ playlist.saving_playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.saving_playlist.title }}">
+                {% else %}
+                    <img src="{% static 'videos/images/default.png' %}" alt="{{ playlist.title }}">
+                {% endif %}
+            </a>
+            <div class="playlist-info">
+                <h3 class="playlist-title">{{ playlist.saving_playlist.title }}</h3>
+                <p class="playlist-meta">{{ playlist.saving_playlist.count_videos }} відео</p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="no-playlists">Немає збережених плейлистів.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function newPlaylistModal() {
+    document.getElementById('newPlaylistModal').style.display = 'block';
+}
+
+function closeNewPlaylistModal() {
+    document.getElementById('newPlaylistModal').style.display = 'none';
+}
+</script>
+{% endblock content %}

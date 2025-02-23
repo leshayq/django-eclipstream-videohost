@@ -2,7 +2,11 @@
 {% block content %}
 <main class="main-container">
     {% for video in videos %}
+
     {% include 'videos/include/video_card.html' %}
+
+    {% empty %}
+    <h4>Помилка при завантаженні відео.</h2>
     {% endfor %}
 </main>
 {% endblock content %}

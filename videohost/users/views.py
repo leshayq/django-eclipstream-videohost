@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
-from videos.models import Video, Subscriptions
+from videos.models import Video, Subscriptions, Playlist
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
 from .forms import UserRegisterForm, UserLoginForm
@@ -8,9 +8,16 @@ from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login
 from django import forms
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.db.models.signals import post_save
+from django.utils.text import slugify
+from unidecode import unidecode
+from django.http import Http404
 
 User = get_user_model()
 
+# Перегляд сторінки каналу
 class ChannelDetail(ListView):
     template_name = 'users/channel_detail.html'
     context_object_name = 'channel'
@@ -28,11 +35,17 @@ class ChannelDetail(ListView):
 
         channel_name = self.kwargs.get('username')
         video_count = self.get_queryset().count()
-        channel_object = User.objects.get(username=channel_name)
+
+        try:
+            channel_object = User.objects.get(username=channel_name)
+        except User.DoesNotExist:
+            raise Http404("Каналу з таким ім'ям не існує.")    
+        
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
 
         if self.request.user.is_authenticated:
             is_user_subscribed = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
+            context['is_owner'] = channel_object == self.request.user
         else:
             is_user_subscribed = False
         
@@ -43,6 +56,8 @@ class ChannelDetail(ListView):
 
         return context
     
+# Підписка на канал користувача
+@login_required(login_url='/u/login/')
 def subscribe_to_channel(request, username):
     channel_name = username
     channel_object = User.objects.get(username=channel_name)
@@ -59,16 +74,35 @@ def redirect_if_user_authenticated(request):
     channel_object = User.objects.get(pk=request.user.pk)
     return HttpResponseRedirect(reverse('users:channel-detail', args=[channel_object]))
 
+# Реєстрація нового користувача
 def register_user(request):
     if request.user.is_authenticated:
-        redirect_if_user_authenticated()
+        return redirect_if_user_authenticated(request)
     else:
         if request.method == 'POST':
             form = UserRegisterForm(request.POST)
             if form.is_valid():
                 user = form.save(commit=False)
                 user.username = user.username.lower()
-                user.save()
+
+                try: 
+                    with transaction.atomic():
+                        user.save()
+
+                        Playlist.objects.create(
+                            title="Переглянути пізніше",
+                            visibility="Приватний",
+                            creator=user
+                        )
+
+                        Playlist.objects.create(
+                            title="Сподобалися",
+                            visibility="Приватний",
+                            creator=user
+                        )
+                    
+                except Exception as e:
+                    return HttpResponseBadRequest(f"Помилка: {str(e)}")
                 
                 return redirect('videos:main-page')
             else:
@@ -77,7 +111,7 @@ def register_user(request):
         form = UserRegisterForm()
         return render(request, 'users/auth/register.html', {'form': form})
 
-
+# Авторизація користувача
 def login_user(request):
     if request.user.is_authenticated:
         redirect_if_user_authenticated()
