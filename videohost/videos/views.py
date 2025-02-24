@@ -20,6 +20,29 @@ class VideosListView(ListView):
     template_name = 'videos/index.html'
     context_object_name = 'videos'
 
+    def get_queryset(self):
+        queryset = self.model.objects.filter(visibility='Публічний')
+        return queryset
+
+def build_comment_tree(comments):
+    grouped_comments = {}
+
+    for comment in comments:
+        if comment.parent is None:
+            grouped_comments[comment.id] = {"main": comment, "replies": []}
+        else:
+            root_parent = comment.parent
+            while root_parent.parent is not None: 
+                root_parent = root_parent.parent
+
+            if root_parent.id in grouped_comments:
+                grouped_comments[root_parent.id]["replies"].append(comment)
+            else:
+                grouped_comments[root_parent.id] = {"main": root_parent, "replies": [comment]}
+
+    return grouped_comments.values()
+
+
 class VideoDetailView(DetailView):
     '''Сторінка перегляду відео'''
     model = Video
@@ -58,8 +81,10 @@ class VideoDetailView(DetailView):
             context['is_user_subscribed'] = False
             context['user_has_liked'] = False
         
-        context['comments'] = Comment.objects.filter(video=video, parent=None).order_by('-created_at')
-
+        comments = Comment.objects.filter(video=video).select_related('parent', 'user').prefetch_related('replies').order_by('created_at')
+        grouped_comments = build_comment_tree(comments)
+        context['grouped_comments'] = grouped_comments
+ 
         return context
 
 class VideoUploadView(TemplateView):
@@ -103,9 +128,12 @@ class PlaylistDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['videos'] = self.object.videos.all()
 
         context['user_is_owner'] = self.request.user == self.object.creator
+        if context['user_is_owner']:
+            context['videos'] = self.object.videos.all()
+        else:
+            context['videos'] = self.object.videos.filter(visibility='Публічний')
 
         return context
 

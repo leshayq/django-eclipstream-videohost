@@ -1,5 +1,5 @@
 {% extends 'videos/base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="channel-container">
     <div class="channel-header">
@@ -25,9 +25,9 @@
             {% else %}
             <button class="subscribe-button channel-owner-btn" onclick="window.location.href='/u/manage/'">Редагувати</button>
             {% endif %}
-            {% else %}
-            <button class="subscribe-button" onclick="window.location.href='#'">Підписатися</button>
-            {% endif %}
+        {% else %}
+        <button class="subscribe-button">Підписатися</button>
+        {% endif %}
         </form>
     </div>
 
@@ -38,14 +38,42 @@
 
     <div class="tab-content" id="videos">
         <main class="main-container channel-view">
-            {% for video in channel %}
+            {% for video in videos %}
             {% include 'videos/include/video_card.html' %}
+            {% empty %}
+            <p>Нові відео користувача з'являться тут...</p>
             {% endfor %}
         </main>
     </div>
 
     <div class="tab-content" id="playlists" style="display: none;">
-        <p>Плейлисты пользователя появятся здесь...</p>
+
+        <main class="main-container channel-view">
+        {% for playlist in playlists %}
+        <div class="playlist-card">
+            <a href="{{ playlist.get_absolute_url }}" class="playlist-thumbnail">
+                {% if playlist.get_first_video_thumbnail %}
+                    <img src="{{ playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.title }}">
+                {% else %}
+                    <img src="{% static 'videos/images/default.png' %}" alt="{{ playlist.title }}">
+                {% endif %}
+            </a>
+            <div class="playlist-info">
+                <h3 class="playlist-title">{{ playlist.title }}</h3>
+                <p class="playlist-meta">{{ playlist.count_videos }} відео</p>
+                <div class="info">
+                    <a href="{% url 'users:channel-detail' playlist.creator %}">
+                        <p>@{{ playlist.creator }}</p>
+                    </a>
+                </div>
+                <!-- <p class="playlist-meta">@{{ playlist.creator }}</p> -->
+                <p class="playlist-meta">{{ playlist.visibility }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>Плейлисти користувача з'являться тут...</p>
+        {% endfor %}
+        </main>
     </div>
 </div>
 

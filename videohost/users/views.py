@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.views.generic import TemplateView
 from videos.models import Video, Subscriptions, Playlist
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
@@ -10,49 +11,51 @@ from django.contrib.auth import authenticate, login
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models.signals import post_save
 from django.utils.text import slugify
 from unidecode import unidecode
-from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
 
 User = get_user_model()
 
 # Перегляд сторінки каналу
-class ChannelDetail(ListView):
+class ChannelDetail(TemplateView):
     template_name = 'users/channel_detail.html'
-    context_object_name = 'channel'
-
-    def get_queryset(self):
-        username = self.kwargs.get('username')
-        if username:
-            queryset = Video.objects.filter(creator__username=username, visibility='Публичный')
-        else:
-            queryset = Video.objects.none()
-        return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         channel_name = self.kwargs.get('username')
-        video_count = self.get_queryset().count()
 
-        try:
-            channel_object = User.objects.get(username=channel_name)
-        except User.DoesNotExist:
-            raise Http404("Каналу з таким ім'ям не існує.")    
+        channel_object = get_object_or_404(User, username=channel_name) 
         
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
 
         if self.request.user.is_authenticated:
             is_user_subscribed = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
-            context['is_owner'] = channel_object == self.request.user
+
+            is_owner = channel_object == self.request.user
+
         else:
+            is_owner = False
             is_user_subscribed = False
         
+        if is_owner:
+            playlists = Playlist.objects.filter(creator=channel_object)
+            videos = Video.objects.filter(creator__username=channel_name)
+        else:
+            playlists = Playlist.objects.filter(creator=channel_object, visibility='Публічний')
+            videos = Video.objects.filter(creator__username=channel_name, visibility='Публічний')
+
+        video_count = videos.count()
+
+        context['is_owner'] = is_owner
         context['channel_name'] = channel_name
         context['video_count'] = video_count
         context['subscribers_count'] = subscribers_count
         context['is_user_subscribed'] = is_user_subscribed
+        context['videos'] = videos
+        context['playlists'] = playlists
 
         return context
     

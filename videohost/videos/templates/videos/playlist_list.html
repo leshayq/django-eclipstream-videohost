@@ -66,6 +66,10 @@
             <div class="playlist-info">
                 <h3 class="playlist-title">{{ playlist.title }}</h3>
                 <p class="playlist-meta">{{ playlist.count_videos }} відео</p>
+                <a href="{% url 'users:channel-detail' playlist.creator.username %}">
+                    <p class="playlist-meta">@{{ playlist.creator }}</p>
+                </a>
+                <p class="playlist-meta">{{ playlist.visibility }}</p>
             </div>
         </div>
         {% empty %}
@@ -87,6 +91,10 @@
             <div class="playlist-info">
                 <h3 class="playlist-title">{{ playlist.saving_playlist.title }}</h3>
                 <p class="playlist-meta">{{ playlist.saving_playlist.count_videos }} відео</p>
+                <a href="{% url 'users:channel-detail' playlist.saving_playlist.creator.username %}">
+                    <p class="playlist-meta">@{{ playlist.saving_playlist.creator }}</p>
+                </a>
+                <p class="playlist-meta">{{ playlist.saving_playlist.visibility }}</p>
             </div>
         </div>
         {% empty %}
