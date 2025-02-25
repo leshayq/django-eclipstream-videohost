@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db.models.signals import post_save
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -34,3 +33,12 @@ class CustomUser(AbstractUser):
 
     objects = UserManager()
 
+class Subscriptions(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    follower = models.ForeignKey(CustomUser, related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey(CustomUser, related_name='followers', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Підписка'
+        verbose_name_plural = 'Підписки'

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Genre, Video, Like, Subscriptions, Comment, Playlist, Saving
+from .models import Genre, Video, Like, Comment
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
@@ -19,22 +19,7 @@ class LikeAdmin(admin.ModelAdmin):
     list_display = ('user', 'video')
     readonly_fields = ('user', 'video')
 
-@admin.register(Subscriptions)
-class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('follower', 'following', 'created_at',)
-    readonly_fields = ('follower', 'following', 'created_at',)
-
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('video', 'user', 'text', 'created_at')
 
-@admin.register(Playlist)
-class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ('title', 'creator', 'created_at', 'updated_at',)
-
-    def get_prepopulated_fields(self, request, obj=None):
-        return {'slug': ('title',)}
-    
-@admin.register(Saving)
-class SavingAdmin(admin.ModelAdmin):
-    list_display = ('user', 'saving_playlist', 'saving_video', 'created_at',)

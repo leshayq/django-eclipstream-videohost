@@ -21,7 +21,7 @@
                 </h1>
                 
                 {% if not user_is_owner %}
-                <form method="POST" action="{% url 'videos:save-playlist-to-favorites' slug=playlist.slug %}">
+                <form method="POST" action="{% url 'playlists:save-playlist-to-favorites' slug=playlist.slug username=playlist.creator.username %}">
                     {% csrf_token %}
                     <button class="save-button">
                         <i class="fas fa-bookmark"></i> Зберегти

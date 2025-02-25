@@ -65,7 +65,7 @@
                             <div class="modal-content">
                                 <span class="close" onclick="closePlaylistModal()">&times;</span>
                                 <h2>Оберіть плейлист</h2>
-                                <form id="playlistForm" method="POST" action="{% url 'videos:add-video-to-playlist' url=video.url %}">
+                                <form id="playlistForm" method="POST" action="{% url 'playlists:add-video-to-playlist' url=video.url %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="video_id" value="{{ video.id }}">
                                     <ul>

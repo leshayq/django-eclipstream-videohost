@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic import TemplateView
-from videos.models import Video, Subscriptions, Playlist
+from videos.models import Video
+from .models import Subscriptions
+from playlists.models import Playlist
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
 from .forms import UserRegisterForm, UserLoginForm

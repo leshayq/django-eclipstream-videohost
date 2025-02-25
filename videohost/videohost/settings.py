@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'videos.apps.VideosConfig',
+    'playlists.apps.PlaylistsConfig',
     'users.apps.UsersConfig',
 ]
 

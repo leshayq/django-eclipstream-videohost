@@ -1,5 +1,5 @@
 from django import forms
-from .models import Video, Playlist
+from .models import Video
 from django.contrib.auth import authenticate, get_user_model
 
 
@@ -9,8 +9,3 @@ class VideoUploadForm(forms.ModelForm):
         model = Video
         fields = ('video', 'genre', 'title', 'description', 'visibility', 'thumbnail',)
 
-class PlaylistCreateForm(forms.ModelForm):
-
-    class Meta:
-        model = Playlist
-        fields = ('title', 'visibility',)

@@ -42,7 +42,7 @@ class Genre(models.Model):
 class Video(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField(max_length=5000, blank=True, null=True)
-    url = models.UUIDField(default=uuid.uuid4().hex, unique=True, null=False)
+    url = models.UUIDField(default=uuid.uuid4, unique=True, null=False)
     visibility = models.CharField(max_length=15, default=VISIBILITY_CHOICES[0][0], choices=VISIBILITY_CHOICES)
     views = models.IntegerField(default=0)
     likes_count = models.PositiveIntegerField(default=0)
@@ -90,82 +90,6 @@ class Like(models.Model):
         
     def __str__(self):
         return f'Лайк від {self.user} на відео: {self.video.title}'
-
-class Subscriptions(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    follower = models.ForeignKey(CustomUser, related_name='following', on_delete=models.CASCADE)
-    following = models.ForeignKey(CustomUser, related_name='followers', on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = 'Підписка'
-        verbose_name_plural = 'Підписки'
-
-
-class Playlist(models.Model):
-    title = models.CharField(max_length=80)
-    visibility = models.CharField(max_length=15, default=VISIBILITY_CHOICES[1][1], choices=VISIBILITY_CHOICES)
-    slug = models.SlugField('URL', max_length=150)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    videos = models.ManyToManyField(Video, blank=True, related_name='playlists')
-
-    class Meta:
-        verbose_name = 'Плейлист'
-        verbose_name_plural = 'Плейлисти'
-        unique_together = ('slug', 'creator')
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            base_slug = slugify(unidecode(self.title))
-            new_slug = base_slug
-            counter = 1
-
-            while Playlist.objects.filter(slug=new_slug, creator=self.creator).exists():
-                new_slug = f"{base_slug}-{counter}"
-                counter += 1
-
-            self.slug = new_slug 
-
-        super().save(*args, **kwargs)   
-    
-
-    # def delete(self, using = ..., keep_parents = ...):
-    #     pass
-    #   TODO: restrict deleting basic playlists
-
-    def get_absolute_url(self):
-        return reverse('videos:playlist-detail', args=[str(self.creator.username), str(self.slug)])
-    
-    def get_first_video_thumbnail(self):
-        first_video = self.videos.first()
-        if first_video:
-            return first_video.thumbnail 
-        else:
-            return None
-
-    def count_videos(self):
-        return self.videos.all().count()
-            
-
-class Saving(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    saving_playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, null=True)
-    saving_video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
-
-    class Meta:
-        verbose_name = 'Збереження'
-        verbose_name_plural = 'Збереження'
-
-    def clean(self):
-        if not self.saving_playlist and not self.saving_video:
-            raise ValidationError('Ви повинні зберегти або плейлист або відео.')
-        if self.saving_playlist and self.saving_video:
-            raise ValidationError('Ви не можете зберегти одночасно і плейлист і відео.')
         
 class WatchHistory(models.Model):
     videos = models.ManyToManyField(Video, blank=True)

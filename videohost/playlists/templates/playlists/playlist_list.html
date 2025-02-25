@@ -18,7 +18,7 @@
                 <div class="modal-content">
                     <span class="close" onclick="closeNewPlaylistModal()">&times;</span>
                     <h2>Новий плейлист</h2>
-                    <form id="newPlaylistForm" method="POST" action="{% url 'videos:create-playlist' %}">
+                    <form id="newPlaylistForm" method="POST" action="{% url 'playlists:create-playlist' %}">
                         {% csrf_token %}
                         {% if form.non_field_errors %}
                         <ul class="errorlist">
