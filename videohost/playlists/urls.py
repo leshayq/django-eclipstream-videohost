@@ -16,4 +16,6 @@ urlpatterns = [
     path('video/save/<uuid:url>', add_video_to_playlist, name='add-video-to-playlist'),
     # create new playlist
     path('create/', create_new_playlist, name='create-playlist'),
+    # update existing playlist
+    path('update/<slug:username>/<slug:slug>/', edit_playlist, name='edit-playlist'),
 ]

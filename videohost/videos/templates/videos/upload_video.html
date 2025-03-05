@@ -2,12 +2,34 @@
 
 {% block content %}
 <main>
-    <div class="form-container">
+    <div class="upload-form__container">
         <h2>Upload Video</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Upload</button>
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form__field">
+                        {% if field.errors %}
+                            {{ field.label_tag }} {{ field }}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            {{ field.label_tag }} {{ field }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            <div class="flex-end__aligner">
+                <button class="button" type="submit">Завантажити</button>
+            </div>
         </form>
     </div>
 </main>

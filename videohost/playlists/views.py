@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView
 from .models import Playlist, Saving
 from videos.models import Video
-from .forms import PlaylistCreateForm
+from .forms import PlaylistCreateForm, PlaylistEditForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from .utils import check_if_basic_playlist
 
 class PlaylistListView(TemplateView):
     '''Сторінка перегляду списку плейлистів користувача'''
@@ -44,10 +45,10 @@ class PlaylistDetailView(DetailView):
             context['videos'] = self.object.videos.all()
         else:
             context['videos'] = self.object.videos.filter(visibility='Публічний')
+        
 
+        context['form'] = PlaylistEditForm(instance=self.object) 
         return context
-
-
 
 @login_required(login_url='/u/login/')  
 def create_new_playlist(request):
@@ -57,9 +58,29 @@ def create_new_playlist(request):
         if form.is_valid():
             playlist = form.save(commit=False)
 
-            playlist.creator = request.user
-            playlist.save()
+            if not check_if_basic_playlist(playlist.title):
+                playlist.creator = request.user
+                playlist.save()
+            else:
+                return HttpResponseBadRequest("Базовий плейлист з таким ім'ям вже існує.")
+        return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
 
+
+@login_required(login_url='/u/login/')  
+def edit_playlist(request, username, slug):
+    '''Оновлення існуючого плейлиста'''
+    playlist_object = Playlist.objects.get(creator__username=username, slug=slug)
+    playlist_object_title = playlist_object.title
+    if request.method == 'POST':
+        form = PlaylistEditForm(data=request.POST, instance=playlist_object)
+        if form.is_valid():
+            playlist = form.save(commit=False)
+            
+            if not check_if_basic_playlist(playlist_object_title):
+                playlist.creator = request.user
+                playlist.save()
+            else:
+                return HttpResponseBadRequest("Базові плейлисти неможливо змінити.")
         return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
 
 @login_required(login_url='/u/login/')  

@@ -1,368 +1,485 @@
+:root {
+    --main-purple: #8600ea;
+    --hover-purple: #6500b2;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #000;
+    font-family: "Montserrat", sans-serif;
+    background-color: #0e0d10;
     color: #fff;
     overflow-x: hidden;
 }
 
-/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
-
-/* Document
-   ========================================================================== */
-
-/**
- * 1. Correct the line height in all browsers.
- * 2. Prevent adjustments of font size after orientation changes in iOS.
- */
-
  html {
     line-height: 1.15; /* 1 */
     -webkit-text-size-adjust: 100%; /* 2 */
-  }
-  
-  /* Sections
-     ========================================================================== */
-  
-  /**
-   * Remove the margin in all browsers.
-   */
-  
-  body {
+}
+
+body {
     margin: 0;
-  }
+}
   
-  /**
-   * Render the `main` element consistently in IE.
-   */
-  
-  main {
+main {
     display: block;
-  }
+}
   
-  /**
-   * Correct the font size and margin on `h1` elements within `section` and
-   * `article` contexts in Chrome, Firefox, and Safari.
-   */
-  
-  h1 {
+h1 {
     font-size: 2em;
-    margin: 0.67em 0;
-  }
+}
+
+h1, h2, h3, h4, h5 {
+    margin: 0;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0;
+}
   
-  /* Grouping content
-     ========================================================================== */
+hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible; 
+}
   
-  /**
-   * 1. Add the correct box sizing in Firefox.
-   * 2. Show the overflow in Edge and IE.
-   */
+pre {
+    font-family: monospace, monospace;
+    font-size: 1em;
+}
   
-  hr {
-    box-sizing: content-box; /* 1 */
-    height: 0; /* 1 */
-    overflow: visible; /* 2 */
-  }
   
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
-   */
-  
-  pre {
-    font-family: monospace, monospace; /* 1 */
-    font-size: 1em; /* 2 */
-  }
-  
-  /* Text-level semantics
-     ========================================================================== */
-  
-  /**
-   * Remove the gray background on active links in IE 10.
-   */
-  
-  a {
+a {
     background-color: transparent;
     text-decoration: none;
-  }
+}
   
-  /**
-   * 1. Remove the bottom border in Chrome 57-
-   * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
-   */
   
-  abbr[title] {
-    border-bottom: none; /* 1 */
-    text-decoration: underline; /* 2 */
-    text-decoration: underline dotted; /* 2 */
-  }
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted;
+}
+
   
-  /**
-   * Add the correct font weight in Chrome, Edge, and Safari.
-   */
-  
-  b,
-  strong {
+b,
+strong {
     font-weight: bolder;
-  }
+}
   
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
-   */
+code,
+kbd,
+samp {
+    font-family: monospace, monospace;
+    font-size: 1em;
+}
   
-  code,
-  kbd,
-  samp {
-    font-family: monospace, monospace; /* 1 */
-    font-size: 1em; /* 2 */
-  }
   
-  /**
-   * Add the correct font size in all browsers.
-   */
-  
-  small {
+small {
     font-size: 80%;
-  }
+}
   
-  /**
-   * Prevent `sub` and `sup` elements from affecting the line height in
-   * all browsers.
-   */
-  
-  sub,
-  sup {
+sub,
+sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
     vertical-align: baseline;
-  }
+}
   
-  sub {
+sub {
     bottom: -0.25em;
-  }
+}
   
-  sup {
+sup {
     top: -0.5em;
-  }
-  
-  /* Embedded content
-     ========================================================================== */
-  
-  /**
-   * Remove the border on images inside links in IE 10.
-   */
-  
-  img {
+}
+    
+img {
     border-style: none;
-  }
+}
   
-  /* Forms
-     ========================================================================== */
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15; 
+    margin: 0; 
+}
   
-  /**
-   * 1. Change the font styles in all browsers.
-   * 2. Remove the margin in Firefox and Safari.
-   */
-  
-  button,
-  input,
-  optgroup,
-  select,
-  textarea {
-    font-family: inherit; /* 1 */
-    font-size: 100%; /* 1 */
-    line-height: 1.15; /* 1 */
-    margin: 0; /* 2 */
-  }
-  
-  /**
-   * Show the overflow in IE.
-   * 1. Show the overflow in Edge.
-   */
-  
-  button,
-  input { /* 1 */
+button,
+input { 
     overflow: visible;
-  }
+}
   
-  /**
-   * Remove the inheritance of text transform in Edge, Firefox, and IE.
-   * 1. Remove the inheritance of text transform in Firefox.
-   */
-  
-  button,
-  select { /* 1 */
+button,
+select {
     text-transform: none;
-  }
+}
   
-  /**
-   * Correct the inability to style clickable types in iOS and Safari.
-   */
-  
-  button,
-  [type="button"],
-  [type="reset"],
-  [type="submit"] {
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
     -webkit-appearance: button;
-  }
+}
   
-  /**
-   * Remove the inner border and padding in Firefox.
-   */
-  
-  button::-moz-focus-inner,
-  [type="button"]::-moz-focus-inner,
-  [type="reset"]::-moz-focus-inner,
-  [type="submit"]::-moz-focus-inner {
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
     border-style: none;
     padding: 0;
-  }
+}
   
-  /**
-   * Restore the focus styles unset by the previous rule.
-   */
-  
-  button:-moz-focusring,
-  [type="button"]:-moz-focusring,
-  [type="reset"]:-moz-focusring,
-  [type="submit"]:-moz-focusring {
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
     outline: 1px dotted ButtonText;
-  }
+}
   
-  /**
-   * Correct the padding in Firefox.
-   */
-  
-  fieldset {
+fieldset {
     padding: 0.35em 0.75em 0.625em;
-  }
+}
   
-  /**
-   * 1. Correct the text wrapping in Edge and IE.
-   * 2. Correct the color inheritance from `fieldset` elements in IE.
-   * 3. Remove the padding so developers are not caught out when they zero out
-   *    `fieldset` elements in all browsers.
-   */
+legend {
+    box-sizing: border-box;
+    color: inherit;
+    display: table; 
+    max-width: 100%; 
+    padding: 0; 
+    white-space: normal; 
+}
   
-  legend {
-    box-sizing: border-box; /* 1 */
-    color: inherit; /* 2 */
-    display: table; /* 1 */
-    max-width: 100%; /* 1 */
-    padding: 0; /* 3 */
-    white-space: normal; /* 1 */
-  }
-  
-  /**
-   * Add the correct vertical alignment in Chrome, Firefox, and Opera.
-   */
-  
-  progress {
+progress {
     vertical-align: baseline;
-  }
+}
   
-  /**
-   * Remove the default vertical scrollbar in IE 10+.
-   */
-  
-  textarea {
+textarea {
     overflow: auto;
-  }
+}
   
-  /**
-   * 1. Add the correct box sizing in IE 10.
-   * 2. Remove the padding in IE 10.
-   */
-  
-  [type="checkbox"],
-  [type="radio"] {
-    box-sizing: border-box; /* 1 */
-    padding: 0; /* 2 */
-  }
-  
-  /**
-   * Correct the cursor style of increment and decrement buttons in Chrome.
-   */
-  
-  [type="number"]::-webkit-inner-spin-button,
-  [type="number"]::-webkit-outer-spin-button {
-    height: auto;
-  }
-  
-  /**
-   * 1. Correct the odd appearance in Chrome and Safari.
-   * 2. Correct the outline style in Safari.
-   */
-  
-  [type="search"] {
-    -webkit-appearance: textfield; /* 1 */
-    outline-offset: -2px; /* 2 */
-  }
-  
-  /**
-   * Remove the inner padding in Chrome and Safari on macOS.
-   */
-  
-  [type="search"]::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
-  
-  /**
-   * 1. Correct the inability to style clickable types in iOS and Safari.
-   * 2. Change font properties to `inherit` in Safari.
-   */
-  
-  ::-webkit-file-upload-button {
-    -webkit-appearance: button; /* 1 */
-    font: inherit; /* 2 */
-  }
-  
-  /* Interactive
-     ========================================================================== */
-  
-  /*
-   * Add the correct display in Edge, IE 10+, and Firefox.
-   */
-  
-  details {
-    display: block;
-  }
-  
-  /*
-   * Add the correct display in all browsers.
-   */
-  
-  summary {
-    display: list-item;
-  }
-  
-  /* Misc
-     ========================================================================== */
-  
-  /**
-   * Add the correct display in IE 10+.
-   */
-  
-  template {
-    display: none;
-  }
-  
-  /**
-   * Add the correct display in IE 10.
-   */
-  
-  [hidden] {
-    display: none;
-  }
+[type="checkbox"],
+[type="radio"] {
+    box-sizing: border-box; 
+    padding: 0; 
+}
 
-  .header {
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+  
+[type="search"] {
+    -webkit-appearance: textfield; 
+    outline-offset: -2px;
+}
+  
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button; 
+    font: inherit;
+}
+  
+details {
+    display: block;
+}
+    
+summary {
+    display: list-item;
+}
+  
+template {
+    display: none;
+}
+    
+[hidden] {
+    display: none;
+}
+
+
+/* ############################################################################### */
+
+/* GENERAL USE STYLES */
+
+.media__container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    padding: 20px 20px 20px 0;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.media-action__button {
+    background-color: #1e1e1e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.media-action__button:hover {
+    background-color: #666;
+    transform: translateY(-2px);
+}
+
+.no-items {
+    color: #595959;
+    font-size: 1rem;
+    grid-column: span 2;
+}
+
+.errorlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin: 5px 0 0;
+    color: #ff4d4d;
+    font-size: 13px;
+}
+
+.errorlist li {
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+}
+
+.button {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--main-purple);
+    transition: background-color 0.3s; 
+}
+
+.button:hover {
+    background-color: var(--hover-purple);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+}
+
+.modal__content {
+    background: #1e1e1e;
+    color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close__button {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    color: #bbb;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-close__button:hover {
+    color: #fff;
+}
+
+
+#playlistSelectModal .modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #f1f1f1;
+}
+
+#playlistSelectModal .modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#playlistSelectModal .modal-content li {
+    background: #292929;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#playlistSelectModal .modal-content li:hover {
+    background: #3a3a3a;
+}
+
+#playlistSelectModal input[type="radio"] {
+    opacity: 1;
+    width: 18px; 
+    height: 18px;
+}
+
+#playlistSelectModal label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    font-size: 16px;
+    color: #ddd;
+    gap: 10px;
+}
+
+#playlistSelectModal input[type="radio"]:checked ~ label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+#playlistSelectModal .modal-content button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#playlistSelectModal .modal-content button:hover {
+    background: #0056b3;
+}
+
+
+
+
+
+
+
+
+
+
+
+.playlist-page__form .modal__content {
+    background: #1e1e1e;
+    color: #fff;
+    text-align: center;
+}
+
+.playlist-page__form .modal__content h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #f1f1f1;
+}
+
+.playlist-page__form .form__field {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.playlist-page__form .form__field label {
+    display: block;
+    font-size: 14px;
+    color: #ddd;
+    margin-bottom: 5px;
+}
+
+.playlist-page__form .form__field input, .playlist-page__form .form__field select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background: #292929;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: white;
+    transition: border 0.3s, background 0.3s;
+}
+
+.playlist-page__form .form__fieldp input:focus, .playlist-page__form .form__field select:focus {
+    border-color: #007bff;
+    background: #333;
+    outline: none;
+}
+
+.playlist-page__form .modal__content button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.playlist-page__form .modal__content button:hover {
+    background: #0056b3;
+}
+
+.playlist-page__form .modal__content label::before {
+    content: none;
+}
+
+.flex-end__aligner {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ############################################################################### */
+
+/* BASE FILE STYLES */
+
+
+.header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: #111;
+    background-color: #18171b;
     position: absolute;
     width: 100%;
     top: 0;
@@ -378,6 +495,13 @@ body {
     margin-left: 10px;
     font-size: 1.5rem;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.header .logo img {
+    max-height: 35px;
+    width: auto;
 }
 
 .header .search-bar {
@@ -471,7 +595,7 @@ main {
     padding: 20px;
 }
 
-.form-container {
+.upload-form__container {
     max-width: 600px;
     margin: 0 auto;
     background-color: #111;
@@ -480,32 +604,32 @@ main {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 }
 
-.form-container h2 {
+.upload-form__container h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #fff;
 }
 
-.form-container form {
+.upload-form__container form {
     display: flex;
     flex-direction: column;
 }
 
-.form-container label {
+.upload-form__container label {
     font-size: 1rem;
     color: #ccc;
     margin-bottom: 5px;
 }
 
-.form-container p label {
+.upload-form__container p label {
     display: block;
     margin-bottom: 10px;
 }
 
-.form-container input[type="text"],
-.form-container textarea,
-.form-container select,
-.form-container input[type="file"] {
+.upload-form__container input[type="text"],
+.upload-form__container textarea,
+.upload-form__container select,
+.upload-form__container input[type="file"] {
     width: 100%;
     padding: 10px;
     border: none;
@@ -516,42 +640,18 @@ main {
     box-sizing: border-box;
 }
 
-.form-container textarea {
+.upload-form__container textarea {
     resize: none;
     height: 150px;
 }
 
-.form-container button {
-    padding: 10px 15px;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.form-container button:hover {
-    background-color: #0056b3;
-}
-
-.form-container input[type="file"]::-webkit-file-upload-button {
+.upload-form__container input[type="file"]::-webkit-file-upload-button {
     padding: 8px 12px;
     background-color: #444;
     border: none;
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
-}
-
-.main-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    color: #fff;
-    box-sizing: border-box;
 }
 
 .video-card {
@@ -725,24 +825,6 @@ main {
     transform: translateY(-2px);
 }
 
-.save-button {
-    background-color: #444;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.save-button:hover {
-    background-color: #666;
-    transform: translateY(-2px);
-}
-
 .video-stats {
     display: flex;
     align-items: center;
@@ -878,23 +960,6 @@ main {
     box-sizing: border-box;
 }
 
-.comment-form button {
-    align-self: flex-end;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.comment-form button:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
-}
-
 .reply-button:hover {
     text-decoration: underline;
 }
@@ -989,7 +1054,6 @@ main {
 }
 
 .channel-view {
-    background-color: #040404 !important;
     border-radius: 10px;
 }
 
@@ -1082,7 +1146,7 @@ h2 {
     margin-bottom: 30px;
 }
 
-.input-group {
+.form__field {
     text-align: left;
     margin-bottom: 25px;
 }
@@ -1152,316 +1216,162 @@ input.error:focus {
     box-shadow: 0 0 8px rgba(255, 77, 77, 0.7);
 }
 
-.errorlist {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    margin: 5px 0 0;
-    color: #ff4d4d;
-    font-size: 13px;
-}
-
-.errorlist li {
-    text-align: left;
-    padding-top: 5px;
-    padding-bottom: 10px;
-    border-radius: 4px;
-}
-
-
 /* PLAYLIST */
-.options-container {
-    position: relative;
-    display: inline-block;
-}
 
-.options-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #fff;
-    padding: 5px;
-}
-
-.options-button:hover {
-    color: #bbb;
-}
-
-.options-dropdown {
-    display: none;
-    position: absolute;
-    background: #282828;
-    border: 1px solid #444;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    padding: 10px;
-    top: 30px;
-    left: 0;
-    z-index: 10;
-    white-space: nowrap;
-}
-
-.options-dropdown button {
-    display: block;
-    width: 100%;
-    padding: 8px 12px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    text-align: left;
-    color: #fff;
-    font-size: 14px;
-}
-
-.options-dropdown button:hover {
-    background: #444;
-    border-radius: 3px;
-}
-
-.playlist-spc-btwn-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-
-
-.playlists-container {
+.playlists__container {
     margin: 0 auto;
     padding: 20px;
     color: #fff;
 }
 
-.section-title {
+.playlist-spc-btwn__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.playlist-section__title {
     font-size: 1.8rem;
     font-weight: bold;
+    margin-top: 25px;
     margin-bottom: 15px;
 }
 
-.playlists-grid {
+.playlists__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 15px;
 }
 
-.playlist-card {
-    background-color: #222;
+.playlist__card {
     border-radius: 10px;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.playlist-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-}
-
-.playlist-thumbnail img {
+.playlist__link img {
     width: 100%;
     height: 120px;
     object-fit: cover;
 }
 
-.playlist-info {
+.playlist-card__info {
     padding-left: 10px;
 }
 
-.playlist-title {
+.playlist-card__title {
     font-size: 1.1rem;
     font-weight: bold;
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: white;
 }
 
-.playlist-meta {
+.playlist-card__title:hover {
+    color: var(--main-purple);
+}
+
+.playlist-creator__link {
+    color: #adadb8;
+}
+
+.playlist-card__meta {
+    display: flex;
+    justify-content: space-between;
+}
+
+.playlist-card__p, .playlist-detail__meta {
+    display: inline;
     font-size: 0.9rem;
-    color: #ccc;
-    margin-top: -10px;
+    color: #adadb8;
 }
 
-.no-playlists {
-    color: #ccc;
-    font-size: 1rem;
-    grid-column: span 2;
+.playlist-detail__container {
+    max-width: 95%;
+    min-width: 95%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    margin-top: 30px;
 }
 
-
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
+.playlist-detail__background {
+    margin: 0 auto;
+    padding: 20px;
+    color: #fff;
+    background-color: #121212;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 }
 
-.modal-content {
+.playlist-detail__title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: block;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
     background: #1e1e1e;
     color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 12px;
-    width: 350px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.close {
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    color: #bbb;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: color 0.3s;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
 }
 
-.close:hover {
-    color: #fff;
+.dropbtn i {
+    pointer-events: none;
 }
 
-#playlistSelectModal .modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    font-weight: 600;
-    color: #f1f1f1;
-}
-
-#playlistSelectModal .modal-content ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#playlistSelectModal .modal-content li {
+.dropbtn:hover {
     background: #292929;
-    padding: 12px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
-#playlistSelectModal .modal-content li:hover {
+.dropbtn:active {
+    transform: scale(0.95);
+}
+
+.dropdown__content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    min-width: 150px;
+    z-index: 10;
+
+    margin-top: 10px;
+}
+
+.dropdown__content button {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 12px 16px;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dropdown__content button:hover {
     background: #3a3a3a;
 }
 
-#playlistSelectModal input[type="radio"] {
-    opacity: 1;
-    width: 18px; 
-    height: 18px;
-}
-
-#playlistSelectModal label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    font-size: 16px;
-    color: #ddd;
-    gap: 10px;
-}
-
-#playlistSelectModal input[type="radio"]:checked ~ label::before {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-#playlistSelectModal .modal-content button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    margin-top: 15px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-#playlistSelectModal .modal-content button:hover {
-    background: #0056b3;
-}
-
-#newPlaylistModal .modal-content {
-    background: #1e1e1e;
-    color: #fff;
-    text-align: center;
-}
-
-#newPlaylistModal .modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    font-weight: 600;
-    color: #f1f1f1;
-}
-
-#newPlaylistModal .input-group {
-    text-align: left;
-    margin-bottom: 15px;
-}
-
-#newPlaylistModal .input-group label {
+.show {
     display: block;
-    font-size: 14px;
-    color: #ddd;
-    margin-bottom: 5px;
-}
-
-#newPlaylistModal .input-group input,
-#newPlaylistModal .input-group select {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    background: #292929;
-    border: 1px solid #444;
-    border-radius: 6px;
-    color: white;
-    transition: border 0.3s, background 0.3s;
-}
-
-#newPlaylistModal .input-group input:focus,
-#newPlaylistModal .input-group select:focus {
-    border-color: #007bff;
-    background: #333;
-    outline: none;
-}
-
-#newPlaylistModal .modal-content button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-#newPlaylistModal .modal-content button:hover {
-    background: #0056b3;
-}
-
-#newPlaylistModal .modal-content label::before {
-    content: none;
 }

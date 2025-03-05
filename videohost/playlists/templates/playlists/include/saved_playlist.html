@@ -1,0 +1,22 @@
+{% load static %}
+<div class="playlist__card">
+    <a href="{{ playlist.saving_playlist.get_absolute_url }}" class="playlist__link">
+        {% if playlist.saving_playlist.get_first_video_thumbnail %}
+            <img src="{{ playlist.saving_playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.saving_playlist.title }}">
+        {% else %}
+            <img src="{% static 'videos/images/default.png' %}" alt="{{ playlist.title }}">
+        {% endif %}
+    </a>
+    <div class="playlist-card__info">
+        <a href="{{ playlist.saving_playlist.get_absolute_url }}" class="playlist-card__title">
+            {{ playlist.saving_playlist.title }}
+        </a>
+        <a href="{% url 'users:channel-detail' playlist.saving_playlist.creator.username %}" class="playlist-creator__link">
+            <p class="playlist-card__p">@{{ playlist.saving_playlist.creator }}</p>
+        </a>
+        <div class="playlist-card__meta">
+            <p class="playlist-card__p">{{ playlist.saving_playlist.count_videos }} відео</p>
+            <p class="playlist-card__p">{{ playlist.saving_playlist.visibility }}</p>
+        </div>
+    </div>
+</div>

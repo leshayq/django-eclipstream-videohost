@@ -57,7 +57,7 @@
                             </button>
                         </form>
                         {% if not user_is_owner %}
-                        <button class="save-button" onclick="openPlaylistModal()">
+                        <button class="media-action__button" onclick="openPlaylistModal()">
                             <i class="fas fa-bookmark"></i> Зберегти
                         </button>
 
@@ -118,12 +118,11 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="parent_id" value="{{ group.main.id }}">
                                 <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
-                                <button type="submit">Відправити</button>
+                                <button class="button" type="submit">Відправити</button>
                             </form>
                         </div>
                     </div>
         
-                    <!-- Ответы на комментарий -->
                     <div class="replies" id="replies-{{ group.main.id }}" style="display: none;">
                         {% for reply in group.replies %}
                             <div class="reply" id="reply-{{ reply.id }}">
@@ -142,7 +141,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="parent_id" value="{{ reply.id }}">
                                         <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
-                                        <button type="submit">Відправити</button>
+                                        <button class="button" type="submit">Відправити</button>
                                     </form>
                                 </div>
                             </div>
@@ -154,7 +153,9 @@
             <form class="comment-form" method="POST" action="{% url 'videos:comment-video' url=video.url %}">
                 {% csrf_token %}
                 <textarea name="comment_text" placeholder="Залиште коментар..." required></textarea>
-                <button type="submit">Відправити</button>
+                <div class="flex-end__aligner">
+                    <button class="button comment__button" type="submit">Відправити</button>
+                </div>
             </form>
         </div>
         

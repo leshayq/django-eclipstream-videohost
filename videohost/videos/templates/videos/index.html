@@ -1,12 +1,12 @@
 {% extends 'videos/base.html' %}
 {% block content %}
-<main class="main-container">
+<main class="media__container">
     {% for video in videos %}
 
     {% include 'videos/include/video_card.html' %}
 
     {% empty %}
-    <h4>Помилка при завантаженні відео.</h2>
+    <p class="no-items">Помилка при завантаженні відео.</p>
     {% endfor %}
 </main>
 {% endblock content %}

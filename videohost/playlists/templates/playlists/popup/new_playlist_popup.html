@@ -1,0 +1,35 @@
+<div id="newPlaylistModal" class="modal">
+    <div class="modal__content">
+        <span class="modal-close__button" onclick="closeNewPlaylistModal()">&times;</span>
+        <h2>Новий плейлист</h2>
+        <form id="newPlaylistForm" method="POST" class="playlist-page__form" action="{% url 'playlists:create-playlist' %}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <ul class="errorlist">
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <ul>
+            {% for field in form %}
+                <div class="form__field">
+                    {% if field.errors %}
+                        {{ field.label_tag }} {{ field }}
+                        <ul class="errorlist">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ field.label_tag }} {{ field }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            </ul>
+            <div class="flex-end__aligner">
+                <button class="button popup__button" type="submit">Створити</button>
+            </div>
+        </form>
+    </div>
+</div>
