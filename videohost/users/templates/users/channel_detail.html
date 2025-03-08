@@ -8,26 +8,26 @@
             <p>{{ subscribers_count }} підписників · {{ video_count }} відео</p>
         </div>
         <form method="POST" action="{% url 'users:subscribe-to-channel' channel_name %}">
-        {% if request.user.is_authenticated %}
-            {% if not is_owner %}
-                {% csrf_token %}
-                <button 
-                class="subscribe-button {% if is_user_subscribed %}subscribed{% endif %}"
-                type="submit"
-                value="{{ channel_username }}"
-                name="{{ channel_username }}"
-                >
-                {% if is_user_subscribed %}✔ Ви підписані
-                {% else %} Підписатися
+            {% csrf_token %}
+            {% if request.user.is_authenticated %}
+                {% if not is_owner %}
+                    <button 
+                    class="subscribe__button {% if is_user_subscribed %}subscribed{% endif %}"
+                    type="submit"
+                    value="{{ channel_username }}"
+                    name="{{ channel_username }}"
+                    >
+                    {% if is_user_subscribed %}✔ Ви підписані
+                    {% else %} Підписатися
+                    {% endif %}
+                    </button>
+                    
+                {% else %}
+                <button class="subscribe__button channel-owner__button" onclick="window.location.href='/u/manage/'">Редагувати</button>
                 {% endif %}
-                </button>
-                
             {% else %}
-            <button class="subscribe-button channel-owner-btn" onclick="window.location.href='/u/manage/'">Редагувати</button>
+            <button class="subscribe__button">Підписатися</button>
             {% endif %}
-        {% else %}
-        <button class="subscribe-button">Підписатися</button>
-        {% endif %}
         </form>
     </div>
 
@@ -37,7 +37,7 @@
     </div>
 
     <div class="tab-content" id="videos">
-        <main class="main-container channel-view">
+        <main class="media__container">
             {% for video in videos %}
             {% include 'videos/include/video_card.html' %}
             {% empty %}
@@ -48,28 +48,9 @@
 
     <div class="tab-content" id="playlists" style="display: none;">
 
-        <main class="main-container channel-view">
+        <main class="media__container">
         {% for playlist in playlists %}
-        <div class="playlist-card">
-            <a href="{{ playlist.get_absolute_url }}" class="playlist-thumbnail">
-                {% if playlist.get_first_video_thumbnail %}
-                    <img src="{{ playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.title }}">
-                {% else %}
-                    <img src="{% static 'videos/images/default.png' %}" alt="{{ playlist.title }}">
-                {% endif %}
-            </a>
-            <div class="playlist-info">
-                <h3 class="playlist-title">{{ playlist.title }}</h3>
-                <p class="playlist-meta">{{ playlist.count_videos }} відео</p>
-                <div class="info">
-                    <a href="{% url 'users:channel-detail' playlist.creator %}">
-                        <p>@{{ playlist.creator }}</p>
-                    </a>
-                </div>
-                <!-- <p class="playlist-meta">@{{ playlist.creator }}</p> -->
-                <p class="playlist-meta">{{ playlist.visibility }}</p>
-            </div>
-        </div>
+        {% include 'playlists/include/default_playlist.html' %}
         {% empty %}
         <p>Плейлисти користувача з'являться тут...</p>
         {% endfor %}

@@ -2,37 +2,41 @@
 {% load static %}
 {% block content %}
 <main>
-    <div class="video-page">
-        <div class="video-player">
-            <video controls width="1920" height="1080">
+    <div class="video-detail__page">
+        <div class="video-detail__player">
+            <video controls width="1920" height="1080" id="myVideo">
                 <source src="{{ video.video.url }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
 
-        <div class="video-details">
-            <h1 class="video-title">{{ video.title }}</h1>
-            <div class="video-meta">
+        <div class="video-detail__details">
+            <h1 class="video-detail__title">{{ video.title }}</h1>
+            <div class="video-detail__meta">
 
-                <div class="channel-row">
-                    <div class="channel-info">
-                        <div class="channel-text">
-                            <a href="{% url 'users:channel-detail' video.creator %}">
-                                <h3>@{{ video.creator }}</h3>
-                            </a>
+                <div class="video-detail__flex">
+                    <div class="video-detail-channel__info">
+                        <div class="video-detail-channel__subscribe">
+                            <div class="video-detail__flex-column">
+                                <a href="{% url 'users:channel-detail' video.creator %}">
+                                    <h3>@{{ video.creator }}</h3>
+                                </a>
+                                <p>0 підписників</p>
+                            </div>
+
                             <form method="POST" action="{% url 'users:subscribe-to-channel' video.creator %}">
                                 {% csrf_token %}
                                 {% if request.user.is_authenticated %}
                                     {% if not is_owner %}
-                                    <button class="subscribe-button {% if is_user_subscribed %}subscribed {% else %} {%endif %}">
+                                    <button class="subscribe__button {% if is_user_subscribed %}subscribed {% else %} {%endif %}">
                                         {% if is_user_subscribed %}✔ Ви підписані{% else %}Підписатися{% endif %}
                                     </button>
 
                                     {% else %}
-                                    <button class="subscribe-button channel-owner-btn" onclick="window.location.href='/u/manage/'">Редагувати</button>
+                                    <button class="subscribe__button channel-owner__button" onclick="window.location.href='/u/manage/'">Редагувати</button>
                                     {% endif %}
                                 {% else %}
-                                <button class="subscribe-button">
+                                <button class="subscribe__button">
                                     Підписатися
                                 </button>
                                 {% endif %}
@@ -40,20 +44,17 @@
                         </div>
                     </div>
                     <div>
-                        <span class="views-count">{{ video.views }} переглядів</span>
+                        <span class="video-detail__views-count">{{ video.views }} переглядів</span>
                     </div>
                 </div>
 
-                <div class="action-buttons">
-                    <div>
-                        <span class="upload-date">{{ video.created_at }}</span>
-                    </div>
+                <div class="video-detail__action-buttons">
                     <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-                        <form method="POST" action="{% url 'videos:likes-video' video.url %}" class="like-form">
+                        <form method="POST" action="{% url 'videos:likes-video' video.url %}">
                             {% csrf_token %}
-                            <button class="like-button {% if user_has_liked %}liked{% else %}not-liked{% endif %}" type="submit" value="{{ video.url }}" name="video_url">
+                            <button class="like__button {% if user_has_liked %}liked{% else %}not-liked{% endif %}" type="submit" value="{{ video.url }}" name="video_url">
                                 <i class="fas fa-thumbs-up"></i>
-                                <span class="like-count">{{ video.likes_count }}</span>
+                                <span class="like__count">{{ video.likes_count }}</span>
                             </button>
                         </form>
                         {% if not user_is_owner %}
@@ -61,96 +62,29 @@
                             <i class="fas fa-bookmark"></i> Зберегти
                         </button>
 
-                        <div id="playlistSelectModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close" onclick="closePlaylistModal()">&times;</span>
-                                <h2>Оберіть плейлист</h2>
-                                <form id="playlistForm" method="POST" action="{% url 'playlists:add-video-to-playlist' url=video.url %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="video_id" value="{{ video.id }}">
-                                    <ul>
-                                        {% for playlist in created_by_user_playlists %}
-                                        <li>
-                                            <label>
-                                                <input type="radio" name="playlist_slug" value="{{ playlist.slug }}"> {{ playlist.title }}
-                                            </label>
-                                        </li>
-                                        {% empty %}
-                                        <p class="no-playlists">У вас ще немає плейлистів.</p>
-                                        {% endfor %}
-                                    </ul>
-                                    <button type="submit">Додати</button>
-                                </form>
-                            </div>
-                        </div>
+                        {% include 'videos/popup/playlist_select_popup.html' %}
                         {% endif %}
                     </div>
                 </div>
             </div>
+            <div class="video-detail__description">
+                <div>
+                    <span class="video-detail__upload-date">{{ video.created_at }}</span>
+                </div>
+                <p class="video-detail__description_text">
+                    {{ video.description }}
+                </p>
+            </div>
 
-            <p class="video-description">
-                {{ video.description }}
-            </p>
         </div>
-        <div class="comments-section">
+        <div class="comments__section">
             <h2>Коментарі</h2>
             
             {% for group in grouped_comments %}
-                <div class="comment" id="comment-{{ group.main.id }}">
-                    <div class="comment-body">
-                        <div class="comment-header">
-                            <h4>{{ group.main.user.username }}</h4>
-                            <span class="comment-time">{{ group.main.created_at|date:"H:i" }}</span>
-                        </div>
-                        <p>{{ group.main.text }}</p>
-        
-                        <div class="comment-actions">
-                            <button class="reply-button" onclick="toggleReplyForm('{{ group.main.id }}')">Відповісти</button>
-                            {% if group.replies %}
-                                <button class="toggle-replies" onclick="toggleReplies('{{ group.main.id }}')">
-                                    Показати відповіді ({{ group.replies|length }})
-                                </button>
-                            {% endif %}
-                        </div>
-        
-                        <div class="reply-form" id="reply-form-{{ group.main.id }}" style="display: none;">
-                            <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=group.main.id %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="parent_id" value="{{ group.main.id }}">
-                                <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
-                                <button class="button" type="submit">Відправити</button>
-                            </form>
-                        </div>
-                    </div>
-        
-                    <div class="replies" id="replies-{{ group.main.id }}" style="display: none;">
-                        {% for reply in group.replies %}
-                            <div class="reply" id="reply-{{ reply.id }}">
-                                <div class="comment-header">
-                                    <h4>{{ reply.user.username }}</h4>
-                                    <span class="comment-time">{{ reply.created_at|date:"H:i" }}</span>
-                                </div>
-                                <p>{{ reply.text }}</p>
-        
-                                <div class="comment-actions">
-                                    <button class="reply-button" onclick="toggleReplyForm('{{ reply.id }}')">Відповісти</button>
-                                </div>
-        
-                                <div class="reply-form" id="reply-form-{{ reply.id }}" style="display: none;">
-                                    <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=reply.id %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="parent_id" value="{{ reply.id }}">
-                                        <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
-                                        <button class="button" type="submit">Відправити</button>
-                                    </form>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+                {% include 'videos/include/comment.html' %}
             {% endfor %}
             
-            <form class="comment-form" method="POST" action="{% url 'videos:comment-video' url=video.url %}">
+            <form class="comment__form" method="POST" action="{% url 'videos:comment-video' url=video.url %}">
                 {% csrf_token %}
                 <textarea name="comment_text" placeholder="Залиште коментар..." required></textarea>
                 <div class="flex-end__aligner">
@@ -187,6 +121,9 @@
     function closePlaylistModal() {
         document.getElementById('playlistSelectModal').style.display = 'none';
     }
+
+    var vid = document.getElementById("myVideo");
+    vid.onended = function() {alert("The video has ended");};
 </script>
 
 {% endblock content %}

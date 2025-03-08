@@ -45,21 +45,21 @@
         </div>
         <ul>
             <a href="{% url 'videos:main-page' %}">
-                <li><i class="fas fa-home"></i><span>Home</span></li>
+                <li><i class="fas fa-home"></i><span>Головна</span></li>
             </a>
-            <li><i class="fas fa-user-friends"></i><span>Subscriptions</span></li>
-            <li><i class="fas fa-history"></i><span>History</span></li>
+            <li><i class="fas fa-user-friends"></i><span>Підписки</span></li>
+            <li><i class="fas fa-history"></i><span>Історія переглядів</span></li>
             {% if request.user.is_authenticated %}
             <a href="{% url 'playlists:playlist-list' request.user.username %}">
-                <li><i class="fas fa-list"></i><span>Playlists</span></li>
+                <li><i class="fas fa-list"></i><span>Плейлисти</span></li>
             </a>
             {% else %}
             <a href="{% url 'users:login-user' %}">
-                <li><i class="fas fa-list"></i><span>Playlists</span></li>
+                <li><i class="fas fa-list"></i><span>Плейлисти</span></li>
             </a>
             {% endif %}
-            <li><i class="fas fa-clock"></i><span>Watch Later</span></li>
-            <li><i class="fas fa-thumbs-up"></i><span>Liked Videos</span></li>
+            <li><i class="fas fa-clock"></i><span>Переглянути пізніше</span></li>
+            <li><i class="fas fa-thumbs-up"></i><span>Сподобалися</span></li>
         </ul>
     </nav>
 
@@ -68,11 +68,7 @@
         {% endblock content %}
     </main>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('side-menu');
-            menu.classList.toggle('open');
-        }
-    </script>
+
+<script src="{% static 'videos/js/toggleSideMenu.js' %}"></script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+<div class="reply" id="reply-{{ reply.id }}">
+    <div class="comment__header">
+        <h4>@{{ reply.user.username }}</h4>
+        <span class="comment__datetime">{{ reply.created_at|timesince }} тому</span>
+    </div>
+    <p>{{ reply.text }}</p>
+
+    <div class="comment__actions">
+        <button class="reply__button" onclick="toggleReplyForm('{{ reply.id }}')">Відповісти</button>
+    </div>
+
+    <div class="reply__form" id="reply-form-{{ reply.id }}" style="display: none;">
+        <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=reply.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ reply.id }}">
+            <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
+            <button class="button" type="submit">Відправити</button>
+        </form>
+    </div>
+</div>

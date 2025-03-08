@@ -1,22 +1,24 @@
 {% load static %}
 <div class="playlist__card">
-    <a href="{{ playlist.get_absolute_url }}" class="playlist__link">
+    <a href="{{ playlist.get_absolute_url }}" class="playlist-card__thumbnail">
         {% if playlist.get_first_video_thumbnail %}
+            <i class="fa-solid fa-list-ul" style="color: #ffffff;"></i>
             <img src="{{ playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.title }}">
         {% else %}
+            <i class="fa-solid fa-list-ul" style="color: #ffffff;"></i>
             <img src="{% static 'videos/images/default.png' %}" alt="{{ playlist.title }}">
         {% endif %}
     </a>
     <div class="playlist-card__info">
-        <a href="{{ playlist.get_absolute_url }}" class="playlist-card__title">
+        <a href="{{ video.get_absolute_url }}" class="playlist-card__title">
             {{ playlist.title }}
         </a>
-        <a href="{% url 'users:channel-detail' playlist.creator.username %}" class="playlist-creator__link">
-            <p class="playlist-card__p">@{{ playlist.creator }}</p>
+        <a href="{% url 'users:channel-detail' playlist.creator %}">
+            <p>@{{ playlist.creator }}</p>
         </a>
         <div class="playlist-card__meta">
-            <p class="playlist-card__p">{{ playlist.count_videos }} відео</p>
-            <p class="playlist-card__p">{{ playlist.visibility }}</p>
+            <span>{{ playlist.count_videos }} відео</span>
+            <span>{{ playlist.visibility }}</span>
         </div>
     </div>
 </div>
