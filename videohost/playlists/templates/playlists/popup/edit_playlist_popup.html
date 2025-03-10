@@ -2,7 +2,7 @@
     <div class="modal__content">
         <span class="modal-close__button" onclick="closeEditPlaylistModal()">&times;</span>
         <h2>Редагувати плейлист</h2>
-        <form id="editPlaylistForm" method="POST" class="playlist-page__form" action="{% url 'playlists:edit-playlist' username=request.user.username slug=playlist.slug %}">
+        <form id="editPlaylistForm" method="POST" class="playlist-page__form" action="{% url 'playlists:edit-playlist' slug=playlist.slug %}">
             {% csrf_token %}
             {% if form.non_field_errors %}
             <ul class="errorlist">

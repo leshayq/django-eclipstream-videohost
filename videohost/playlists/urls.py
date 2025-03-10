@@ -17,5 +17,7 @@ urlpatterns = [
     # create new playlist
     path('create/', create_new_playlist, name='create-playlist'),
     # update existing playlist
-    path('update/<slug:username>/<slug:slug>/', edit_playlist, name='edit-playlist'),
+    path('update/<slug:slug>/', edit_playlist, name='edit-playlist'),
+    # delete existing playlist
+    path('delete/<slug:slug>/', delete_playlist, name='delete-playlist'),
 ]

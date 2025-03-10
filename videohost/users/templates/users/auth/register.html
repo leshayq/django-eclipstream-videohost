@@ -1,7 +1,7 @@
 {% extends 'videos/base.html' %}
 {% load static %}
 {% block content %}
-<div class="register-container">
+<div class="auth__container">
     <h2>Створіть акаунт</h2>
     <form method="POST" action="{% url 'users:register-user' %}">
         {% csrf_token %}
@@ -13,7 +13,7 @@
         </ul>
         {% endif %}
         {% for field in form %}
-            <div class="input-group">
+            <div class="form__field">
                 {% if field.errors %}
                     {{ field.label_tag }} {{ field }}
                     <ul class="errorlist">
@@ -26,7 +26,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <button type="submit" class="btn">Зареєструватися</button>
+        <button type="submit" class="button auth__button">Зареєструватися</button>
     </form>
     <p class="login-link">Уже есть аккаунт? <a href="{% url 'users:login-user' %}">Увійти</a></p>
 </div>

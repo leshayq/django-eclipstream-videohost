@@ -10,7 +10,7 @@
         {% endif %}
     </a>
     <div class="playlist-card__info">
-        <a href="{{ video.get_absolute_url }}" class="playlist-card__title">
+        <a href="{{ playlist.get_absolute_url }}" class="playlist-card__title">
             {{ playlist.title }}
         </a>
         <a href="{% url 'users:channel-detail' playlist.creator %}">

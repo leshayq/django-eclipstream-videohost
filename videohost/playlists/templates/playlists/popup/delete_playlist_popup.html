@@ -1,0 +1,14 @@
+<div id="deletePlaylistModal" class="modal">
+    <div class="modal__content">
+        <span class="modal-close__button" onclick="closeDeletePlaylistModal()">&times;</span>
+        <h2>Видалити плейлист</h2>
+        <form id="deletePlaylistForm" method="POST" class="playlist-page__form" action="{% url 'playlists:delete-playlist' slug=playlist.slug %}">
+            {% csrf_token %}
+            <p class="modal-content__text">Чи впевнені ви, що хочете видалити плейлист?</p>
+            <div class="flex-end__aligner" style="gap: 20px; margin-top: 20px;">
+                <button class="button outline__button" type="button" onclick="closeDeletePlaylistModal()">Ні</button>
+                <button class="button" type="submit">Так</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -67,11 +67,11 @@ def create_new_playlist(request):
 
 
 @login_required(login_url='/u/login/')  
-def edit_playlist(request, username, slug):
+def edit_playlist(request, slug):
     '''Оновлення існуючого плейлиста'''
-    playlist_object = Playlist.objects.get(creator__username=username, slug=slug)
-    playlist_object_title = playlist_object.title
     if request.method == 'POST':
+        playlist_object = Playlist.objects.get(creator__username=request.user.username, slug=slug)
+        playlist_object_title = playlist_object.title
         form = PlaylistEditForm(data=request.POST, instance=playlist_object)
         if form.is_valid():
             playlist = form.save(commit=False)
@@ -82,6 +82,11 @@ def edit_playlist(request, username, slug):
             else:
                 return HttpResponseBadRequest("Базові плейлисти неможливо змінити.")
         return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
+    
+@login_required(login_url='/u/login/')  
+def delete_playlist(request, slug):
+    playlist_object = Playlist.objects.get(creator__username=request.user.username, slug=slug).delete()
+    return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
 
 @login_required(login_url='/u/login/')  
 def add_video_to_playlist(request, url):

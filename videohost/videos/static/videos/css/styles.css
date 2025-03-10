@@ -7,7 +7,7 @@ body {
     margin: 0;
     font-family: "Montserrat", sans-serif;
     background-color: #0e0d10;
-    color: #fff;
+    color: var(--white);
     overflow-x: hidden;
 }
 
@@ -218,13 +218,13 @@ template {
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     padding: 20px 20px 20px 0;
-    color: #fff;
+    color: var(--white);
     box-sizing: border-box;
 }
 
 .media-action__button {
     background-color: #1e1e1e;
-    color: #fff;
+    color: var(--white);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -292,7 +292,7 @@ template {
 
 .modal__content {
     background: #1e1e1e;
-    color: #fff;
+    color: var(--white);
     margin: 10% auto;
     padding: 20px;
     border-radius: 12px;
@@ -323,7 +323,7 @@ template {
 }
 
 .modal-close__button:hover {
-    color: #fff;
+    color: var(--white);
 }
 
 
@@ -403,7 +403,7 @@ template {
 
 .playlist-page__form .modal__content {
     background: #1e1e1e;
-    color: #fff;
+    color: var(--white);
     text-align: center;
 }
 
@@ -516,7 +516,7 @@ template {
     border: none;
     border-radius: 5px;
     background-color: #222;
-    color: #fff;
+    color: var(--white);
 }
 
 .header .actions {
@@ -531,7 +531,7 @@ template {
 
 .header a {
     text-decoration: none;
-    color: #fff;
+    color: var(--white);
 }
 
 .side-menu {
@@ -583,7 +583,7 @@ template {
 }
 
 .side-menu ul a {
-    color: #fff;
+    color: var(--white);
 }
 
 .side-menu.open {
@@ -607,7 +607,7 @@ main {
 .upload-form__container h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #fff;
+    color: var(--white);
 }
 
 .upload-form__container form {
@@ -635,7 +635,7 @@ main {
     border: none;
     border-radius: 5px;
     background-color: #222;
-    color: #fff;
+    color: var(--white);
     font-size: 1rem;
     box-sizing: border-box;
 }
@@ -650,7 +650,7 @@ main {
     background-color: #444;
     border: none;
     border-radius: 5px;
-    color: #fff;
+    color: var(--white);
     cursor: pointer;
 }
 
@@ -694,7 +694,7 @@ main {
 .video-card .info h3 {
     font-size: 1rem;
     margin: 0 0 5px;
-    color: #fff;
+    color: var(--white);
 }
 
 .video-card .info p {
@@ -705,7 +705,7 @@ main {
 }
 
 .video-card .info p:hover {
-    color: #ffffff;
+    color: var(--white)fff;
 }
 
 .info p {
@@ -729,7 +729,7 @@ main {
 .video-page {
     margin: 0 auto;
     padding: 20px;
-    color: #fff;
+    color: var(--white);
     background-color: #121212;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
@@ -793,7 +793,7 @@ main {
 .channel-text h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: #fff;
+    color: var(--white);
 }
 
 .upload-date {
@@ -811,7 +811,7 @@ main {
 .subscribe-button {
     padding: 5px 12px;
     background-color: #FF0000;
-    color: #fff;
+    color: var(--white);
     font-size: 0.85rem;
     font-weight: bold;
     border: none;
@@ -868,7 +868,7 @@ main {
 
 .like-button.liked {
     background-color: #777777;
-    color: #fff;
+    color: var(--white);
     box-shadow: 0px 4px 6px rgba(199, 199, 199, 0.4);
 }
 
@@ -898,7 +898,7 @@ main {
 .comments-section h2 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: #fff;
+    color: var(--white);
 }
 
 .comment {
@@ -924,7 +924,7 @@ main {
 
 .comment-header h4 {
     font-size: 1rem;
-    color: #fff;
+    color: var(--white);
     margin: 0;
 }
 
@@ -953,7 +953,7 @@ main {
     border: none;
     border-radius: 8px;
     background-color: #222;
-    color: #fff;
+    color: var(--white);
     font-size: 1rem;
     resize: none;
     height: 100px;
@@ -966,7 +966,7 @@ main {
     background-color: #007BFF;
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--white);
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
@@ -997,7 +997,7 @@ main {
     border: none;
     border-radius: 6px;
     background-color: #222;
-    color: #fff;
+    color: var(--white);
     font-size: 0.9rem;
     resize: none;
     height: 70px;
@@ -1010,7 +1010,7 @@ main {
     background-color: #007BFF;
     border: none;
     border-radius: 6px;
-    color: #fff;
+    color: var(--white);
     font-size: 0.9rem;
     cursor: pointer;
 }
@@ -1238,7 +1238,7 @@ input.error:focus {
 .playlists__container {
     margin: 0 auto;
     padding: 20px;
-    color: #fff;
+    color: var(--white);
 }
 
 .playlist-spc-btwn__title {
@@ -1318,7 +1318,7 @@ input.error:focus {
 .playlist-detail__background {
     margin: 0 auto;
     padding: 20px;
-    color: #fff;
+    color: var(--white);
     background-color: #121212;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
@@ -1337,7 +1337,7 @@ input.error:focus {
 
 .dropbtn {
     background: #1e1e1e;
-    color: #fff;
+    color: var(--white);
     border: none;
     padding: 8px 12px;
     border-radius: 6px;
@@ -1376,7 +1376,7 @@ input.error:focus {
 .dropdown__content button {
     background: none;
     border: none;
-    color: #fff;
+    color: var(--white);
     padding: 12px 16px;
     width: 100%;
     text-align: left;

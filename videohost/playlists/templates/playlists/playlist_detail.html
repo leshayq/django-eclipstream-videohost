@@ -13,6 +13,8 @@
                     
                     {% include 'playlists/popup/edit_playlist_popup.html' %}
 
+                    {% include 'playlists/popup/delete_playlist_popup.html' %}
+
                     {% endif %}
                 </h1>
                 
@@ -43,30 +45,5 @@
     </div>
 </div>
 
-<script>
-function togglePlaylistActions() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
-
-function editPlaylistModal() {
-    document.getElementById('editPlaylistModal').style.display = 'block';
-}
-
-function closeEditPlaylistModal() {
-    document.getElementById('editPlaylistModal').style.display = 'none';
-}
-</script>
+<script src="{% static 'playlists/js/playlistActions.js' %}"></script>
 {% endblock content %}
