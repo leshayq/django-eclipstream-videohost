@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .utils import build_comment_tree
+from notifications.models import Notification
 
 User = get_user_model()
 

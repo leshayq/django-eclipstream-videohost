@@ -11,6 +11,8 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    "daphne",
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -20,6 +22,7 @@ INSTALLED_APPS = [
 
     'videos.apps.VideosConfig',
     'playlists.apps.PlaylistsConfig',
+    'notifications.apps.NotificationsConfig',
     'users.apps.UsersConfig',
 ]
 
@@ -53,6 +56,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'videohost.wsgi.application'
 
+ASGI_APPLICATION = "videohost.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 DATABASES = {
     "default": {
@@ -101,3 +111,4 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.CustomUser"
+
