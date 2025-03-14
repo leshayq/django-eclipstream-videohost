@@ -524,8 +524,8 @@ template {
 .side-menu {
     position: fixed;
     top: 0;
-    left: -250px;
-    width: 250px;
+    left: -300px;
+    width: 300px;
     height: 100%;
     background-color: var(--side-menu-bg);
     overflow-y: auto;
@@ -566,7 +566,7 @@ template {
 }
 
 .side-menu ul li span {
-    font-size: 1rem;
+    font-size: 1.3rem;
 }
 
 .side-menu ul a {
@@ -586,13 +586,34 @@ main {
     position: relative;
 }
 
+.notifications__trigger {
+    position: relative;
+}
+
+.notifications__badge {
+    display: none;
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    padding: 3px 7px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    z-index: 800;
+}
+
+.notifications__badge.show {
+    display: block;
+}
+
 .notifications__page {
     display: none;
     position: absolute;
     background-color: var(--modal-gray);
     width: 400px;
-    max-height: 400px;
-    /* overflow-y: scroll; */
+    max-height: 500px;
+    overflow-y: scroll;
     border-radius: 8px;
     right: 0;
     top: 45px;
@@ -613,7 +634,7 @@ main {
     cursor: pointer;
     padding: 20px;
     transition: background-color 0.3s ease;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .notification:last-child {
@@ -632,7 +653,7 @@ main {
 
 .notification__timedate {
     margin-top: 10px;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--no-items)
 }
 

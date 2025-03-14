@@ -6,6 +6,9 @@
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('notifications__list');
+
+                changeNotificationsBadge(data);
+
                 data.notifications.forEach(notification => {
                     container.insertAdjacentHTML('beforeend', `
                         <div class="notification">
@@ -18,5 +21,18 @@
                 });
             });
         });
+
+        function changeNotificationsBadge(data) {
+            const { unread_notifications_count } = data;
+        
+            const badge = document.getElementById('notifications__badge');
+        
+            if (badge) {
+                if (unread_notifications_count > 0) {
+                    badge.classList.toggle('show');
+                    badge.textContent = unread_notifications_count;
+                }
+            }
+        }
     }
 })();

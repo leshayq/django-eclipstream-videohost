@@ -15,3 +15,7 @@ def build_comment_tree(comments):
                 grouped_comments[root_parent.id] = {"main": root_parent, "replies": [comment]}
 
     return grouped_comments.values()
+
+
+def notification_comment_template(user: str, message: str) -> str:
+    return f'Користувач @{user} залишив коментар: "{message}"'

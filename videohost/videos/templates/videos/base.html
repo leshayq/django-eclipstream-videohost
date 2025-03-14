@@ -30,28 +30,27 @@
                     <i class="fas fa-video"></i>
                 </a>
             </div>
+
             <div class="notifications__container">
                 <a onclick="showNotifications()">
-                    <i class="fas fa-bell"></i>
+                    <div class="notifications__trigger">
+                        <i class="fas fa-bell"></i>
+                        <span class="notifications__badge" id="notifications__badge"></span>
+                    </div>
                 </a>
 
                 <div class="notifications__page" id="notifications__page">
                     <h2 class="notifications-page__title">Повідомлення</h2>
                     <div class="notifications__list" id="notifications__list">
-                        <!-- {% for notification in notifications %}
-                        <div class="notification">
-                            <div class="notification__content">
-                                <p class="notification__text">{{ notification.message }}</p>
-                                <p class="notification__timedate">{{ notification.timesince }}</p>
-                            </div>
-                        </div>
-                        {% endfor %} -->
+                        <!-- сюди будуть вставлені повідомлення -->
                     </div>
                 </div>
 
             </div>
 
             {% endif %}
+
+
             <div>
                 {% if request.user.is_authenticated %}
                 <a href="{% url 'users:channel-detail' request.user.username %}">
@@ -98,8 +97,9 @@
 
 
 <script src="{% static 'videos/js/showSideMenu.js' %}"></script>
-<script src="{% static 'videos/js/showNotificationsMenu.js' %}"></script>
+<script src="{% static 'videos/js/notificationsActions.js' %}"></script>
+<!-- <script src="{% static 'videos/js/showNotificationsMenu.js' %}"></script> -->
 <script src="{% static 'videos/js/wsConnection.js' %}"></script>
-<script src="{% static 'videos/js/fetchNotifications.js' %}"></script>
+<!-- <script src="{% static 'videos/js/fetchNotifications.js' %}"></script> -->
 </body>
 </html>
