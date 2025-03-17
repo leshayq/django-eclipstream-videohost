@@ -19,3 +19,6 @@ def build_comment_tree(comments):
 
 def notification_comment_template(user: str, message: str) -> str:
     return f'Користувач @{user} залишив коментар: "{message}"'
+
+def notification_new_video_template(user: str, title: str) -> str:
+    return f'На каналі @{user} з\'явилося нове відео: "{title}"'

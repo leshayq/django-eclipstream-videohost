@@ -35,44 +35,21 @@ document.addEventListener('click', function(event) {
         }
         notificationsPage.classList.remove('show');
     }
-
-
 });
 
-function showNotifications() {
-    console.log("Открытие окна уведомлений");
-    const notificationsPage = document.getElementById('notifications__page');
-
-    notificationsPage.classList.toggle('show');
-
-    if (notificationsPage.classList.contains('show')) {
-        console.log("Окно уведомлений открыто, помечаем прочитанными");
-        fetchMarkAsReadNotifications();
+function throttle(f, t) {
+    return function (args) {
+      let previousCall = this.lastCall;
+      this.lastCall = Date.now();
+      if (previousCall === undefined 
+          || (this.lastCall - previousCall) > t) {
+        f(args);
+      }
     }
+  }
 
-}
-
-function count_unread_notifications(data) {
-    const { unread_notifications_count } = data;
-    return Number(unread_notifications_count);
-}
-
-function setNotificationsBadge(num) {
-    const badge = document.getElementById('notifications__badge');
-    console.log("setNotificationsBadge вызван с:", num);
-    if (badge) {
-        if (typeof num === 'number' && num > 0) {
-            badge.classList.add('show');
-            badge.textContent = num;
-        } else {
-            badge.classList.remove('show');
-        }
-    }
-}
-
-function fetchMarkAsReadNotifications() {
+const fetchMarkAsReadNotifications = () => {
     if (isAuthenticated) {
-        console.log("Отправка запроса на пометку уведомлений как прочитанные");
         fetch('/notifications/mark-read/', {
             method: 'POST',
             headers: {
@@ -91,6 +68,36 @@ function fetchMarkAsReadNotifications() {
         })
         .catch(error => console.error("Network error:", error));
     }   
+}
+ 
+let throttledFetchMarkAsReadNotifications = throttle(fetchMarkAsReadNotifications, 3000); 
+
+function showNotifications() {
+    const notificationsPage = document.getElementById('notifications__page');
+
+    notificationsPage.classList.toggle('show');
+
+    if (notificationsPage.classList.contains('show')) {
+        throttledFetchMarkAsReadNotifications();
+    }
+
+}
+
+function count_unread_notifications(data) {
+    const { unread_notifications_count } = data;
+    return Number(unread_notifications_count);
+}
+
+function setNotificationsBadge(num) {
+    const badge = document.getElementById('notifications__badge');
+    if (badge) {
+        if (typeof num === 'number' && num > 0) {
+            badge.classList.add('show');
+            badge.textContent = num;
+        } else {
+            badge.classList.remove('show');
+        }
+    }
 }
 
 function getCSRFToken() {
