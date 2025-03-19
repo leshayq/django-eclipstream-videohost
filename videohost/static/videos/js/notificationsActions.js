@@ -6,9 +6,14 @@ if (isAuthenticated) {
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('notifications__list');
-
+            const noItemsText = document.getElementById('notifications__no-items');
             const unreadNotificationsCount = count_unread_notifications(data);
+
             setNotificationsBadge(unreadNotificationsCount);
+            
+            if (data.notifications.length > 0) {
+                noItemsText.style.display = 'none';
+            }
 
             data.notifications.forEach(notification => {
                 container.insertAdjacentHTML('beforeend', `

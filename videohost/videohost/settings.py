@@ -13,6 +13,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     "daphne",
     'channels',
+    'channels_redis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,8 +61,13 @@ ASGI_APPLICATION = "videohost.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts":[{
+                "address": os.environ.get('CHANNELS_REDIS_URL')
+            }]
+        },
+    },
 }
 
 DATABASES = {

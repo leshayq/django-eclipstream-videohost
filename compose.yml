@@ -11,6 +11,7 @@ services:
       - ./.env.dev
     depends_on:
       - db
+      - redis
     networks:
       - default
 
@@ -25,6 +26,25 @@ services:
     networks:
       - default
 
+  redis:
+    image: 'redis:alpine'
+    hostname: redis
+    ports:
+      - 6379:6379
+    networks:
+      - default
+
+  celery:
+    build: ./videohost
+    command: celery worker --app=core --loglevel=info
+    depends_on:
+      - web
+      - db
+      - redis
+    restart: on-failure
+    networks:
+      - default
+
   nginx:
     image: nginx:latest
     volumes:
@@ -35,5 +55,6 @@ services:
       - "80:80"
     depends_on:
       - web
+    
 volumes:
   postgres_data:

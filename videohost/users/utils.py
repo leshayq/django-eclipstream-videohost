@@ -6,3 +6,4 @@ def notification_subscription_template(user: str) -> str:
 def get_list_of_followers(user):
     followers = Subscriptions.objects.filter(following=user).only('follower').select_related('follower')
     return followers
+

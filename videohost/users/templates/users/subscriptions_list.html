@@ -1,0 +1,22 @@
+{% extends 'videos/base.html' %}
+{% block content %}
+<main class="subscriptions__wrapper">
+    <h2 class="playlist-section__title">{{ section_title }}</h2>
+    <div class="subscriptions__container">
+        {% for subscription in subscriptions %}
+        <div class="subscription__template">
+            <a href="{% url 'users:channel-detail' subscription.following.username %}">
+                <div class="subscription__pfp">{{ subscription.following.username|make_list|first }}</div>
+            </a>
+
+            <a href="{% url 'users:channel-detail' subscription.following.username %}">{{ subscription.following.username }}</a>
+            <p>{{ subscription.subscribers_count }} підписників</p>
+        </div>
+        {% empty %}
+        <p class="no-items">Немає підписок.</p>
+        {% endfor%}
+
+    </div>
+</main>
+
+{% endblock %}

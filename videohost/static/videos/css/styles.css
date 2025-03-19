@@ -554,6 +554,7 @@ template {
     display: flex;
     align-items: center;
     padding: 15px 20px;
+    border-radius: 8px;
     cursor: pointer;
 }
 
@@ -628,6 +629,10 @@ main {
 .notifications-page__title {
     font-size: 18px;
     padding: 20px 20px 5px 20px;
+}
+
+.notifications__no-items {
+    padding: 20px;
 }
 
 .notification {
@@ -838,7 +843,7 @@ main {
 }
 
 .video-detail__flex-column p {
-    font-size: 12px;
+    font-size: 16px;
     color: var(--no-items);
 }
 
@@ -1216,6 +1221,60 @@ input.error {
 input.error:focus {
     border-color: #ff7878;
     box-shadow: 0 0 8px rgba(255, 77, 77, 0.7);
+}
+
+
+/* SUBS PAGE */
+
+.subscriptions__wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.subscriptions__container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 80px;
+    padding: 20px 20px 20px 0;
+    color: var(--white);
+    box-sizing: border-box;
+}
+
+.subscription__template {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 10px;
+}
+
+.subscription__template a {
+    color: var(--white);
+}
+
+.subscription__template a:hover {
+    color: var(--text-light-gray);
+}
+
+.subscription__template p {
+    text-align: center;
+    color: var(--text-light-gray)
+}
+
+.subscription__pfp {
+    font-size: 32px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    background-color: var(--dark-gray-header-bg);
 }
 
 /* PLAYLIST */

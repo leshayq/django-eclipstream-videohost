@@ -17,6 +17,8 @@ from django.utils.text import slugify
 from unidecode import unidecode
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
+from notifications.utils import delete_subscription_notification
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -61,6 +63,20 @@ class ChannelDetail(TemplateView):
 
         return context
     
+class SubscriptionsListView(ListView):
+    template_name = 'users/subscriptions_list.html'
+    context_object_name = 'subscriptions'
+
+    def get_queryset(self):
+        queryset = Subscriptions.objects.filter(follower=self.request.user).only('following').select_related('following').annotate(subscribers_count=Count('following__followers'))
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['section_title'] = f'Підписки @{self.request.user.username}'
+        return context
+
 # Підписка на канал користувача
 @login_required(login_url='/u/login/')
 def subscribe_to_channel(request, username):
@@ -69,7 +85,10 @@ def subscribe_to_channel(request, username):
     if request.user.username != channel_name and channel_object:
         subscription, created = Subscriptions.objects.get_or_create(follower=request.user, following=channel_object)
         if not created:
+            # код, який виконується якщо юзер вже був підписаний (відписка)
             subscription.delete()
+            delete_subscription_notification(sender=request.user, receiver=channel_object)
+
         return HttpResponse(f"<script>window.location.href=document.referrer;</script>")
     return HttpResponseBadRequest(f"Упс.. Помилка.")
 

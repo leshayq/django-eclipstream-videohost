@@ -5,8 +5,10 @@
         ws.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const container = document.getElementById('notifications__list');
-        
+        const noItemsText = document.getElementById('notifications__no-items');
+
         updateNotificationsBadge();
+        noItemsText.style.display = 'none';
         
         container.insertAdjacentHTML('afterbegin', `
         <div class="notification">

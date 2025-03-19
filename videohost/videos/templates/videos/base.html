@@ -41,6 +41,7 @@
 
                 <div class="notifications__page" id="notifications__page">
                     <h2 class="notifications-page__title">Повідомлення</h2>
+                    <p class="no-items notifications__no-items" id="notifications__no-items">Немає нових повідомлень.</p>
                     <div class="notifications__list" id="notifications__list">
                         <!-- сюди будуть вставлені повідомлення -->
                     </div>
@@ -74,7 +75,9 @@
             <a href="{% url 'videos:main-page' %}">
                 <li><i class="fas fa-home"></i><span>Головна</span></li>
             </a>
-            <li><i class="fas fa-user-friends"></i><span>Підписки</span></li>
+            <a href="{% url 'users:subscriptions-list' %}">
+                <li><i class="fas fa-user-friends"></i><span>Підписки</span></li>
+            </a>
             <li><i class="fas fa-history"></i><span>Історія переглядів</span></li>
             {% if request.user.is_authenticated %}
             <a href="{% url 'playlists:playlist-list' request.user.username %}">

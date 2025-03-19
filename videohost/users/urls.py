@@ -12,4 +12,6 @@ urlpatterns = [
     path('register/', register_user, name='register-user'),
     #login user
     path('login/', login_user, name='login-user'),
+    # сторінка з підписками користувача
+    path('subscriptions/', SubscriptionsListView.as_view(), name='subscriptions-list')
 ]
