@@ -30,19 +30,27 @@ class ChannelDetail(TemplateView):
         context = super().get_context_data(**kwargs)
 
         channel_name = self.kwargs.get('username')
-
         channel_object = get_object_or_404(User, username=channel_name) 
         
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
 
+        is_user_subscribed = False
+
         if self.request.user.is_authenticated:
-            is_user_subscribed = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
+            if self.request.user != channel_object:
+                try:
+                    user_subscription = Subscriptions.objects.get(follower=self.request.user, following=channel_object)
+                    is_user_subscribed = bool(user_subscription)
+
+                    context['subscription_id'] = user_subscription.id if user_subscription else None
+                    context['enabled_notifications'] = user_subscription.notify
+                except Subscriptions.DoesNotExist:
+                    context['subscription_id'] = None
 
             is_owner = channel_object == self.request.user
 
         else:
             is_owner = False
-            is_user_subscribed = False
         
         if is_owner:
             playlists = Playlist.objects.filter(creator=channel_object)
@@ -55,6 +63,7 @@ class ChannelDetail(TemplateView):
 
         context['is_owner'] = is_owner
         context['channel_name'] = channel_name
+        context['channel_object'] = channel_object
         context['video_count'] = video_count
         context['subscribers_count'] = subscribers_count
         context['is_user_subscribed'] = is_user_subscribed

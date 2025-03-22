@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('videos.urls', namespace='videos')),
     path('playlist/', include('playlists.urls', namespace='playlists')),
     path('u/', include('users.urls', namespace='users')),
-    path('', include('notifications.urls', namespace='notifications')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
 ]
 
 if settings.DEBUG:

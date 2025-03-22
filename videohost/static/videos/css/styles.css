@@ -250,6 +250,15 @@ template {
     display: none;
 }
 
+.notifications__page::-webkit-scrollbar {
+    width: 0.4em;
+}
+
+.notifications__page::-webkit-scrollbar-thumb { 
+    background-color: var(--no-items);
+    border-radius: 100vw;
+}
+
 
 /* ############################################################################### */
 
@@ -417,6 +426,8 @@ template {
 }
 
 .dropdown__content button {
+    display: flex;
+    align-items: center;
     background: none;
     border: none;
     color: var(--white);
@@ -426,10 +437,18 @@ template {
     font-size: 14px;
     cursor: pointer;
     transition: background 0.3s ease;
+    white-space: nowrap;
 }
 
 .dropdown__content button:hover {
     background: var(--dropdown-menu-btn-hover);
+}
+
+.dropdown__content button i {
+    font-size: 1.25rem; 
+    max-width: 20px;
+    width: 20px;
+    text-align: center;
 }
 
 .show {
@@ -1377,7 +1396,7 @@ input.error:focus {
     content: none;
 }
 
-.dropbtn {
+.playlist-actions__button {
     background: var(--modal-gray);
     color: var(--white);
     border: none;
@@ -1386,17 +1405,16 @@ input.error:focus {
     cursor: pointer;
     font-size: 16px;
     transition: background 0.3s ease, transform 0.2s ease;
-    margin-left: 10px;
 }
 
-.dropbtn i {
+.playlist-actions__button i {
     pointer-events: none;
 }
 
-.dropbtn:hover {
+.playlist-actions__button:hover {
     background: #292929;
 }
 
-.dropbtn:active {
+.playlist-actions__button:active {
     transform: scale(0.95);
 }

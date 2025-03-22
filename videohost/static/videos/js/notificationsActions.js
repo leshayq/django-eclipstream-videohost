@@ -1,5 +1,3 @@
-const isAuthenticated = document.body.dataset.isAuthenticated === 'true';
-
 if (isAuthenticated) {
     document.addEventListener('DOMContentLoaded', function() {
         fetch('/notifications/')
@@ -103,9 +101,4 @@ function setNotificationsBadge(num) {
             badge.classList.remove('show');
         }
     }
-}
-
-function getCSRFToken() {
-    const cookieValue = document.cookie.match(/csrftoken=([^;]+)/);
-    return cookieValue ? cookieValue[1] : "";
 }

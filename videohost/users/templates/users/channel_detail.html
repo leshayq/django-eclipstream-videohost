@@ -7,26 +7,39 @@
             <h2>@{{ channel_name }}</h2>
             <p>{{ subscribers_count }} підписників · {{ video_count }} відео</p>
         </div>
-        <form method="POST" action="{% url 'users:subscribe-to-channel' channel_name %}">
+        <form method="POST" action="{% url 'users:subscribe-to-channel' channel_object %}" onsubmit="subscribeFormSubmit(event)" class="dropdown" data-user-subscribed="{{ is_user_subscribed }}">
             {% csrf_token %}
+
             {% if request.user.is_authenticated %}
                 {% if not is_owner %}
-                    <button 
-                    class="subscribe__button {% if is_user_subscribed %}subscribed{% endif %}"
-                    type="submit"
-                    value="{{ channel_username }}"
-                    name="{{ channel_username }}"
-                    >
-                    {% if is_user_subscribed %}✔ Ви підписані
-                    {% else %} Підписатися
-                    {% endif %}
+                    {% if is_user_subscribed %}
+
+                    <button type="button" class="subscribe__button {% if is_user_subscribed %}subscribed dropbtn{% else %}{% endif %}" {% if is_user_subscribed %}onclick="showChannelActions()" {% endif %}>
+                        {% if enabled_notifications %}
+                        <i class="fa-solid fa-bell" style="color: #ffffff; padding-right: 10px;"></i>
+                        {% else %}
+                        <i class="fa-regular fa-bell" style="color: #ffffff; padding-right: 10px;"></i>
+                        {% endif %}
+                        Ви підписані ▼
                     </button>
-                    
+
+                    {% include 'users/include/channel_actions_dropdown.html' %}
+
+                    {% else %}
+
+                    <button type="submit" class="subscribe__button">
+                        Підписатися
+                    </button>
+
+                    {% endif %}
+
                 {% else %}
                 <button class="subscribe__button channel-owner__button" onclick="window.location.href='/u/manage/'">Редагувати</button>
                 {% endif %}
             {% else %}
-            <button class="subscribe__button">Підписатися</button>
+            <button class="subscribe__button">
+                Підписатися
+            </button>
             {% endif %}
         </form>
     </div>
@@ -81,4 +94,5 @@
     });
 </script>
 
+<script src="{% static 'users/js/channelActions.js' %}"></script>
 {% endblock %}

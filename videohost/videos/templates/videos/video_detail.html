@@ -12,26 +12,44 @@
 
         <div class="video-detail__details">
             <h1 class="video-detail__title">{{ video.title }}</h1>
-            <div class="video-detail__meta">
-
+            <div class="video-detail__flex">
                 <div class="video-detail__flex">
+
                     <div class="video-detail-channel__info">
                         <div class="video-detail-channel__subscribe">
                             <div class="video-detail__flex-column">
                                 <a href="{% url 'users:channel-detail' video.creator %}">
                                     <h3>@{{ video.creator }}</h3>
                                 </a>
-                                <p>0 підписників</p>
+                                <p>{{ subscribers_count }} підписників</p>
                             </div>
-
-                            <form method="POST" action="{% url 'users:subscribe-to-channel' video.creator %}">
+                
+                            <form method="POST" action="{% url 'users:subscribe-to-channel' video.creator %}" onsubmit="subscribeFormSubmit(event)" class="dropdown" data-user-subscribed="{{ is_user_subscribed }}">
                                 {% csrf_token %}
+                
                                 {% if request.user.is_authenticated %}
                                     {% if not is_owner %}
-                                    <button class="subscribe__button {% if is_user_subscribed %}subscribed {% else %} {%endif %}">
-                                        {% if is_user_subscribed %}✔ Ви підписані{% else %}Підписатися{% endif %}
-                                    </button>
-
+                                        {% if is_user_subscribed %}
+                
+                                        <button type="button" class="subscribe__button {% if is_user_subscribed %}subscribed dropbtn{% else %}{% endif %}" {% if is_user_subscribed %}onclick="showChannelActions()" {% endif %}>
+                                            {% if enabled_notifications %}
+                                            <i class="fa-solid fa-bell" style="color: #ffffff; padding-right: 10px;"></i>
+                                            {% else %}
+                                            <i class="fa-regular fa-bell" style="color: #ffffff; padding-right: 10px;"></i>
+                                            {% endif %}
+                                            Ви підписані ▼
+                                        </button>
+                
+                                        {% include 'users/include/channel_actions_dropdown.html' %}
+                
+                                        {% else %}
+                
+                                        <button type="submit" class="subscribe__button">
+                                            Підписатися
+                                        </button>
+                
+                                        {% endif %}
+                
                                     {% else %}
                                     <button class="subscribe__button channel-owner__button" onclick="window.location.href='/u/manage/'">Редагувати</button>
                                     {% endif %}
@@ -43,10 +61,12 @@
                             </form>
                         </div>
                     </div>
-                    <div>
-                        <span class="video-detail__views-count">{{ video.views }} переглядів</span>
-                    </div>
+
                 </div>
+                <div>
+                    <span class="video-detail__views-count">{{ video.views }} переглядів</span>
+                </div>
+            </div>
 
                 <div class="video-detail__action-buttons">
                     <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
@@ -94,7 +114,6 @@
         </div>
         
 </main>
-
 <script>
     function toggleReplyForm(commentId) {
         let form = document.getElementById('reply-form-' + commentId);
@@ -125,5 +144,7 @@
     var vid = document.getElementById("myVideo");
     vid.onended = function() {alert("The video has ended");};
 </script>
+
+<script src="{% static 'users/js/channelActions.js' %}"></script>
 
 {% endblock content %}

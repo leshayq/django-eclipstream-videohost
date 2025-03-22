@@ -1,5 +1,5 @@
 function showPlaylistActions() {
-    document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById("playlistActionsDropdown").classList.toggle("show");
   }
   
   window.onclick = function(event) {
@@ -11,19 +11,18 @@ function showPlaylistActions() {
     }
   }
   
-  function showEditPlaylistModal() {
+function showEditPlaylistModal() {
       document.getElementById('editPlaylistModal').style.display = 'block';
-  }
+}
   
-  function closeEditPlaylistModal() {
+function closeEditPlaylistModal() {
       document.getElementById('editPlaylistModal').style.display = 'none';
-  }
+}
   
-  function showDeletePlaylistModal() {
+function showDeletePlaylistModal() {
       document.getElementById('deletePlaylistModal').style.display = 'block';
-  }
+}
   
-  function closeDeletePlaylistModal() {
+function closeDeletePlaylistModal() {
       document.getElementById('deletePlaylistModal').style.display = 'none';
-  }
-  
+}

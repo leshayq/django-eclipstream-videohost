@@ -8,5 +8,5 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Subscriptions)
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('follower', 'following', 'created_at',)
+    list_display = ('follower', 'following', 'notify', 'created_at',)
     readonly_fields = ('follower', 'following', 'created_at',)

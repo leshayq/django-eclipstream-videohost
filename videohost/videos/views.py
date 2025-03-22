@@ -57,7 +57,16 @@ class VideoDetailView(DetailView):
         channel_object = User.objects.get(username=channel_name)
 
         if self.request.user.is_authenticated:
-            context['is_user_subscribed'] = Subscriptions.objects.filter(follower=self.request.user, following=channel_object)
+            if self.request.user != channel_object:
+                try:
+                    user_subscription = Subscriptions.objects.get(follower=self.request.user, following=channel_object)
+                    context['is_user_subscribed'] = bool(user_subscription)
+
+                    context['subscription_id'] = user_subscription.id if user_subscription else None
+                    context['enabled_notifications'] = user_subscription.notify
+                except Subscriptions.DoesNotExist:
+                    context['subscription_id'] = None
+
             context['user_has_liked'] = Like.objects.filter(user=self.request.user, video=video).exists()
             context['is_owner'] = channel_object == self.request.user
 
@@ -69,6 +78,9 @@ class VideoDetailView(DetailView):
         
         comments = Comment.objects.filter(video=video).select_related('parent', 'user').prefetch_related('replies').order_by('created_at')
         grouped_comments = build_comment_tree(comments)
+
+        subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
+        context['subscribers_count'] = subscribers_count
         context['grouped_comments'] = grouped_comments
  
         return context
