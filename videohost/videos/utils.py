@@ -1,3 +1,5 @@
+from .models import WatchHistory
+
 def build_comment_tree(comments):
     grouped_comments = {}
 

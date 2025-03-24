@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Genre, Video, Like, Comment
+from .models import Genre, Video, Like, Comment, WatchHistory
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
@@ -22,4 +22,9 @@ class LikeAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('video', 'user', 'text', 'created_at')
+
+@admin.register(WatchHistory)
+class WatchHistoryAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    readonly_fields = ('videos',)
 

@@ -1,0 +1,28 @@
+<div class="video__card wh__video-card">
+    <a href="{{ video.video.get_absolute_url }}">
+        <img src="{{ video.video.thumbnail.url }}" alt="Video thumbnail">
+    </a>
+    <div class="video-card__info wh-video-card__info">
+        <div style="display: flex; justify-content: space-between;">
+            <a href="{{ video.video.get_absolute_url }}" class="video-card__title wh-video-card__title">
+                {{ video.video.title }}
+            </a>
+            
+            <form method="POST" action="{% url 'users:wh-delete-video' username=request.user.username video_url=video.video.url %}">
+                {% csrf_token %}
+                <button type="submit" class="modal-close__button wh-delete__button">&times;</button>
+            </form>
+        </div>
+
+        <a href="{% url 'users:channel-detail' video.video.creator %}">
+            <p>@{{ video.video.creator }}</p>
+        </a>
+        <div class="video-card__meta">
+            <span>{{ video.video.views }} views</span>
+        </div>
+
+        <div class="video-card__meta">
+            <span class="wh-video-card__description">{{ video.video.description }}</span>
+        </div>
+    </div>
+</div>

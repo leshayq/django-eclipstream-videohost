@@ -1,5 +1,6 @@
 from django.urls import path, include
 from .views import *
+from videos.views import delete_video_from_watch_history
 
 app_name = 'users'
 
@@ -13,5 +14,9 @@ urlpatterns = [
     #login user
     path('login/', login_user, name='login-user'),
     # сторінка з підписками користувача
-    path('subscriptions/', SubscriptionsListView.as_view(), name='subscriptions-list')
+    path('subscriptions/', SubscriptionsListView.as_view(), name='subscriptions-list'),
+    # сторінка історія перегляду відео
+    path('wh/', WatchHistoryListView.as_view(), name='watch-history'),
+    # видалити відео з історії перегляду
+    path('wh/delete-video/<slug:username>/<uuid:video_url>/', delete_video_from_watch_history, name='wh-delete-video')
 ]

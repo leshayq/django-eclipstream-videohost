@@ -1296,6 +1296,49 @@ input.error:focus {
     background-color: var(--dark-gray-header-bg);
 }
 
+/* WATCH HISTORY PAGE  */
+
+.wh__container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+
+.wh-section__title {
+    margin-bottom: 35px !important;
+}
+
+.wh__video-card {
+    flex-direction: row !important;
+}
+.wh__video-card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.wh-video-card__title {
+    font-size: 1.6rem;
+}
+
+.wh-video-card__info p {
+    font-size: 1.1rem;
+    margin-top: 5px;
+}
+
+.wh-video-card__description {
+    max-width: 600px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.wh-delete__button {
+    font-size: 2rem;
+    background: none;
+    border: none;
+}
+
+
 /* PLAYLIST */
 
 .playlists__container {
@@ -1320,7 +1363,7 @@ input.error:focus {
     justify-content: space-between;
 }
 
-.playlist-section__title {
+.playlist-section__title, .sl-section__title, .wh-section__title {
     font-size: 1.8rem;
     font-weight: bold;
     margin-top: 25px;

@@ -1,21 +1,20 @@
-from .models import Video, Like, Comment
-from playlists.models import Playlist, Saving
+from .models import Video, Like, Comment, WatchHistory, WatchHistoryItem
+from playlists.models import Playlist
 from users.models import Subscriptions
-from playlists.forms import PlaylistCreateForm
 from .forms import VideoUploadForm
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView, DetailView
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
 from django.db.models import F
 from django.db import transaction
-from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .utils import build_comment_tree
-from notifications.models import Notification
+from django.utils.timezone import now
+
 
 User = get_user_model()
 
@@ -47,8 +46,12 @@ class VideoDetailView(DetailView):
 
             video.refresh_from_db()
 
+            # додавання відео у історію перегляду
+            add_video_to_watch_history(user=self.request.user, video=video)
+
+
         return video
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         video = self.object
@@ -143,3 +146,23 @@ def comment_video(request, url, pk=None):
                 parent_comment_owner = parent_comment.user
                 Comment.objects.create(text=f'@{str(parent_comment_owner)} {text}', parent=parent_comment, video=video, user=request.user)
             return HttpResponseRedirect(reverse('videos:video-detail', args=[str(url)]))
+
+def add_video_to_watch_history(user, video):
+    watch_history, _ = WatchHistory.objects.get_or_create(user=user) 
+
+    is_video_exists = WatchHistoryItem.objects.filter(watch_history=watch_history, video=video).exists()
+
+    if not is_video_exists:
+        WatchHistoryItem.objects.create(watch_history=watch_history, video=video)
+    else:
+        item = WatchHistoryItem.objects.get(watch_history=watch_history, video=video)
+        item.added_at = now()
+        item.save()
+
+@login_required(login_url='/u/login/') 
+def delete_video_from_watch_history(request, username, video_url):
+    watch_history = get_object_or_404(WatchHistory, user__username=username)
+    video = get_object_or_404(Video, url=video_url)
+
+    WatchHistoryItem.objects.filter(watch_history=watch_history, video=video).delete()
+    return HttpResponseRedirect(reverse('users:watch-history'))

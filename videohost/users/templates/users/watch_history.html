@@ -1,0 +1,14 @@
+{% extends 'videos/base.html' %}
+{% block content %}
+<main>
+    <h2 class="wh-section__title">Історія перегляду</h2>
+    <div class="wh__container">
+        {% for video in videos %}
+            {% include 'videos/include/wh_video_card.html' %}
+        {% empty %}
+        <p class="no-items">Упс! Порожньо...</p>
+         {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

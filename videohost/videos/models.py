@@ -6,6 +6,7 @@ from django.urls import reverse
 import os
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
+from django.utils.timezone import now
 
 VISIBILITY_CHOICES = [
     ('Публічний', 'Публічний'),
@@ -92,6 +93,14 @@ class Like(models.Model):
         return f'Лайк від {self.user} на відео: {self.video.title}'
         
 class WatchHistory(models.Model):
-    videos = models.ManyToManyField(Video, blank=True)
+    videos = models.ManyToManyField(Video, through='WatchHistoryItem', blank=True)
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+class WatchHistoryItem(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    watch_history = models.ForeignKey(WatchHistory, on_delete=models.CASCADE)
+    added_at = models.DateTimeField(default=now)
+
+    class Meta:
+        ordering = ['-added_at']

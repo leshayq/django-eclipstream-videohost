@@ -75,15 +75,24 @@
             <a href="{% url 'videos:main-page' %}">
                 <li><i class="fas fa-home"></i><span>Головна</span></li>
             </a>
+            {% if request.user.is_authenticated %}
             <a href="{% url 'users:subscriptions-list' %}">
                 <li><i class="fas fa-user-friends"></i><span>Підписки</span></li>
             </a>
-            <li><i class="fas fa-history"></i><span>Історія переглядів</span></li>
-            {% if request.user.is_authenticated %}
+            <a href="{% url 'users:watch-history' %}">
+                <li><i class="fas fa-history"></i><span>Історія переглядів</span></li>
+            </a>
+
             <a href="{% url 'playlists:playlist-list' request.user.username %}">
                 <li><i class="fas fa-list"></i><span>Плейлисти</span></li>
             </a>
             {% else %}
+            <a href="{% url 'users:login-user' %}">
+                <li><i class="fas fa-user-friends"></i><span>Підписки</span></li>
+            </a>
+            <a href="{% url 'users:login-user' %}">
+                <li><i class="fas fa-history"></i><span>Історія переглядів</span></li>
+            </a>
             <a href="{% url 'users:login-user' %}">
                 <li><i class="fas fa-list"></i><span>Плейлисти</span></li>
             </a>

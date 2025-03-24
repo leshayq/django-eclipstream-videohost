@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from videos.models import Video
 from .models import Subscriptions
 from playlists.models import Playlist
+from videos.models import WatchHistory, WatchHistoryItem
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
 from .forms import UserRegisterForm, UserLoginForm
@@ -85,6 +86,14 @@ class SubscriptionsListView(ListView):
 
         context['section_title'] = f'Підписки @{self.request.user.username}'
         return context
+    
+class WatchHistoryListView(ListView):
+    model =  WatchHistory
+    template_name = 'users/watch_history.html'
+    context_object_name = 'videos'
+
+    def get_queryset(self):
+        return WatchHistoryItem.objects.filter(watch_history__user=self.request.user)
 
 # Підписка на канал користувача
 @login_required(login_url='/u/login/')
@@ -132,6 +141,10 @@ def register_user(request):
                             title="Сподобалися",
                             visibility="Приватний",
                             creator=user
+                        )
+
+                        WatchHistory.objects.create(
+                            user=user
                         )
                     
                 except Exception as e:
