@@ -942,12 +942,12 @@ main {
 }
 
 .like__button.not-liked {
-    background-color: #f0f0f0;
-    color: var(--action-hover);
+    /* background-color: #f0f0f0; */
+    color: var(--white);
 }
 
 .like__button:hover {
-    background-color: #aaaaaa;
+    background-color: var(--action-hover);
 }
 
 
