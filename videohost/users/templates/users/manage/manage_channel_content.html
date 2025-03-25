@@ -1,0 +1,45 @@
+{% extends 'videos/base.html' %}
+{% block content %}
+<main class="dashboard__container">
+    <div class="dashboard__sidemenu">
+        <ul>
+            <a>
+                <li><i class="fa-solid fa-list-check" style="color: #ffffff;"></i><span>Контент</span></li>
+            </a>
+            <a href="{% url 'users:manage-channel-customization' %}">
+                <li><i class="fa-solid fa-wand-magic-sparkles" style="color: #ffffff;"></i><span>Кастомізація</span></li>
+            </a>
+        </ul>
+    </div>
+    <h2 class="dashboard__section-title">Контент каналу</h2>
+    <div class="dashboard__content">
+        <table class="dashboard__table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>Відео</th>
+                    <th>Доступ</th>
+                    <th>Дата</th>
+                    <th>Перегляди</th>
+                    <th>Коментарі</th>
+                    <th>Лайки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for video in videos %}
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>{% include 'videos/include/dashboard_video_card.html' %}</td>
+                    <td>{{ video.visibility }}</td>
+                    <td>{{ video.created_at }}</td>
+                    <td>{{ video.views }}</td>
+                    <td>{{ video.count_comments }}</td>
+                    <td>{{ video.likes_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       
+    </div>
+</main>
+{% endblock %}

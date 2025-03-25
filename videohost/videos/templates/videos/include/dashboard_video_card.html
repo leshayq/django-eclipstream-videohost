@@ -1,0 +1,16 @@
+<div class="video__card dashboard__video-card">
+    <a>
+        <img src="{{ video.thumbnail.url }}" alt="Video thumbnail">
+    </a>
+    <div class="video-card__info wh-video-card__info">
+        <div style="display: flex; justify-content: space-between;">
+            <a href="{{ video.get_absolute_url }}" class="video-card__title">
+                {{ video.title }}
+            </a>
+        </div>
+
+        <div class="video-card__meta">
+            <span class="wh-video-card__description">{{ video.description }}</span>
+        </div>
+    </div>
+</div>

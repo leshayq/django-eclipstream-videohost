@@ -1,0 +1,26 @@
+{% extends 'videos/base.html' %}
+{% block content %}
+<main class="dashboard__container">
+    <div class="dashboard__sidemenu">
+        <ul>
+            <a href="{% url 'users:manage-channel-content' %}">
+                <li><i class="fa-solid fa-list-check" style="color: #ffffff;"></i><span>Контент</span></li>
+            </a>
+            <a>
+                <li><i class="fa-solid fa-wand-magic-sparkles" style="color: #ffffff;"></i><span>Кастомізація</span></li>
+            </a>
+        </ul>
+    </div>
+    <h2 class="dashboard__section-title">Кастомізація</h2>
+    <div class="dashboard__content">
+        <div class="form__field dashboard-form__field">
+            <label for="dashboard_change_username">Ім'я користувача</label>
+            <input type="text" id="dashboard_change_username">
+            <div style="display: flex; justify-content: space-between;">
+                <p>Виберіть свій унікальний псевдонім, додавши літери та цифри.</p>
+                <button class="button" type="button">Оновити</button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -942,7 +942,6 @@ main {
 }
 
 .like__button.not-liked {
-    /* background-color: #f0f0f0; */
     color: var(--white);
 }
 
@@ -1311,7 +1310,7 @@ input.error:focus {
 .wh__video-card {
     flex-direction: row !important;
 }
-.wh__video-card:hover {
+.wh__video-card:hover, .dashboard__video-card:hover {
     transform: none;
     box-shadow: none;
 }
@@ -1337,6 +1336,115 @@ input.error:focus {
     background: none;
     border: none;
 }
+
+
+
+/* DASHBOARD PAGE */
+
+
+.dashboard__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard__sidemenu {
+    width: 100%;
+}
+
+.dashboard__sidemenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard__sidemenu ul li {
+    display: inline;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.dashboard__sidemenu ul li:hover {
+    background-color: var(--input-dark-gray-bg);
+}
+
+.dashboard__sidemenu ul li i {
+    margin-right: 15px;
+}
+
+.dashboard__sidemenu ul li span {
+    font-size: 1.3rem;
+}
+
+.dashboard__sidemenu ul a {
+    color: var(--white);
+}
+
+.dashboard__content {
+    width: 100%;
+}
+
+.dashboard__table {
+    margin: 15px;
+    width: 100%;
+}
+
+.dashboard__table tr {
+    text-align: center;
+}
+
+.dashboard__table th {
+    padding: 15px;
+}
+
+.dashboard__video-card {
+    flex-direction: row !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.dashboard__video-card img {
+    max-width: 200px;
+    height: auto;
+}
+
+.dashboard__section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-left: 15px;
+}
+
+.dashboard-form__field {
+    margin-left: 15px;
+}
+
+.dashboard-form__field label {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.dashboard-form__field p {
+    color: var(--no-items);
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.dashboard-form__field input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--input-dark-gray-bg);
+    color: var(--white);
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+
 
 
 /* PLAYLIST */

@@ -64,6 +64,10 @@ class Video(models.Model):
     
     def get_absolute_url(self):
         return reverse('videos:video-detail', args=[str(self.url)])
+    
+    def count_comments(self):
+        count_of_comments = Comment.objects.filter(video=self).count()
+        return count_of_comments
 
 class Comment(models.Model):
     text = models.TextField(max_length=5000, null=False)

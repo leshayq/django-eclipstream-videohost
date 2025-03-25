@@ -18,5 +18,7 @@ urlpatterns = [
     # сторінка історія перегляду відео
     path('wh/', WatchHistoryListView.as_view(), name='watch-history'),
     # видалити відео з історії перегляду
-    path('wh/delete-video/<slug:username>/<uuid:video_url>/', delete_video_from_watch_history, name='wh-delete-video')
+    path('wh/delete-video/<slug:username>/<uuid:video_url>/', delete_video_from_watch_history, name='wh-delete-video'),
+    path('manage/content/', ManageChannelContentView.as_view(), name='manage-channel-content'),
+    path('manage/customization/', ManageChannelCustomizationView.as_view(), name='manage-channel-customization'),
 ]

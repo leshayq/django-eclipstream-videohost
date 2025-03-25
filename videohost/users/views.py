@@ -94,6 +94,18 @@ class WatchHistoryListView(ListView):
 
     def get_queryset(self):
         return WatchHistoryItem.objects.filter(watch_history__user=self.request.user)
+    
+class ManageChannelContentView(TemplateView):
+    template_name = 'users/manage/manage_channel_content.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        context['videos'] = Video.objects.filter(creator=self.request.user)
+        return context
+    
+class ManageChannelCustomizationView(TemplateView):
+    template_name = 'users/manage/manage_channel_customization.html'
 
 # Підписка на канал користувача
 @login_required(login_url='/u/login/')
