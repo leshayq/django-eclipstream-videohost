@@ -13,14 +13,38 @@
     </div>
     <h2 class="dashboard__section-title">Кастомізація</h2>
     <div class="dashboard__content">
-        <div class="form__field dashboard-form__field">
+        <div class="dashboard-form__field">
             <label for="dashboard_change_username">Ім'я користувача</label>
-            <input type="text" id="dashboard_change_username">
-            <div style="display: flex; justify-content: space-between;">
-                <p>Виберіть свій унікальний псевдонім, додавши літери та цифри.</p>
-                <button class="button" type="button">Оновити</button>
-            </div>
+            <input type="text" id="dashboard_change_username" readonly value="@{{ request.user.username }}">
         </div>
+
+        <form method="POST">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% for field in form %}
+                    <div class="dashboard-form__field">
+                        {% if field.errors %}
+                            {{ field.label_tag }} {{ field }}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            {{ field.label_tag }} {{ field }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div style="display: flex; justify-content: flex-end;">
+                    <button class="button" type="submit">Оновити</button>
+                </div>
+        </form>
     </div>
 </main>
 {% endblock %}

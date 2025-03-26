@@ -11,15 +11,14 @@ from .forms import UserRegisterForm, UserLoginForm
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login
-from django import forms
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.utils.text import slugify
-from unidecode import unidecode
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from notifications.utils import delete_subscription_notification
 from django.db.models import Count
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
 
 User = get_user_model()
 
@@ -104,8 +103,13 @@ class ManageChannelContentView(TemplateView):
         context['videos'] = Video.objects.filter(creator=self.request.user)
         return context
     
-class ManageChannelCustomizationView(TemplateView):
+class ManageChannelCustomizationView(PasswordChangeView):
     template_name = 'users/manage/manage_channel_customization.html'
+    context_object_name = 'user'
+    form_class = PasswordChangeForm
+    
+    def get_success_url(self):
+        return reverse('videos:main-page')
 
 # Підписка на канал користувача
 @login_required(login_url='/u/login/')

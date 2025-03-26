@@ -1413,17 +1413,23 @@ input.error:focus {
     font-size: 1.8rem;
     font-weight: bold;
     margin-top: 25px;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     padding-left: 15px;
 }
 
 .dashboard-form__field {
     margin-left: 15px;
+    margin-bottom: 20px;
+}
+
+.dashboard-form__field .helptext {
+    margin-top: 10px;
 }
 
 .dashboard-form__field label {
-    font-weight: 600;
-    font-size: 20px;
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-light-gray)
 }
 
 .dashboard-form__field p {
@@ -1432,16 +1438,19 @@ input.error:focus {
     font-weight: 300;
 }
 
-.dashboard-form__field input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: var(--input-dark-gray-bg);
+.dashboard-form__field input[type="password"] {
     color: var(--white);
     font-size: 1rem;
-    box-sizing: border-box;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+}
+
+.dashboard-form__field ul:not(.errorlist) {
+    list-style: disc;
+    padding: 15px;
+}
+
+.dashboard-form__field li:not(.errorlist li) {
+    color: var(--no-items);
 }
 
 
