@@ -34,7 +34,7 @@
                     {% endif %}
 
                 {% else %}
-                <button class="subscribe__button channel-owner__button" onclick="window.location.href='/u/manage/'">Редагувати</button>
+                <button class="subscribe__button channel-owner__button" type="button" onclick="window.location.href='/u/manage/content/'">Редагувати</button>
                 {% endif %}
             {% else %}
             <button class="subscribe__button">
@@ -50,24 +50,24 @@
     </div>
 
     <div class="tab-content" id="videos">
-        <main class="media__container">
+        <div class="media__container">
             {% for video in videos %}
             {% include 'videos/include/video_card.html' %}
             {% empty %}
             <p>Нові відео користувача з'являться тут...</p>
             {% endfor %}
-        </main>
+        </div>
     </div>
 
     <div class="tab-content" id="playlists" style="display: none;">
 
-        <main class="media__container">
+        <div class="media__container">
         {% for playlist in playlists %}
         {% include 'playlists/include/default_playlist.html' %}
         {% empty %}
         <p>Плейлисти користувача з'являться тут...</p>
         {% endfor %}
-        </main>
+        </div>
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 {% extends 'videos/base.html' %}
 {% block content %}
-<main class="dashboard__container">
+<div class="dashboard__container">
     <div class="dashboard__sidemenu">
         <ul>
             <a href="{% url 'users:manage-channel-content' %}">
@@ -46,5 +46,5 @@
                 </div>
         </form>
     </div>
-</main>
+</div>
 {% endblock %}

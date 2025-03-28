@@ -16,4 +16,8 @@ urlpatterns = [
     path('comment/<uuid:url>/', comment_video, name='comment-video'),
     #reply to comment
     path('reply/<uuid:url>/<int:pk>/', comment_video, name='reply-to-comment'),
+
+    path('delete-video/', delete_video, name='delete-video'),
+    path('edit-video/<uuid:url>/', UpdateVideoView.as_view(), name='edit-video'),
+
 ]

@@ -1,12 +1,12 @@
 {% extends 'videos/base.html' %}
-
 {% block content %}
 <div>
-    <div class="upload-form__container">
-        <h2>Upload Video</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
+    <h2 class="dashboard__section-title video-edit__section-title">Огляд відео</h2>
+    <div style="display: flex;">
+        <div class="video-edit-80">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
                 <ul class="errorlist">
                     {% for error in form.non_field_errors %}
                         <li>{{ error }}</li>
@@ -14,7 +14,7 @@
                 </ul>
                 {% endif %}
                 {% for field in form %}
-                    <div class="form__field">
+                    <div class="dashboard-form__field">
                         {% if field.errors %}
                             {{ field.label_tag }} {{ field }}
                             <ul class="errorlist">
@@ -27,10 +27,17 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-            <div class="flex-end__aligner">
-                <button class="button" type="submit">Завантажити</button>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button class="button" type="submit">Зберегти</button>
+                </div>
+            </form>
+        </div>
+        <div class="video-edit-20">
+            <div class="video-edit__image-preview">
+                <img src="{{ form.instance.thumbnail.url }}" alt="preview" id="video_thumbnail_overview">
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
 {% endblock %}

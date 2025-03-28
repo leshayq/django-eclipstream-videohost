@@ -1,7 +1,7 @@
 {% extends 'videos/base.html' %}
 {% load static %}
 {% block content %}
-<main>
+<div>
     <div class="video-detail__page">
         <div class="video-detail__player">
             <video controls width="1920" height="1080" id="myVideo">
@@ -51,7 +51,7 @@
                                         {% endif %}
                 
                                     {% else %}
-                                    <button class="subscribe__button channel-owner__button" onclick="window.location.href='/u/manage/'">Редагувати</button>
+                                    <button class="subscribe__button channel-owner__button" type="button" onclick="window.location.href='/u/manage/content/'">Редагувати</button>
                                     {% endif %}
                                 {% else %}
                                 <button class="subscribe__button">
@@ -112,8 +112,8 @@
                 </div>
             </form>
         </div>
-        
-</main>
+    </div>
+</div>
 <script>
     function toggleReplyForm(commentId) {
         let form = document.getElementById('reply-form-' + commentId);

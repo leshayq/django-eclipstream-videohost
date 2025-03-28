@@ -192,3 +192,4 @@ def login_user(request):
 
         form = UserLoginForm()
         return render(request, 'users/auth/login.html', {'form': form})
+

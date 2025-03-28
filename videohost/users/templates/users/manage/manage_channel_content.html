@@ -1,6 +1,6 @@
 {% extends 'videos/base.html' %}
 {% block content %}
-<main class="dashboard__container">
+<div class="dashboard__container">
     <div class="dashboard__sidemenu">
         <ul>
             <a>
@@ -12,11 +12,21 @@
         </ul>
     </div>
     <h2 class="dashboard__section-title">Контент каналу</h2>
+    <form method="POST" action="{% url 'videos:delete-video' %}">
+    <div class="dashboard__actions">
+        <p id="dashboard_video_counter">0 відео обрано</p>
+        <div class="dashboard-actions__divider"></div>
+        <button class="button dashboard__button" type="button" onclick="showDeleteVideoModal()">
+            Видалити
+        </button>
+
+    </div>
+    {% include 'users/popup/delete_video_popup.html' %}
     <div class="dashboard__content">
         <table class="dashboard__table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" onclick="checkAllCheckboxes(this)"></th>
                     <th>Відео</th>
                     <th>Доступ</th>
                     <th>Дата</th>
@@ -28,7 +38,7 @@
             <tbody>
                 {% for video in videos %}
                 <tr>
-                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox" name="video_select_checkbox" value="{{ video.id }}"></td>
                     <td>{% include 'videos/include/dashboard_video_card.html' %}</td>
                     <td>{{ video.visibility }}</td>
                     <td>{{ video.created_at }}</td>
@@ -39,7 +49,56 @@
                 {% endfor %}
             </tbody>
         </table>
-       
     </div>
-</main>
+    </form>
+</div>
+
+
+<script>
+function checkAllCheckboxes(source) {
+    checkboxes = document.getElementsByName('video_select_checkbox');
+    for(let i=0, n=checkboxes.length; i<n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+
+    updateVideoDeletePanel();
+}
+
+function updateVideoDeletePanel() {
+    const numSelected = countSelectedVideos();
+    setNumberOfVideos(numSelected);
+}
+
+function countSelectedVideos() {
+    const checkboxes = document.querySelectorAll('input[name="video_select_checkbox"]:checked');
+    const videoDeletePanel = document.getElementsByClassName('dashboard__actions')[0];
+    videoDeletePanel.classList.toggle('show', checkboxes.length > 0);
+    return checkboxes.length;
+}
+
+function setNumberOfVideos(num) {
+    const numField = document.getElementById('dashboard_video_counter');
+    numField.textContent = `${num} відео обрано`;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[name="video_select_checkbox"]');
+    
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            setNumberOfVideos(countSelectedVideos());
+        });
+    });
+});
+</script>
+
+<script>
+function showDeleteVideoModal() {
+      document.getElementById('deleteVideoModal').style.display = 'block';
+}
+  
+function closeDeleteVideoModal() {
+      document.getElementById('deleteVideoModal').style.display = 'none';
+}
+</script>
 {% endblock %}

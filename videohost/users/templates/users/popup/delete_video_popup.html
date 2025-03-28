@@ -1,0 +1,12 @@
+<div id="deleteVideoModal" class="modal">
+    <div class="modal__content">
+        <span class="modal-close__button" onclick="closeDeleteVideoModal()">&times;</span>
+        <h2>Видалити відео</h2>
+            {% csrf_token %}
+            <p class="modal-content__text">Чи впевнені ви, що хочете видалити обрані відео?</p>
+            <div class="flex-end__aligner" style="gap: 20px; margin-top: 20px;">
+                <button class="button outline__button" type="button" onclick="closeDeleteVideoModal()">Ні</button>
+                <button class="button" type="submit">Так</button>
+            </div>
+    </div>
+</div>

@@ -14,6 +14,11 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .utils import build_comment_tree
 from django.utils.timezone import now
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
+from django.views.generic.edit import UpdateView
+from .forms import VideoEditForm
+
 
 
 User = get_user_model()
@@ -166,3 +171,33 @@ def delete_video_from_watch_history(request, username, video_url):
 
     WatchHistoryItem.objects.filter(watch_history=watch_history, video=video).delete()
     return HttpResponseRedirect(reverse('users:watch-history'))
+
+@login_required(login_url='/u/login/') 
+def delete_video(request):
+    if request.method == 'POST':
+        videos_list = request.POST.getlist('video_select_checkbox')
+        if videos_list:
+            for i in range(len(videos_list)):
+                video = get_object_or_404(Video, pk=videos_list[i])
+                if video and video.creator == request.user:
+                    video.delete()
+                else:
+                    print('відео не знайдено/немає доступу')
+        return redirect('videos:main-page')
+
+# @login_required(login_url='/u/login/') 
+# def edit_video(request, id):
+#     video = get_object_or_404(Video, pk=id)
+
+#     if request.method == 'POST':
+#         pass
+#     else:
+#         form = 
+
+class UpdateVideoView(UpdateView):
+    model = Video
+    form_class = VideoEditForm
+    template_name = 'users/manage/manage_video.html'
+    success_url = '/'
+    slug_field = 'url'
+    slug_url_kwarg = 'url'

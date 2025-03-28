@@ -4,7 +4,7 @@
     </a>
     <div class="video-card__info wh-video-card__info">
         <div style="display: flex; justify-content: space-between;">
-            <a href="{{ video.get_absolute_url }}" class="video-card__title">
+            <a href="{% url 'videos:edit-video' video.url %}" class="video-card__title dashboard-video-card__title">
                 {{ video.title }}
             </a>
         </div>

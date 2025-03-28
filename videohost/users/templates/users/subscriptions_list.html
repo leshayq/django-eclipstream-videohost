@@ -1,6 +1,6 @@
 {% extends 'videos/base.html' %}
 {% block content %}
-<main class="subscriptions__wrapper">
+<div class="subscriptions__wrapper">
     <h2 class="sl-section__title">{{ section_title }}</h2>
     <div class="subscriptions__container">
         {% for subscription in subscriptions %}
@@ -17,6 +17,6 @@
         {% endfor%}
 
     </div>
-</main>
+</div>
 
 {% endblock %}
