@@ -101,10 +101,10 @@ def add_video_to_playlist(request, url):
         return HttpResponseBadRequest("Відео вже додано до плейлисту.")
     
 @login_required(login_url='/u/login/')  
-def save_playlist_to_favorites(request, slug, username):
+def save_playlist_to_favorites(request, username, slug):
     '''Збереження плейлисту до обраного'''
     if request.method == 'POST':
-        playlist = Playlist.objects.get(slug=slug, creator=username)
+        playlist = get_object_or_404(Playlist, slug=slug, creator__username=username)
         if request.user != playlist.creator:
             saving, created = Saving.objects.get_or_create(
                 user=request.user, 

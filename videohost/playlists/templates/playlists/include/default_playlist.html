@@ -13,7 +13,7 @@
         <a href="{{ playlist.get_absolute_url }}" class="playlist-card__title">
             {{ playlist.title }}
         </a>
-        <a href="{% url 'users:channel-detail' playlist.creator %}">
+        <a href="{% url 'users:channel-detail' playlist.creator %}" class="playlist-card-creator__link">
             <p>@{{ playlist.creator }}</p>
         </a>
         <div class="playlist-card__meta">

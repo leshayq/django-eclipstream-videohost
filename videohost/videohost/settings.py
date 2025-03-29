@@ -118,6 +118,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.CustomUser"
 
+VIDEO_MAX_UPLOAD_SIZE = 524288000
+IMAGE_MAX_UPLOAD_SIZE = 20971520
+
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
 
 CELERY_ACCEPT_CONTENT = ['application/json']

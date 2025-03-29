@@ -6,7 +6,7 @@
         <a href="{{ video.get_absolute_url }}" class="video-card__title">
             {{ video.title }}
         </a>
-        <a href="{% url 'users:channel-detail' video.creator %}">
+        <a href="{% url 'users:channel-detail' video.creator %}" class="video-card-creator__link">
             <p>@{{ video.creator }}</p>
         </a>
         <div class="video-card__meta">

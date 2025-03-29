@@ -1,9 +1,9 @@
 <div class="reply" id="reply-{{ reply.id }}">
     <div class="comment__header">
-        <h4>@{{ reply.user.username }}</h4>
+        <h4>@{{ reply.user.username|escape }}</h4>
         <span class="comment__datetime">{{ reply.created_at|timesince }} тому</span>
     </div>
-    <p>{{ reply.text }}</p>
+    <p>{{ reply.text|escape }}</p>
 
     <div class="comment__actions">
         <button class="reply__button" onclick="toggleReplyForm('{{ reply.id }}')">Відповісти</button>

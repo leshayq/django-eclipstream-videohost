@@ -1,7 +1,7 @@
 {% extends 'videos/base.html' %}
 {% block content %}
 <div>
-    <h2 class="wh-section__title">Історія перегляду</h2>
+    <h2 class="section__title wh-section__title">Історія перегляду</h2>
     <div class="wh__container">
         {% for video in videos %}
             {% include 'videos/include/wh_video_card.html' %}

@@ -1,7 +1,8 @@
 {% extends 'videos/base.html' %}
+{% load static %}
 {% block content %}
 <div>
-    <h2 class="dashboard__section-title video-edit__section-title">Огляд відео</h2>
+    <h2 class="section__title video-edit__section-title">Огляд відео</h2>
     <div style="display: flex;">
         <div class="video-edit-80">
             <form method="POST" enctype="multipart/form-data">
@@ -23,7 +24,12 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
+                            {% if field.name == 'description' %}
                             {{ field.label_tag }} {{ field }}
+                            <p class="chars__counter">0/5000</p>
+                            {% else %}
+                            {{ field.label_tag }} {{ field }}
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -40,4 +46,5 @@
     </div>
 </div>
 
+<script src="{% static 'videos/js/textAreaCharsCount.js' %}"></script>
 {% endblock %}

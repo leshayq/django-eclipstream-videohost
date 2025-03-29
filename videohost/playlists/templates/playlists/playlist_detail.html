@@ -7,16 +7,18 @@
             <div class="playlist-spc-btwn__title">
                 <h1 class="playlist-detail__title">
                     {{ playlist.title }}
-                    {% if user_is_owner %}
                     
-                    {% include 'playlists/include/playlist_actions_dropdown.html' %}
-                    
-                    {% include 'playlists/popup/edit_playlist_popup.html' %}
-
-                    {% include 'playlists/popup/delete_playlist_popup.html' %}
-
-                    {% endif %}
                 </h1>
+
+                {% if user_is_owner %}       
+                         
+                {% include 'playlists/include/playlist_actions_dropdown.html' %}
+                    
+                {% include 'playlists/popup/edit_playlist_popup.html' %}
+
+                {% include 'playlists/popup/delete_playlist_popup.html' %}
+
+                {% endif %}
                 
                 {% if not user_is_owner %}
                 <form method="POST" action="{% url 'playlists:save-playlist-to-favorites' slug=playlist.slug username=playlist.creator.username %}">

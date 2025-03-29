@@ -1,5 +1,5 @@
 {% extends 'videos/base.html' %}
-
+{% load static %}
 {% block content %}
 <div>
     <div class="upload-form__container">
@@ -23,7 +23,12 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
+                            {% if field.name == 'description' %}
                             {{ field.label_tag }} {{ field }}
+                            <p class="chars__counter">0/5000</p>
+                            {% else %}
+                            {{ field.label_tag }} {{ field }}
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -33,4 +38,6 @@
         </form>
     </div>
 </div>
+
+<script src="{% static 'videos/js/textAreaCharsCount.js' %}"></script>
 {% endblock %}

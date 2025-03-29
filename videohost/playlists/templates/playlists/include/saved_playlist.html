@@ -1,6 +1,6 @@
 {% load static %}
 <div class="playlist__card">
-    <a href="{{ playlist.get_absolute_url }}" class="playlist__link">
+    <a href="{{ playlist.saving_playlist.get_absolute_url }}" class="playlist__link">
         {% if playlist.saving_playlist.get_first_video_thumbnail %}
             <img src="{{ playlist.get_first_video_thumbnail.url }}" alt="{{ playlist.title }}">
         {% else %}
@@ -11,7 +11,7 @@
         <a href="{{ playlist.saving_playlist.get_absolute_url }}" class="playlist-card__title">
             {{ playlist.saving_playlist.title }}
         </a>
-        <a href="{% url 'users:channel-detail' playlist.creator %}">
+        <a href="{% url 'users:channel-detail' playlist.saving_playlist.creator %}" class="playlist-card-creator__link">
             <p>@{{ playlist.saving_playlist.creator }}</p>
         </a>
         <div class="playlist-card__meta">

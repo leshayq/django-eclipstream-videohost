@@ -1,10 +1,10 @@
 <div class="comment" id="comment-{{ group.main.id }}">
     <div class="comment__body">
         <div class="comment__header">
-            <h4>@{{ group.main.user.username }}</h4>
+            <h4>@{{ group.main.user.username|escape }}</h4>
             <span class="comment__datetime">{{ group.main.created_at|timesince }} тому</span>
         </div>
-        <p>{{ group.main.text }}</p>
+        <p>{{ group.main.text|escape }}</p>
 
         <div class="comment__actions">
             <button class="reply__button" onclick="toggleReplyForm('{{ group.main.id }}')">Відповісти</button>

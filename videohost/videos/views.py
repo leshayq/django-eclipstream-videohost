@@ -185,15 +185,6 @@ def delete_video(request):
                     print('відео не знайдено/немає доступу')
         return redirect('videos:main-page')
 
-# @login_required(login_url='/u/login/') 
-# def edit_video(request, id):
-#     video = get_object_or_404(Video, pk=id)
-
-#     if request.method == 'POST':
-#         pass
-#     else:
-#         form = 
-
 class UpdateVideoView(UpdateView):
     model = Video
     form_class = VideoEditForm

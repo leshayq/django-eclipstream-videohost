@@ -461,6 +461,13 @@ template {
     justify-content: flex-end;
 }
 
+.section__title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
 /* ############################################################################### */
 
 /* BASE FILE STYLES */
@@ -745,6 +752,12 @@ main {
     cursor: pointer;
 }
 
+.chars__counter {
+    color: var(--no-items);
+    text-align: right;
+    margin-top: 5px;
+}
+
 /* VIDEO STYLES */
 
 .video__card, .playlist__card {
@@ -765,10 +778,11 @@ main {
 
 .video__card img, .playlist__card img {
     width: 100%;
-    height: auto;
     display: block;
-    object-fit: cover;
-    max-height: 200px;
+    object-fit: contain;
+    max-width: 600px;
+    max-height: 337.5px;
+    height: auto;
 }
 
 .video-card__info, .playlist-card__info {
@@ -779,8 +793,12 @@ main {
 }
 
 .video-card__title,  .playlist-card__title {
-    display: inline-block;
-    width: fit-content;
+    display: -webkit-box;             
+    -webkit-line-clamp: 2;           
+    -webkit-box-orient: vertical;    
+    overflow: hidden;           
+    text-overflow: ellipsis;
+    width: 100%;  
     text-decoration: none !important;
     font-size: 1rem;
     margin: 0 0 5px;
@@ -810,6 +828,11 @@ main {
     font-size: 0.875rem;
     margin-top: 10px;
     color: #aaa;
+    margin-top: auto;
+}
+
+.video-card-creator__link, .playlist-card-creator__link {
+    margin-bottom: 10px;
 }
 
 .video-detail__page {
@@ -957,7 +980,7 @@ main {
     background-color: #272727;
     border-radius: 12px;
     padding: 10px;
-    margin-top: 20px;
+    margin: 15px;
 }
 
 .comments__section {
@@ -1310,6 +1333,12 @@ input.error:focus {
 .wh__video-card {
     flex-direction: row !important;
 }
+
+.wh__video-card img {
+    max-width: 300px !important;
+    max-height: 168.75px !important;
+}
+
 .wh__video-card:hover, .dashboard__video-card:hover {
     transform: none;
     box-shadow: none;
@@ -1317,6 +1346,11 @@ input.error:focus {
 
 .wh-video-card__title {
     font-size: 1.6rem;
+    max-width: 800px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline !important;
 }
 
 .wh-video-card__info p {
@@ -1440,15 +1474,14 @@ input.error:focus {
 } */
 
 .dashboard__section-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 25px !important;
     padding-left: 15px;
 }
 
 .video-edit__section-title {
     margin-top: 0 !important;
+    margin-bottom: 25px;
+    padding-left: 15px;
 }
 
 .video-edit-80 {
@@ -1518,6 +1551,7 @@ input.error:focus {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-align: left;
 }
 
 .dashboard-form__field {
@@ -1582,13 +1616,6 @@ input.error:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.playlist-section__title, .sl-section__title, .wh-section__title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-top: 25px;
-    margin-bottom: 15px;
 }
 
 .playlists__grid {
@@ -1681,4 +1708,9 @@ input.error:focus {
 
 .playlist-actions__button:active {
     transform: scale(0.95);
+}
+
+#playlistActionsDropdown {
+    right: 0;
+    left: auto;
 }
