@@ -8,6 +8,9 @@ from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from .utils import check_if_basic_playlist
+from unidecode import unidecode
+from django.template.defaultfilters import slugify
+from django.shortcuts import redirect
 
 class PlaylistListView(TemplateView):
     '''Сторінка перегляду списку плейлистів користувача'''
@@ -30,6 +33,12 @@ class PlaylistDetailView(DetailView):
     model = Playlist
     template_name = 'playlists/playlist_detail.html'
     context_object_name = 'playlist'
+    
+    def dispatch(self, request, *args, **kwargs):
+        playlist = self.get_object()
+        if playlist.visibility == 'Приватний' and playlist.creator != self.request.user:
+            return redirect('videos:main-page')
+        return super().dispatch(request, *args, **kwargs)
     
     def get_object(self):
         username = self.kwargs.get('username')
@@ -78,6 +87,7 @@ def edit_playlist(request, slug):
             
             if not check_if_basic_playlist(playlist_object_title):
                 playlist.creator = request.user
+                playlist.slug = slugify(unidecode(playlist.title))
                 playlist.save()
             else:
                 return HttpResponseBadRequest("Базові плейлисти неможливо змінити.")

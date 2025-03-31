@@ -38,13 +38,6 @@
     </div>
 </div>
 
-<script>
-    function newPlaylistModal() {
-    document.getElementById('newPlaylistModal').style.display = 'block';
-}
-
-function closeNewPlaylistModal() {
-    document.getElementById('newPlaylistModal').style.display = 'none';
-}
-</script>
+<script src="{% static 'playlists/js/newPlaylist.js' %}"></script>
+<script src="{% static 'playlists/js/modalPopupClose.js' %}"></script>
 {% endblock content %}

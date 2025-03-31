@@ -41,6 +41,12 @@ class VideoDetailView(DetailView):
     slug_field = 'url'
     slug_url_kwarg = 'url'
 
+    def dispatch(self, request, *args, **kwargs):
+        video = self.get_object()
+        if video.visibility == 'Приватний' and video.creator != self.request.user:
+            return redirect('videos:main-page')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_object(self):
         video_url = self.kwargs.get('url')
         video = get_object_or_404(Video, url=video_url)
@@ -52,10 +58,10 @@ class VideoDetailView(DetailView):
             video.refresh_from_db()
 
             # додавання відео у історію перегляду
-            add_video_to_watch_history(user=self.request.user, video=video)
+            if self.request.user.is_authenticated:
+                add_video_to_watch_history(user=self.request.user, video=video)
 
-
-        return video
+            return video
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -83,6 +83,8 @@ function unsubscribe() {
 window.onclick = function(event) {
   if (!event.target.matches('.dropbtn')) {
       let dropdown = document.querySelector("div[data-subscription-id]");
+
+      if (!dropdown) return ;
       if (dropdown.classList.contains('show')) {
           dropdown.classList.remove('show');
       }

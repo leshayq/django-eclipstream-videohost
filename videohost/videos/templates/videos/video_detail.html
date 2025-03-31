@@ -78,7 +78,7 @@
                             </button>
                         </form>
                         {% if not user_is_owner %}
-                        <button class="media-action__button" onclick="openPlaylistModal()">
+                        <button class="media-action__button" onclick="openSelectPlaylistModal()">
                             <i class="fas fa-bookmark"></i> Зберегти
                         </button>
 
@@ -133,18 +133,19 @@
         }
     }
 
-    function openPlaylistModal() {
-        document.getElementById('playlistSelectModal').style.display = 'block';
+    function openSelectPlaylistModal() {
+        document.getElementById('playlistSelectModal').classList.add('show');
+        disableBodyScroll();
     }
 
-    function closePlaylistModal() {
-        document.getElementById('playlistSelectModal').style.display = 'none';
+    function closeSelectPlaylistModal() {
+        document.getElementById('playlistSelectModal').classList.remove('show');
+        enableBodyScroll();
     }
 
-    var vid = document.getElementById("myVideo");
-    vid.onended = function() {alert("The video has ended");};
 </script>
 
 <script src="{% static 'users/js/channelActions.js' %}"></script>
+<script src="{% static 'playlists/js/modalPopupClose.js' %}"></script>
 
-{% endblock content %}
+{% endblock content %} 

@@ -1,21 +1,18 @@
 <div id="playlistSelectModal" class="modal">
     <div class="modal__content">
-        <span class="modal-close__button" onclick="closePlaylistModal()">&times;</span>
+        <span class="modal-close__button" onclick="closeSelectPlaylistModal()">&times;</span>
         <h2>Оберіть плейлист</h2>
         <form id="playlistForm" method="POST" action="{% url 'playlists:add-video-to-playlist' url=video.url %}">
             {% csrf_token %}
             <input type="hidden" name="video_id" value="{{ video.id }}">
-            <ul>
-                {% for playlist in created_by_user_playlists %}
-                <li>
-                    <label>
-                        <input type="radio" name="playlist_slug" value="{{ playlist.slug }}"> {{ playlist.title }}
-                    </label>
-                </li>
-                {% empty %}
-                <p class="no-items">У вас ще немає плейлистів.</p>
-                {% endfor %}
-            </ul>
+
+            {% for playlist in created_by_user_playlists %}
+            <label>
+                <input type="radio" name="playlist_slug" value="{{ playlist.slug }}">
+                <span class="truncate">{{ playlist.title }}</span>
+            </label>
+            {% endfor %}
+            
             <div class="flex-end__aligner">
                 <button class="button" type="submit">Додати</button>
             </div>

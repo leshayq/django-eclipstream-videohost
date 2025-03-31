@@ -3,7 +3,7 @@ from .models import Video
 from django.forms.widgets import FileInput
 from django.core.exceptions import ValidationError
 from django.conf import settings
-
+from django.core.files.uploadedfile import UploadedFile
 
 class VideoUploadForm(forms.ModelForm):
 
@@ -60,6 +60,7 @@ class VideoUploadForm(forms.ModelForm):
             raise ValidationError("Помилка при завантаженні файлу.")
         
 class VideoEditForm(forms.ModelForm):
+
     class Meta:
         model = Video
         fields = ('title', 'description', 'visibility', 'genre', 'thumbnail')
@@ -79,6 +80,9 @@ class VideoEditForm(forms.ModelForm):
     def clean_thumbnail(self):
         thumbnail = self.cleaned_data['thumbnail']
 
+        if not isinstance(thumbnail, UploadedFile):
+            return self.instance.thumbnail
+        
         valid_mime_types = ('image/jpeg', 'image/png')
         valid_extensions = ('.jpeg', '.jpg', '.png')
 
