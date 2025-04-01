@@ -19,6 +19,8 @@ from notifications.utils import delete_subscription_notification
 from django.db.models import Count
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import CustomUser
 
 User = get_user_model()
 
@@ -73,9 +75,12 @@ class ChannelDetail(TemplateView):
 
         return context
     
-class SubscriptionsListView(ListView):
+class SubscriptionsListView(LoginRequiredMixin, ListView):
+    model =  CustomUser
     template_name = 'users/subscriptions_list.html'
     context_object_name = 'subscriptions'
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
 
     def get_queryset(self):
         queryset = Subscriptions.objects.filter(follower=self.request.user).only('following').select_related('following').annotate(subscribers_count=Count('following__followers'))
@@ -88,10 +93,12 @@ class SubscriptionsListView(ListView):
         context['section_title'] = f'Підписки @{self.request.user.username}'
         return context
     
-class WatchHistoryListView(ListView):
+class WatchHistoryListView(LoginRequiredMixin, ListView):
     model =  WatchHistory
     template_name = 'users/watch_history.html'
     context_object_name = 'videos'
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
 
     def get_queryset(self):
         return WatchHistoryItem.objects.filter(watch_history__user=self.request.user)
@@ -101,8 +108,10 @@ class WatchHistoryListView(ListView):
         context['title'] = 'EclipStream'
         return context
     
-class ManageChannelContentView(TemplateView):
+class ManageChannelContentView(LoginRequiredMixin, TemplateView):
     template_name = 'users/manage/manage_channel_content.html'
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -111,10 +120,12 @@ class ManageChannelContentView(TemplateView):
         context['videos'] = Video.objects.filter(creator=self.request.user)
         return context
     
-class ManageChannelCustomizationView(PasswordChangeView):
+class ManageChannelCustomizationView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'users/manage/manage_channel_customization.html'
     context_object_name = 'user'
     form_class = PasswordChangeForm
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
     
     def get_success_url(self):
         return reverse('videos:main-page')

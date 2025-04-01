@@ -7,7 +7,7 @@ urlpatterns = [
     # PLAYLIST RELATED 
     
     # list of playlists
-    path('list/@<slug:username>/', PlaylistListView.as_view(), name='playlist-list'),
+    path('list/', PlaylistListView.as_view(), name='playlist-list'),
     # playlist detail view
     path('@<slug:username>/<slug:slug>/', PlaylistDetailView.as_view(), name='playlist-detail'),
     # saving playlist to favorites

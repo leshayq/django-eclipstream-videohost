@@ -1,0 +1,109 @@
+.playlists__container {
+    margin: 0 auto;
+    padding: 20px;
+    color: var(--white);
+    margin-top: -30px;
+}
+
+.playlist-spc-btwn__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.playlists__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.playlist-detail__container {
+    max-width: 95%;
+    min-width: 95%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    margin-top: 30px;
+}
+
+.playlist-detail__background {
+    margin: 0 auto;
+    padding: 20px;
+    color: var(--white);
+    border-radius: 12px;
+}
+
+.playlist-detail__title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: block;
+}
+
+.playlist-page__form .modal__content {
+    background: var(--modal-gray);
+    color: var(--white);
+    text-align: center;
+}
+
+.playlist-page__form .modal__content h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.playlist-page__form .form__field {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.playlist-page__form .form__field label {
+    display: block;
+    font-size: 14px;
+    color: var(--text-light-gray);
+    margin-bottom: 5px;
+}
+
+.playlist-page__form .form__field input, .playlist-page__form .form__field select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background: #292929;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: var(--white);
+    transition: border 0.3s, background 0.3s;
+}
+
+.playlist-page__form .modal__content label::before {
+    content: none;
+}
+
+.playlist-actions__button {
+    background: var(--modal-gray);
+    color: var(--white);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.playlist-actions__button i {
+    pointer-events: none;
+}
+
+.playlist-actions__button:hover {
+    background: #292929;
+}
+
+.playlist-actions__button:active {
+    transform: scale(0.95);
+}
+
+#playlistActionsDropdown {
+    right: 0;
+    left: auto;
+}

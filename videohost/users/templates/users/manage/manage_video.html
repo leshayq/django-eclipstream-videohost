@@ -1,4 +1,8 @@
 {% extends 'videos/base.html' %}
+{% load static %}
+{% block css %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/users.css' %}?v=1">
+{% endblock css %}
 {% block title %} {{ title }} {% endblock title %}
 {% load static %}
 {% block content %}
@@ -27,7 +31,7 @@
                         {% else %}
                             {% if field.name == 'description' %}
                             {{ field.label_tag }} {{ field }}
-                            <p class="chars__counter">0/5000</p>
+                            <p class="chars__counter">{{ form.instance.description|length }}/5000</p>
                             {% else %}
                             {{ field.label_tag }} {{ field }}
                             {% endif %}

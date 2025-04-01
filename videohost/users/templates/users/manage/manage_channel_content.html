@@ -1,4 +1,9 @@
 {% extends 'videos/base.html' %}
+{% load static %}
+{% block css %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'videos/css/shared.css' %}?v=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/users.css' %}?v=1">
+{% endblock css %}
 {% block title %} {{ title }} {% endblock title %}
 {% block content %}
 <div class="dashboard__container">

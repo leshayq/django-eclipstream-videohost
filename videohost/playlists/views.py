@@ -11,16 +11,23 @@ from .utils import check_if_basic_playlist
 from unidecode import unidecode
 from django.template.defaultfilters import slugify
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class PlaylistListView(TemplateView):
+class PlaylistListView(LoginRequiredMixin, TemplateView):
     '''Сторінка перегляду списку плейлистів користувача'''
     template_name = 'playlists/playlist_list.html'
-    
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        created_by_user_playlists = Playlist.objects.filter(creator=self.request.user)
-        saved_by_user_playlists = Saving.objects.filter(user=self.request.user)
+        created_by_user_playlists = None
+        saved_by_user_playlists = None
+
+        if self.request.user.is_authenticated:
+            created_by_user_playlists = Playlist.objects.filter(creator=self.request.user)
+            saved_by_user_playlists = Saving.objects.filter(user=self.request.user)
 
         context['title'] = 'Список плейлистів'
         context['created_by_user_playlists'] = created_by_user_playlists
@@ -28,7 +35,8 @@ class PlaylistListView(TemplateView):
         context['form'] = PlaylistCreateForm()
 
         return context
-    
+
+
 class PlaylistDetailView(DetailView):
     '''Сторінка перегляду плейлисту'''
     model = Playlist
@@ -107,7 +115,10 @@ def add_video_to_playlist(request, url):
         playlist = Playlist.objects.get(slug=playlist_slug, creator=request.user)
         video = Video.objects.get(url=url)
         if not playlist.videos.filter(url=video.url).exists():
-            playlist.videos.add(video)
+            if request.user == playlist.creator: 
+                playlist.videos.add(video)
+            else:
+                return HttpResponseBadRequest("Відео можна додавати тількі у свої плейлисти.")
             return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
         return HttpResponseBadRequest("Відео вже додано до плейлисту.")
     

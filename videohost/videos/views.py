@@ -18,6 +18,7 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import UpdateView
 from .forms import VideoEditForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
@@ -106,9 +107,11 @@ class VideoDetailView(DetailView):
 
         return context
 
-class VideoUploadView(TemplateView):
+class VideoUploadView(LoginRequiredMixin, TemplateView):
     '''Сторінка завантаження відео'''
     template_name = 'videos/upload_video.html'
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -200,14 +203,23 @@ def delete_video(request):
                     print('відео не знайдено/немає доступу')
         return redirect('videos:main-page')
 
-class UpdateVideoView(UpdateView):
+
+class UpdateVideoView(LoginRequiredMixin, UpdateView):
     model = Video
     form_class = VideoEditForm
     template_name = 'users/manage/manage_video.html'
     success_url = '/'
     slug_field = 'url'
     slug_url_kwarg = 'url'
+    login_url = '/u/login/'
+    redirect_field_name = 'redirect_to'
 
+    def dispatch(self, request, *args, **kwargs):
+        video = self.get_object()
+        if video.visibility == 'Приватний' and video.creator != self.request.user:
+            return redirect('videos:main-page')
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
