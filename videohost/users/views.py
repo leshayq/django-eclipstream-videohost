@@ -61,6 +61,7 @@ class ChannelDetail(TemplateView):
 
         video_count = videos.count()
 
+        context['title'] = f'{channel_name} - EclipStream'
         context['is_owner'] = is_owner
         context['channel_name'] = channel_name
         context['channel_object'] = channel_object
@@ -83,6 +84,7 @@ class SubscriptionsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['title'] = 'EclipStream'
         context['section_title'] = f'Підписки @{self.request.user.username}'
         return context
     
@@ -93,6 +95,11 @@ class WatchHistoryListView(ListView):
 
     def get_queryset(self):
         return WatchHistoryItem.objects.filter(watch_history__user=self.request.user)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['title'] = 'EclipStream'
+        return context
     
 class ManageChannelContentView(TemplateView):
     template_name = 'users/manage/manage_channel_content.html'
@@ -100,6 +107,7 @@ class ManageChannelContentView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
+        context['title'] = 'EclipStream'
         context['videos'] = Video.objects.filter(creator=self.request.user)
         return context
     
@@ -110,6 +118,12 @@ class ManageChannelCustomizationView(PasswordChangeView):
     
     def get_success_url(self):
         return reverse('videos:main-page')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        context['title'] = 'EclipStream'
+        return context
 
 # Підписка на канал користувача
 @login_required(login_url='/u/login/')
@@ -171,7 +185,7 @@ def register_user(request):
                 form.add_error_css()
                 return render(request, 'users/auth/register.html', {'form': form})
         form = UserRegisterForm()
-        return render(request, 'users/auth/register.html', {'form': form})
+        return render(request, 'users/auth/register.html', {'form': form, 'title': 'Реєстрація'})
 
 # Авторизація користувача
 def login_user(request):
@@ -191,5 +205,5 @@ def login_user(request):
             return render(request, 'users/auth/login.html', {'form': form}) 
 
         form = UserLoginForm()
-        return render(request, 'users/auth/login.html', {'form': form})
+        return render(request, 'users/auth/login.html', {'form': form, 'title': 'Авторизація'})
 

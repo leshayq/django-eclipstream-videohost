@@ -1603,6 +1603,7 @@ input.error:focus {
 } */
 
 .dashboard__section-title {
+    margin-top: 30px;
     margin-bottom: 25px !important;
     padding-left: 15px;
 }

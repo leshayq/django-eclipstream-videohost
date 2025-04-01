@@ -33,6 +33,12 @@ class VideosListView(ListView):
         queryset = self.model.objects.filter(visibility='Публічний')
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['title'] = 'EclipStream'
+        return context
+    
 class VideoDetailView(DetailView):
     '''Сторінка перегляду відео'''
     model = Video
@@ -96,7 +102,8 @@ class VideoDetailView(DetailView):
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
         context['subscribers_count'] = subscribers_count
         context['grouped_comments'] = grouped_comments
- 
+        context['title'] = video.title
+
         return context
 
 class VideoUploadView(TemplateView):
@@ -105,6 +112,8 @@ class VideoUploadView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['title'] = 'EclipStream'
         context['form'] = VideoUploadForm()
         return context
 
@@ -198,3 +207,9 @@ class UpdateVideoView(UpdateView):
     success_url = '/'
     slug_field = 'url'
     slug_url_kwarg = 'url'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['title'] = self.object.title
+        return context

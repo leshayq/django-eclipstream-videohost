@@ -22,6 +22,7 @@ class PlaylistListView(TemplateView):
         created_by_user_playlists = Playlist.objects.filter(creator=self.request.user)
         saved_by_user_playlists = Saving.objects.filter(user=self.request.user)
 
+        context['title'] = 'Список плейлистів'
         context['created_by_user_playlists'] = created_by_user_playlists
         context['saved_by_user_playlists'] = saved_by_user_playlists
         context['form'] = PlaylistCreateForm()
@@ -55,7 +56,7 @@ class PlaylistDetailView(DetailView):
         else:
             context['videos'] = self.object.videos.filter(visibility='Публічний')
         
-
+        context['title'] = self.object.title
         context['form'] = PlaylistEditForm(instance=self.object) 
         return context
 
