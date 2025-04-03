@@ -16,12 +16,15 @@ constantly==23.10.4
 cryptography==44.0.2
 daphne==4.1.2
 Django==5.1.4
+ffmpeg-python==0.2.0
+future==1.0.0
 gunicorn==23.0.0
 hyperlink==21.0.0
 idna==3.10
 incremental==24.7.2
 kombu==5.5.0
 msgpack==1.1.0
+numpy==2.2.4
 packaging==24.2
 pillow==11.0.0
 prompt_toolkit==3.0.50

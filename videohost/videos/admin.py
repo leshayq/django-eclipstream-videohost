@@ -10,9 +10,9 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('creator', 'title', 'genre', 'views', 'thumbnail', 'created_at',)
-    fields = ('creator', 'genre', 'title', 'description', 'thumbnail', 'url', 'visibility', 'views', 'likes_count', 'created_at', 'video')
-    readonly_fields = ('creator', 'views', 'likes_count', 'url', 'video', 'created_at',)
+    list_display = ('creator', 'title', 'duration', 'genre', 'views', 'thumbnail', 'created_at',)
+    fields = ('creator', 'genre', 'title', 'duration', 'description', 'thumbnail', 'url', 'visibility', 'views', 'likes_count', 'created_at', 'video')
+    readonly_fields = ('creator', 'duration', 'views', 'likes_count', 'url', 'video', 'created_at',)
     
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):

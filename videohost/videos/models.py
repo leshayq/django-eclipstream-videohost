@@ -1,6 +1,5 @@
 from django.db import models
 from users.models import CustomUser
-from django.core.exceptions import ValidationError
 import uuid
 from django.urls import reverse
 import os
@@ -48,6 +47,7 @@ class Video(models.Model):
     views = models.IntegerField(default=0)
     likes_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    duration = models.PositiveIntegerField(default=0, null=False)
 
     video = models.FileField(upload_to=user_directory_path)
     thumbnail = models.FileField(upload_to=user_thumbnail_path)

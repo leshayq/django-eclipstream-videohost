@@ -44,4 +44,55 @@
 </div>
 
 <script src="{% static 'videos/js/textAreaCharsCount.js' %}"></script>
+
+<script>
+    const uploadForm = document.querySelector('form');
+    uploadForm.addEventListener('submit', submitUploadForm);
+    const uploadVideoField = document.getElementById('id_video');
+    const videoFormField = document.querySelector('.form__field');
+
+    async function submitUploadForm(event) {
+        event.preventDefault();
+        videoFormField.querySelectorAll('.errorlist').forEach(el => el.remove());
+        
+        const file = uploadVideoField.files[0];
+        if (!file) return;
+
+        if (file.size > 524288000) {
+            videoFormField.insertAdjacentHTML("beforeend", '<p class="errorlist">Файл відео не повинен перевищувати 500МБ.</p>');
+            return;
+        }
+
+        try {
+            const duration = await getVideoDuration(file);
+            if (duration > 61) {
+                videoFormField.insertAdjacentHTML("beforeend", '<p class="errorlist">Тривалість відео не може бути більше 1 хвилини (60 секунд).</p>');
+                return;
+            }
+        } catch (error) {
+            videoFormField.insertAdjacentHTML("beforeend", '<p class="errorlist">Помилка при обробці файлу.</p>');
+            return;
+        }
+
+        uploadForm.submit();
+    }
+
+    function getVideoDuration(file) {
+        return new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+            video.src = URL.createObjectURL(file);
+            
+            video.onloadedmetadata = () => {
+                URL.revokeObjectURL(video.src);
+                resolve(video.duration);
+            };
+            
+            video.onerror = () => {
+                URL.revokeObjectURL(video.src);
+                reject('Invalid video');
+            };
+        });
+    }
+</script>
 {% endblock %}

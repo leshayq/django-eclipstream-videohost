@@ -1,4 +1,6 @@
-from .models import WatchHistory
+from math import floor
+from django.core.exceptions import ValidationError
+import subprocess
 
 def build_comment_tree(comments):
     grouped_comments = {}
@@ -24,3 +26,18 @@ def notification_comment_template(user: str, message: str) -> str:
 
 def notification_new_video_template(user: str, title: str) -> str:
     return f'На каналі @{user} з\'явилося нове відео: "{title}"'
+
+def get_video_duration(filepath):
+    try:
+        result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                                "format=duration", "-of",
+                                "default=noprint_wrappers=1:nokey=1", filepath],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT)
+        return floor(float(result.stdout.strip()))
+    except Exception as e:
+        print('Помилка при отриманні тривалості відео: ', e)
+
+def set_video_duration(video, duration):
+    video.duration = duration
+    video.save()

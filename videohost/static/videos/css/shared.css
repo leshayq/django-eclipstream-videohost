@@ -97,8 +97,17 @@
     color: var(--text-light-gray);
 }
 
-.playlist-card__thumbnail {
+.playlist-card__thumbnail, .video-card__thumbnail {
     position: relative;
+}
+
+.video-card__duration {
+    position: absolute;
+    bottom: 7.5px;
+    right: 7.5px;
+    color: var(--white);
+    padding: 5px;
+    background: rgb(0 0 0 / 75%);
 }
 
 .playlist-card__thumbnail i {

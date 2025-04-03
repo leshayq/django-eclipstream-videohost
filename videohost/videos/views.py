@@ -12,7 +12,7 @@ from django.db.models import F
 from django.db import transaction
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .utils import build_comment_tree
+from .utils import build_comment_tree, get_video_duration
 from django.utils.timezone import now
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
@@ -125,6 +125,7 @@ class VideoUploadView(LoginRequiredMixin, TemplateView):
         if form.is_valid():
                 video = form.save(commit=False)
                 video.creator = request.user
+
                 video.save()
         return self.render_to_response({'form': form})
 
