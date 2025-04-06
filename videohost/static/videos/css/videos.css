@@ -41,8 +41,8 @@
 }
 
 .upload-form__container textarea {
-    resize: none;
-    height: 150px;
+    resize: vertical;
+    height: 230px;
 }
 
 .upload-form__container input[type="file"]::-webkit-file-upload-button {
@@ -363,9 +363,14 @@
     width: 0.4em;
 }
 
-#playlistForm::-webkit-scrollbar-thumb { 
+.upload-form__container textarea::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+#playlistForm::-webkit-scrollbar-thumb, .upload-form__container textarea::-webkit-scrollbar-thumb { 
     background-color: var(--no-items);
     border-radius: 100vw;
+    cursor: pointer;
 }
 
 #playlistSelectModal label, #playlistSelectModal input[type="radio"] {

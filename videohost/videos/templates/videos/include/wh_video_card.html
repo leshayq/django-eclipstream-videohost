@@ -1,5 +1,7 @@
+{% load custom_tags %}
 <div class="video__card wh__video-card">
-    <a href="{{ video.video.get_absolute_url }}">
+    <a href="{{ video.video.get_absolute_url }}" class="video-card__thumbnail">
+        <div class="video-card__duration">{{ video.video.duration|format_duration }}</div>
         <img src="{{ video.video.thumbnail.url }}" alt="Video thumbnail">
     </a>
     <div class="video-card__info wh-video-card__info">

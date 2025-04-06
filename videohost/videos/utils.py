@@ -1,6 +1,10 @@
 from math import floor
 from django.core.exceptions import ValidationError
 import subprocess
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 
 def build_comment_tree(comments):
     grouped_comments = {}
@@ -41,3 +45,21 @@ def get_video_duration(filepath):
 def set_video_duration(video, duration):
     video.duration = duration
     video.save()
+
+def compress_image(self):
+    try:
+        img = Image.open(self.thumbnail)
+        img = img.convert('RGB')
+
+        output = BytesIO()
+
+        img = img.resize((640, 360))
+
+        img.save(output, format='JPEG', quality=90)
+        output.seek(0)
+        img.close()
+        
+        self.thumbnail = InMemoryUploadedFile(output, 'FileField', f'{'.'.join(self.thumbnail.name.split('.')[:-1])}.jpg', 'image/jpeg',
+                                    sys.getsizeof(output), None)
+    except Exception as e:
+        raise ValueError('Сталася помилка при відкритті та компресуванні файлу зображення.') from e

@@ -28,16 +28,21 @@ if (isAuthenticated) {
 }
 
 document.addEventListener('click', function(event) {
-    const notificationsPage = document.getElementById('notifications__page');
-    const notificationsBadge = document.getElementsByClassName('notifications__badge')[0];
-    const trigger = document.querySelector('.notifications__container a');
-    
-    if (!notificationsPage.contains(event.target) && !trigger.contains(event.target)) {
-        if (notificationsPage.classList.contains('show')) {
-            setNotificationsBadge(0);
+    if (isAuthenticated) {
+        const notificationsPage = document.getElementById('notifications__page');
+        const notificationsBadge = document.getElementsByClassName('notifications__badge')[0];
+        const trigger = document.querySelector('.notifications__container a');
+        
+        if (!notificationsPage.contains(event.target) && !trigger.contains(event.target)) {
+            if (notificationsPage.classList.contains('show')) {
+                setNotificationsBadge(0);
+            }
+            notificationsPage.classList.remove('show');
         }
-        notificationsPage.classList.remove('show');
+    } else {
+        // pass
     }
+
 });
 
 function throttle(f, t) {

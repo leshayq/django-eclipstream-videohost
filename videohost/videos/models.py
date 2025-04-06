@@ -4,8 +4,12 @@ import uuid
 from django.urls import reverse
 import os
 from django.template.defaultfilters import slugify
-from unidecode import unidecode
 from django.utils.timezone import now
+from .utils import compress_image
+from io import BytesIO
+import sys
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 VISIBILITY_CHOICES = [
     ('Публічний', 'Публічний'),
@@ -68,6 +72,11 @@ class Video(models.Model):
     def count_comments(self):
         count_of_comments = Comment.objects.filter(video=self).count()
         return count_of_comments
+    
+    def save(self, *args, **kwargs):
+        compress_image(self)
+
+        return super().save(*args, **kwargs)
 
 class Comment(models.Model):
     text = models.TextField(max_length=5000, null=False)

@@ -55,20 +55,22 @@ class VideoDetailView(DetailView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self):
-        video_url = self.kwargs.get('url')
-        video = get_object_or_404(Video, url=video_url)
+        if not hasattr(self, 'object') or self.object is None:
+            video_url = self.kwargs.get('url')
+            video = get_object_or_404(Video, url=video_url)
 
-        if video:
-            video.views = F('views') + 1
-            video.save(update_fields=['views'])
+            if video:
+                video.views = F('views') + 1
+                video.save(update_fields=['views'])
 
-            video.refresh_from_db()
+                video.refresh_from_db()
 
-            # додавання відео у історію перегляду
-            if self.request.user.is_authenticated:
-                add_video_to_watch_history(user=self.request.user, video=video)
+                # додавання відео у історію перегляду
+                if self.request.user.is_authenticated:
+                    add_video_to_watch_history(user=self.request.user, video=video)
 
-            return video
+                self.object = video
+        return self.object
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,6 +1,9 @@
 <div class="reply" id="reply-{{ reply.id }}">
     <div class="comment__header">
-        <h4>@{{ reply.user.username|escape }}</h4>
+        <a href="{% url 'users:channel-detail' reply.user.username %}">
+            <h4>@{{ reply.user.username|escape }}</h4>
+        </a>
+
         <span class="comment__datetime">{{ reply.created_at|timesince }} тому</span>
     </div>
     <p>{{ reply.text|escape }}</p>

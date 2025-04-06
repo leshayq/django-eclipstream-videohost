@@ -1,5 +1,7 @@
+{% load custom_tags %}
 <div class="video__card dashboard__video-card">
-    <a>
+    <a class="video-card__thumbnail">
+        <div class="video-card__duration">{{ video.duration|format_duration }}</div>
         <img src="{{ video.thumbnail.url }}" alt="Video thumbnail">
     </a>
     <div class="video-card__info wh-video-card__info">

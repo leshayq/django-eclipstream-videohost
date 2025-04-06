@@ -1,7 +1,10 @@
 <div class="comment" id="comment-{{ group.main.id }}">
     <div class="comment__body">
         <div class="comment__header">
-            <h4>@{{ group.main.user.username|escape }}</h4>
+            <a href="{% url 'users:channel-detail' group.main.user.username %}">
+                <h4>@{{ group.main.user.username|escape }}</h4>
+            </a>
+
             <span class="comment__datetime">{{ group.main.created_at|timesince }} тому</span>
         </div>
         <p>{{ group.main.text|escape }}</p>
