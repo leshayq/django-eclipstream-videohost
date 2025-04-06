@@ -46,7 +46,7 @@ def set_video_duration(video, duration):
     video.duration = duration
     video.save()
 
-def compress_image(self):
+def compress_image(self, *args, **kwargs):
     try:
         img = Image.open(self.thumbnail)
         img = img.convert('RGB')

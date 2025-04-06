@@ -26,7 +26,18 @@
                         {% endfor %}
                     </ul>
                 {% else %}
+                    {% if field.name == 'username' %}
                     {{ field.label_tag }} {{ field }}
+                    <div style="display: flex; justify-content: flex-end;">
+                        <p  class="login-link">
+                            <a href="{% url 'users:password-reset' %}">
+                                Забули пароль?
+                            </a>
+                        </p>
+                    </div>
+                    {% else %}
+                    {{ field.label_tag }} {{ field }}
+                    {% endif %}
                 {% endif %}
             </div>
         {% endfor %}

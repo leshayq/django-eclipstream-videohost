@@ -71,6 +71,14 @@
     margin-top: 50px;
 }
 
+.password-reset__container {
+    max-width: 40%;
+}
+
+.success-password-reset__container {
+    box-shadow: 0 0 15px rgb(39 255 0 / 66%);
+}
+
 .auth__container h2 {
     font-size: 20px;
     margin-bottom: 30px;

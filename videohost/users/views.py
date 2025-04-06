@@ -201,7 +201,7 @@ def register_user(request):
 # Авторизація користувача
 def login_user(request):
     if request.user.is_authenticated:
-        redirect_if_user_authenticated()
+        return redirect_if_user_authenticated(request)
     else:
         if request.method == 'POST':
             form = UserLoginForm(request, data=request.POST)

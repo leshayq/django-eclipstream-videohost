@@ -6,10 +6,6 @@ import os
 from django.template.defaultfilters import slugify
 from django.utils.timezone import now
 from .utils import compress_image
-from io import BytesIO
-import sys
-from PIL import Image
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 VISIBILITY_CHOICES = [
     ('Публічний', 'Публічний'),
@@ -74,6 +70,10 @@ class Video(models.Model):
         return count_of_comments
     
     def save(self, *args, **kwargs):
+        if self.pk:
+            old_video = Video.objects.get(pk=self.pk)
+            if old_video.thumbnail == self.thumbnail:
+                return super().save(*args, **kwargs)
         compress_image(self)
 
         return super().save(*args, **kwargs)
