@@ -34,5 +34,5 @@ urlpatterns = [
         success_url = reverse_lazy('users:password-reset-complete')
         ), name="password-reset-confirm"),
     path('password-reset/complete/', PasswordResetCompleteView.as_view(template_name='users/password_reset/password_reset_complete.html'), name="password-reset-complete"),
-
+    path('email-verification/', email_verification, name='email-verification'),
 ]

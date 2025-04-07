@@ -1,0 +1,16 @@
+{% extends 'videos/base.html' %}
+{% load static %}
+{% block css %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/users.css' %}?v=1">
+{% endblock css %}
+{% block content %}
+
+<div class="auth__container password-reset__container success-password-reset__container">
+    <h2>Підтвердження пошти</h2>
+    <p>Вітаємо! Ви успішно активували акаунт.</p>
+    <p class="login-link">
+        <a href="{% url 'users:login-user' %}"">Вхід в акаунт</a>
+    </p>
+</div>
+
+{% endblock content %}

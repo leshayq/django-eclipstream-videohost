@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = bool(os.environ.get("DEBUG", default=False))
 
 ALLOWED_HOSTS = ['*']
 
@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_email_verification',
 
     'videos.apps.VideosConfig',
     'playlists.apps.PlaylistsConfig',
@@ -118,12 +119,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.CustomUser"
 
+def email_verified_callback(user):
+    user.is_active = True
+
+# email backend settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_FROM_ADDRESS')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+
+# email verification
+EMAIL_FROM_ADDRESS = os.getenv('EMAIL_FROM_ADDRESS')
+EMAIL_PAGE_DOMAIN = 'http://127.0.0.1:8000/' 
+EMAIL_MULTI_USER = False
+
+EMAIL_MAIL_SUBJECT = 'EclipStream| Підтвердження'
+EMAIL_MAIL_HTML = 'users/verification/mail_body.html'
+EMAIL_MAIL_PLAIN = 'users/verification/mail_body.txt'
+EMAIL_MAIL_TOKEN_LIFE = 60000 * 60000
+
+EMAIL_MAIL_PAGE_TEMPLATE = 'users/verification/email_success_template.html'
+EMAIL_MAIL_CALLBACK = email_verified_callback
 
 VIDEO_MAX_UPLOAD_SIZE = 524288000
 IMAGE_MAX_UPLOAD_SIZE = 20971520
@@ -135,3 +153,4 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
+

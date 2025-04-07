@@ -21,6 +21,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser
+from django_email_verification import send_email
 
 User = get_user_model()
 
@@ -167,29 +168,33 @@ def register_user(request):
             if form.is_valid():
                 user = form.save(commit=False)
                 user.username = user.username.lower()
+                user.is_active = False
+                # try: 
+                with transaction.atomic():
 
-                try: 
-                    with transaction.atomic():
-                        user.save()
+                    user.save()
+                    send_email(user)
 
-                        Playlist.objects.create(
-                            title="Переглянути пізніше",
-                            visibility="Приватний",
-                            creator=user
-                        )
+                    Playlist.objects.create(
+                        title="Переглянути пізніше",
+                        visibility="Приватний",
+                        creator=user
+                    )
 
-                        Playlist.objects.create(
-                            title="Сподобалися",
-                            visibility="Приватний",
-                            creator=user
-                        )
+                    Playlist.objects.create(
+                        title="Сподобалися",
+                        visibility="Приватний",
+                        creator=user
+                    )
 
-                        WatchHistory.objects.create(
-                            user=user
-                        )
+                    WatchHistory.objects.create(
+                        user=user
+                    )
+
+                    return redirect('users:email-verification')
                     
-                except Exception as e:
-                    return HttpResponseBadRequest(f"Помилка: {str(e)}")
+                # except Exception as e:
+                    # return HttpResponseBadRequest(f"Помилка: {str(e)}")
                 
                 return redirect('videos:main-page')
             else:
@@ -218,3 +223,5 @@ def login_user(request):
         form = UserLoginForm()
         return render(request, 'users/auth/login.html', {'form': form, 'title': 'Авторизація'})
 
+def email_verification(request):
+    return render(request, 'users/verification/email_verification.html')

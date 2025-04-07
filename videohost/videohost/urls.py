@@ -25,6 +25,7 @@ urlpatterns = [
     path('playlist/', include('playlists.urls', namespace='playlists')),
     path('u/', include('users.urls', namespace='users')),
     path('notifications/', include('notifications.urls', namespace='notifications')),
+    path('verify/', include('django_email_verification.urls')),
 ]
 
 if settings.DEBUG:

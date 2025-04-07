@@ -1,0 +1,14 @@
+{% extends 'videos/base.html' %}
+{% load static %}
+{% block css %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/users.css' %}?v=1">
+{% endblock css %}
+{% block content %}
+
+<div class="auth__container password-reset__container">
+    <h2>Підтвердження пошти</h2>
+    <p>Ми відправили інструкції для активації вашого акаунту на вашу електронну пошту.</p>
+    <p class="no-items" style="margin-top: 25px;">Якщо ви не отримали листа, будь ласка впевніться у вірності введених даних.</p>
+</div>
+
+{% endblock content %}
