@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, TemplateView, DetailView
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse, Http404
 from django.urls import reverse
 from django.db.models import F
 from django.db import transaction
@@ -99,8 +99,10 @@ class VideoDetailView(DetailView):
             context['is_user_subscribed'] = False
             context['user_has_liked'] = False
         
-        comments = Comment.objects.filter(video=video).select_related('parent', 'user').prefetch_related('replies').order_by('created_at')
+        comments = Comment.objects.filter(video=video).select_related('parent', 'user').order_by('created_at')
+        print(comments)
         grouped_comments = build_comment_tree(comments)
+        print(grouped_comments)
 
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
         context['subscribers_count'] = subscribers_count
@@ -135,43 +137,61 @@ class VideoUploadView(LoginRequiredMixin, TemplateView):
 @login_required(login_url='/u/login/')
 def like_video(request, url):
     '''Лайк на відео'''
-    liking_video = get_object_or_404(Video, url=request.POST.get('video_url'))
-    
-    user_like, created = Like.objects.get_or_create(user=request.user, video=liking_video)
-    try:
-        with transaction.atomic():
-            liked_by_user_playlist = Playlist.objects.get(slug='spodobalisia', creator=request.user)
+    if request.method == 'POST':
 
-            if not created:
-                    user_like.delete()
-                    liking_video.likes_count = F('likes_count') - 1
+        liking_video = get_object_or_404(Video, url=url)
+        
+        user_like, created = Like.objects.get_or_create(user=request.user, video=liking_video)
+        try:
+            with transaction.atomic():
+                liked_by_user_playlist = Playlist.objects.get(slug='spodobalisia', creator=request.user)
 
-                    liked_by_user_playlist.videos.remove(liking_video)
-            else:
-                liking_video.likes_count = F('likes_count') + 1
+                if not created:
+                        user_like.delete()
+                        liking_video.likes_count = F('likes_count') - 1
 
-                liked_by_user_playlist.videos.add(liking_video)
+                        liked_by_user_playlist.videos.remove(liking_video)
+                else:
+                    liking_video.likes_count = F('likes_count') + 1
 
-            liking_video.save(update_fields=['likes_count'])
-    except Exception as e:
-        return HttpResponseBadRequest(f"Помилка: {str(e)}")
-    return HttpResponseRedirect(reverse('videos:video-detail', args=[str(url)]))
+                    liked_by_user_playlist.videos.add(liking_video)
+
+                liking_video.save(update_fields=['likes_count'])
+
+                return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    raise Http404('Invalid request. Only POST method allowed')
 
 @login_required(login_url='/u/login/')  
 def comment_video(request, url, pk=None):
     '''Коментування відео'''
     if request.method == 'POST':
         text = request.POST.get('comment_text') or request.POST.get('reply_text')
-        video = Video.objects.get(url=url)
+        video = get_object_or_404(Video, url=url)
         parent_id = request.POST.get('parent_id')
-        if video:
-            if not parent_id:
-                Comment.objects.create(text=text, parent=None, video=video, user=request.user)
-            else:
-                parent_comment = Comment.objects.get(pk=parent_id)
-                parent_comment_owner = parent_comment.user
-                Comment.objects.create(text=f'@{str(parent_comment_owner)} {text}', parent=parent_comment, video=video, user=request.user)
-            return HttpResponseRedirect(reverse('videos:video-detail', args=[str(url)]))
+        try:
+            if video:
+                if not parent_id:
+                    Comment.objects.create(text=text, parent=None, video=video, user=request.user)
+                    return JsonResponse({'status': 'success', 'user': request.user.username, 'parent_id': None})
+                else:
+                    parent_comment = Comment.objects.get(pk=parent_id)
+                    parent_comment_owner = parent_comment.user
+                    Comment.objects.create(text=text, parent=parent_comment, video=video, user=request.user)
+
+                    root = parent_comment
+                    while root.parent is not None:
+                        root = root.parent
+                    return JsonResponse({'status': 'success', 
+                                         'user': request.user.username, 
+                                         'parent_id': parent_id,
+                                         'root_id': root.id})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    raise Http404('Invalid request. Only POST method allowed')
 
 def add_video_to_watch_history(user, video):
     watch_history, _ = WatchHistory.objects.get_or_create(user=user) 

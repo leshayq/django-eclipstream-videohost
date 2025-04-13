@@ -8,21 +8,32 @@ import sys
 
 def build_comment_tree(comments):
     grouped_comments = {}
-
+    
     for comment in comments:
         if comment.parent is None:
-            grouped_comments[comment.id] = {"main": comment, "replies": []}
+            # Добавляем корневой комментарий, если его ещё нет
+            if comment.id not in grouped_comments:
+                grouped_comments[comment.id] = {
+                    "main": comment,
+                    "replies": []
+                }
         else:
+            # Находим корневой родительский комментарий
             root_parent = comment.parent
-            while root_parent.parent is not None: 
+            while root_parent.parent is not None:
                 root_parent = root_parent.parent
-
+            
+            # Добавляем ответ к корневому комментарию
             if root_parent.id in grouped_comments:
                 grouped_comments[root_parent.id]["replies"].append(comment)
             else:
-                grouped_comments[root_parent.id] = {"main": root_parent, "replies": [comment]}
-
-    return grouped_comments.values()
+                # Если корневой родитель не найден, создаём запись (на случай ошибок в данных)
+                grouped_comments[root_parent.id] = {
+                    "main": root_parent,
+                    "replies": [comment]
+                }
+    
+    return list(grouped_comments.values())
 
 
 def notification_comment_template(user: str, message: str) -> str:

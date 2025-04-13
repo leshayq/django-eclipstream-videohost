@@ -19,11 +19,19 @@
         </div>
 
         <div class="reply__form" id="reply-form-{{ group.main.id }}" style="display: none;">
-            <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=group.main.id %}">
+            <form method="POST" 
+            action="{% url 'videos:reply-to-comment' url=video.url pk=group.main.id %}"
+            data-reply-url="{% url 'videos:reply-to-comment' url=video.url pk=group.main.id %}"
+            data-parent-id="{{ group.main.id }}"
+            >
                 {% csrf_token %}
                 <input type="hidden" name="parent_id" value="{{ group.main.id }}">
                 <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
-                <button class="button" type="submit">Відправити</button>
+                <div class="flex-end__aligner">
+                    <button class="button reply-cancel__button" onclick="cleanReplyForm('{{ group.main.id }}')" type="button">Скасувати</button>
+                    <button class="button" type="submit">Відповісти</button>
+                </div>
+
             </form>
         </div>
     </div>

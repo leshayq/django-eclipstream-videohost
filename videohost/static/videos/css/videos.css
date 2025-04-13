@@ -164,7 +164,7 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
-    color: var(--action-hover);
+    color: var(--white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -187,10 +187,6 @@
     background-color: #777777;
     color: var(--white);
     box-shadow: 0px 4px 6px rgba(199, 199, 199, 0.4);
-}
-
-.like__button.not-liked {
-    color: var(--white);
 }
 
 .like__button:hover {
@@ -259,8 +255,8 @@
 }
 
 .comment__body p {
-    font-size: 0.9rem;
-    color: var(--text-light-gray);
+    font-size: 1rem;
+    color: var(--white);
     margin: 5px 0;
 }
 
@@ -280,9 +276,37 @@
     background-color: var(--input-dark-gray-bg);
     color: var(--white);
     font-size: 1rem;
-    resize: none;
-    height: 100px;
+    resize: vertical;
+    height: 45px;
     box-sizing: border-box;
+    transition: height 0.3s ease;
+}
+
+.comment__button {
+    cursor: default;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cancel__button {
+    cursor: default;
+    background: none;
+    margin-right: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cancel__button:hover {
+    background-color: var(--action-hover);
+}
+
+.reply-cancel__button {
+    background: none;
+    margin-right: 10px;
+}
+
+.reply-cancel__button:hover {
+    background-color: var(--action-hover);
 }
 
 .reply-button:hover {
@@ -295,8 +319,6 @@
 
 .reply__form {
     margin-top: 10px;
-    padding-left: 20px;
-    max-width: 80%;
 }
 
 .reply__form textarea {
@@ -307,7 +329,7 @@
     background-color: var(--input-dark-gray-bg);
     color: var(--white);
     font-size: 0.9rem;
-    resize: none;
+    resize: vertical;
     height: 70px;
     box-sizing: border-box;
 }
@@ -321,6 +343,11 @@
     padding: 8px;
     border-radius: 6px;
     margin-top: 15px;
+}
+
+.reply p {
+    font-size: 0.9rem;
+    color: var(--text-light-gray);
 }
 
 .reply__button {

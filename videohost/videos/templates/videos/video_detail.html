@@ -29,7 +29,12 @@
                                 <p>{{ subscribers_count }} підписників</p>
                             </div>
                 
-                            <form method="POST" action="{% url 'users:subscribe-to-channel' video.creator %}" onsubmit="subscribeFormSubmit(event)" class="dropdown" data-user-subscribed="{{ is_user_subscribed }}">
+                            <form method="POST" 
+                                action="{% url 'users:subscribe-to-channel' video.creator %}" 
+                                class="dropdown"
+                                id="subscribeForm"
+                                data-user-subscribed="{{ is_user_subscribed }}"
+                                data-subscribe-url="{% url 'users:subscribe-to-channel' video.creator %}">
                                 {% csrf_token %}
                 
                                 {% if request.user.is_authenticated %}
@@ -44,9 +49,7 @@
                                             {% endif %}
                                             Ви підписані ▼
                                         </button>
-                
-                                        {% include 'users/include/channel_actions_dropdown.html' %}
-                
+
                                         {% else %}
                 
                                         <button type="submit" class="subscribe__button">
@@ -54,7 +57,8 @@
                                         </button>
                 
                                         {% endif %}
-                
+
+                                        {% include 'users/include/channel_actions_dropdown.html' %}
                                     {% else %}
                                     <button class="subscribe__button channel-owner__button" type="button" onclick="window.location.href='/u/manage/content/'">Редагувати</button>
                                     {% endif %}
@@ -75,9 +79,12 @@
 
                 <div class="video-detail__action-buttons">
                     <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-                        <form method="POST" action="{% url 'videos:likes-video' video.url %}">
+                        <form method="POST" 
+                        action="{% url 'videos:likes-video' video.url %}" 
+                        id="likeVideoForm"
+                        data-like-url="{% url 'videos:likes-video' video.url %}">
                             {% csrf_token %}
-                            <button class="like__button {% if user_has_liked %}liked{% else %}not-liked{% endif %}" type="submit" value="{{ video.url }}" name="video_url">
+                            <button class="like__button {% if user_has_liked %}liked{% else %}{% endif %}" type="submit" value="{{ video.url }}">
                                 <i class="fas fa-thumbs-up"></i>
                                 <span class="like__count">{{ video.likes_count }}</span>
                             </button>
@@ -103,42 +110,37 @@
 
         </div>
         <div class="comments__section">
-            <h2>Коментарі</h2>
+            <h2>Коментарі ({{ video.count_comments }})</h2>
             
-            {% for group in grouped_comments %}
-                {% include 'videos/include/comment.html' %}
-            {% endfor %}
-            
-            <form class="comment__form" method="POST" action="{% url 'videos:comment-video' url=video.url %}">
+            <form class="comment__form" method="POST" 
+            action="{% url 'videos:comment-video' url=video.url %}"
+            data-comment-url="{% url 'videos:comment-video' url=video.url %}"
+            >
                 {% csrf_token %}
-                <textarea name="comment_text" placeholder="Залиште коментар..." required></textarea>
+                <textarea name="comment_text" placeholder="Залиште коментар..." required maxlength="2500"></textarea>
                 <div class="flex-end__aligner">
-                    <button class="button comment__button" type="submit">Відправити</button>
+                    <button class="button cancel__button" type="button" disabled>Скасувати</button>
+                    <button class="button comment__button" type="submit" disabled>Коментувати</button>
                 </div>
             </form>
+            
+            <div class="comments_container">
+                {% for group in grouped_comments %}
+                {% include 'videos/include/comment.html' with group=group %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
+{% endblock content %} 
+
+{% block scripts %}
+<script src="{% static 'users/js/channelActions.js' %}" defer></script>
+<script src="{% static 'playlists/js/modalPopupClose.js' %}" defer></script>
+<script src="{% static 'videos/js/videoLikeAjax.js' %}" defer></script>
+<script src="{% static 'videos/js/commentActions.js' %}"></script>
 <script>
-    function toggleReplyForm(commentId) {
-        let form = document.getElementById('reply-form-' + commentId);
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function toggleReplies(commentId) {
-        let replies = document.getElementById('replies-' + commentId);
-        let button = document.querySelector(`#comment-${commentId} .toggle-replies`);
-        
-        if (replies.style.display === 'none') {
-            replies.style.display = 'block';
-            button.textContent = `Скрити відповіді (${replies.children.length})`;
-        } else {
-            replies.style.display = 'none';
-            button.textContent = `Показати відповіді (${replies.children.length})`;
-        }
-    }
-
-    function openSelectPlaylistModal() {
+        function openSelectPlaylistModal() {
         document.getElementById('playlistSelectModal').classList.add('show');
         disableBodyScroll();
     }
@@ -147,10 +149,5 @@
         document.getElementById('playlistSelectModal').classList.remove('show');
         enableBodyScroll();
     }
-
 </script>
-
-<script src="{% static 'users/js/channelActions.js' %}"></script>
-<script src="{% static 'playlists/js/modalPopupClose.js' %}"></script>
-
-{% endblock content %} 
+{% endblock scripts %}

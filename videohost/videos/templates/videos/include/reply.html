@@ -13,11 +13,17 @@
     </div>
 
     <div class="reply__form" id="reply-form-{{ reply.id }}" style="display: none;">
-        <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=reply.id %}">
+        <form method="POST" action="{% url 'videos:reply-to-comment' url=video.url pk=reply.id %}"
+        data-reply-url="{% url 'videos:reply-to-comment' url=video.url pk=reply.id %}"
+        data-parent-id="{{ reply.id }}"
+        >
             {% csrf_token %}
             <input type="hidden" name="parent_id" value="{{ reply.id }}">
             <textarea name="reply_text" placeholder="Ваша відповідь..." required></textarea>
-            <button class="button" type="submit">Відправити</button>
+            <div class="flex-end__aligner">
+                <button class="button reply-cancel__button" onclick="cleanReplyForm('{{ reply.id }}')" type="button">Скасувати</button>
+                <button class="button" type="submit">Відповісти</button>
+            </div>
         </form>
     </div>
 </div>

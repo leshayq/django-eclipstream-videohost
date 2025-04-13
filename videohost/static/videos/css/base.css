@@ -277,6 +277,16 @@ template {
     border-radius: 100vw;
 }
 
+textarea::-webkit-scrollbar {
+    width: 0.4em;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: var(--no-items);
+    border-radius: 100vw;
+    cursor: pointer;
+}
+
 .header {
     display: flex;
     align-items: center;

@@ -8,6 +8,8 @@
     <!-- <link rel="stylesheet" type="text/css" href="{% static 'videos/css/styles.css' %}?v=1"> -->
     <link rel="stylesheet" type="text/css" href="{% static 'videos/css/base.css' %}?v=1">
     <link rel="stylesheet" type="text/css" href="{% static 'videos/css/components.css' %}?v=1">
+    <link rel="icon" href="{% static 'videos/images/eclipstream_icon.png' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     {% block css %}
     
     {% endblock css %}
@@ -117,9 +119,12 @@
         {% endblock content %}
     </main>
 
-<script src="{% static 'videos/js/base.js' %}"></script>
-<script src="{% static 'videos/js/showSideMenu.js' %}"></script>
-<script src="{% static 'videos/js/notificationsActions.js' %}"></script>
-<script src="{% static 'videos/js/wsConnection.js' %}"></script>
+    <script src="{% static 'videos/js/base.js' %}" defer></script>
+    <script src="{% static 'videos/js/showSideMenu.js' %}" defer></script>
+    <script src="{% static 'videos/js/notificationsActions.js' %}" defer></script>
+    <script src="{% static 'videos/js/wsConnection.js' %}" defer></script>
+
+    {% block scripts %}
+    {% endblock scripts %}
 </body>
 </html>

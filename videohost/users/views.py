@@ -5,7 +5,7 @@ from videos.models import Video
 from .models import Subscriptions
 from playlists.models import Playlist
 from videos.models import WatchHistory, WatchHistoryItem
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.urls import reverse
 from .forms import UserRegisterForm, UserLoginForm
 from django.shortcuts import redirect
@@ -140,17 +140,27 @@ class ManageChannelCustomizationView(LoginRequiredMixin, PasswordChangeView):
 # Підписка на канал користувача
 @login_required(login_url='/u/login/')
 def subscribe_to_channel(request, username):
-    channel_name = username
-    channel_object = User.objects.get(username=channel_name)
-    if request.user.username != channel_name and channel_object:
-        subscription, created = Subscriptions.objects.get_or_create(follower=request.user, following=channel_object)
-        if not created:
-            # код, який виконується якщо юзер вже був підписаний (відписка)
-            subscription.delete()
-            delete_subscription_notification(sender=request.user, receiver=channel_object)
+    if request.method == 'POST':
+        try:
+            channel_name = username
+            channel_object = get_object_or_404(User, username=channel_name)
+            if request.user.username != channel_name and channel_object:
+                subscription, created = Subscriptions.objects.get_or_create(follower=request.user, following=channel_object)
+                if not created:
+                    # код, який виконується якщо юзер вже був підписаний (відписка)
+                    subscription.delete()
+                    delete_subscription_notification(sender=request.user, receiver=channel_object)
 
-        return HttpResponse(f"<script>window.location.href=document.referrer;</script>")
-    return HttpResponseBadRequest(f"Упс.. Помилка.")
+                    return JsonResponse({'status': 'success', 'subscription_id': None})
+                else:
+                    return JsonResponse({'status': 'success', 'subscription_id': subscription.id})
+                
+            raise Http404('Invalid request.')
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+    raise Http404('Invalid request. Only POST method allowed')
 
 
 # Перенаправляє користувача на сторінку його каналу, якщо він авторизований
