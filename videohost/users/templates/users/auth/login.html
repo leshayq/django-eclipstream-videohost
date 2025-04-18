@@ -8,6 +8,7 @@
 <div class="auth__container">
     <h2>Увійти в акаунт</h2>
     <form method="POST" action="{% url 'users:login-user' %}">
+        <input type="hidden" name="next" value="{{ next }}">
         {% csrf_token %}
         {% if form.non_field_errors %}
         <ul class="errorlist">

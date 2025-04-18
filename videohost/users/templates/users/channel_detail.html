@@ -12,7 +12,12 @@
             <h2>@{{ channel_name }}</h2>
             <p>{{ subscribers_count }} підписників · {{ video_count }} відео</p>
         </div>
-        <form method="POST" action="{% url 'users:subscribe-to-channel' channel_object %}" onsubmit="subscribeFormSubmit(event)" class="dropdown" data-user-subscribed="{{ is_user_subscribed }}">
+            <form method="POST" 
+                action="{% url 'users:subscribe-to-channel' channel_name %}" 
+                class="dropdown"
+                data-user-subscribed="{{ is_user_subscribed }}"
+                data-subscribe-url="{% url 'users:subscribe-to-channel' channel_name %}"
+            >
             {% csrf_token %}
 
             {% if request.user.is_authenticated %}
@@ -28,8 +33,6 @@
                         Ви підписані ▼
                     </button>
 
-                    {% include 'users/include/channel_actions_dropdown.html' %}
-
                     {% else %}
 
                     <button type="submit" class="subscribe__button">
@@ -38,6 +41,7 @@
 
                     {% endif %}
 
+                    {% include 'users/include/channel_actions_dropdown.html' %}
                 {% else %}
                 <button class="subscribe__button channel-owner__button" type="button" onclick="window.location.href='/u/manage/content/'">Редагувати</button>
                 {% endif %}

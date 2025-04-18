@@ -14,18 +14,23 @@ const likeVideoAjax = (e) => {
                 toggleLikedClass();
             } else {
                 console.log(response.message);
-            }
+        }
         },
         error: function(response) {
-            console.log('Video like error', response.responseJSON?.message)
-        },
+            console.log('Video like error',response.message);
+        }
     })
 }
 
 let throttledLikeVideoAjax = throttle(likeVideoAjax, 1000)
+
 $(document).on('submit', '#likeVideoForm', (e) => {
     e.preventDefault();
-    throttledLikeVideoAjax(e);
+    if (isAuthenticated) {
+        throttledLikeVideoAjax(e);
+    } else {
+        window.location.href = `/u/login/?next=${encodeURIComponent(window.location.pathname)}`;
+    }
 })
 
 

@@ -116,12 +116,20 @@ function insertCreatedReply(user, text, parent_id, position="afterbegin") {
 
 $(document).on('submit', '.comment__form', (e) => {
     e.preventDefault();
+    if (isAuthenticated) {
     commentVideoAjax(e, null);
+    } else {
+        window.location.href = `/u/login/?next=${encodeURIComponent(window.location.pathname)}`;
+    }
 })
 
 $(document).on('submit', '.reply__form', (e) => {
     e.preventDefault();
+    if (isAuthenticated) {
     replyToCommentAjax(e);
+    } else {
+        window.location.href = `/u/login/?next=${encodeURIComponent(window.location.pathname)}`;
+    }
 })
 
 function commentVideoAjax(e) {

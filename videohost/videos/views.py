@@ -100,9 +100,7 @@ class VideoDetailView(DetailView):
             context['user_has_liked'] = False
         
         comments = Comment.objects.filter(video=video).select_related('parent', 'user').order_by('created_at')
-        print(comments)
         grouped_comments = build_comment_tree(comments)
-        print(grouped_comments)
 
         subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
         context['subscribers_count'] = subscribers_count
@@ -138,7 +136,9 @@ class VideoUploadView(LoginRequiredMixin, TemplateView):
 def like_video(request, url):
     '''Лайк на відео'''
     if request.method == 'POST':
-
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'unauthenticated', 'redirect_url': f'/u/login/?next={request.path}'}, status=401)
+    
         liking_video = get_object_or_404(Video, url=url)
         
         user_like, created = Like.objects.get_or_create(user=request.user, video=liking_video)
@@ -168,6 +168,9 @@ def like_video(request, url):
 def comment_video(request, url, pk=None):
     '''Коментування відео'''
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'unauthenticated', 'redirect_url': f'/u/login/?next={request.path}'}, status=401)
+        
         text = request.POST.get('comment_text') or request.POST.get('reply_text')
         video = get_object_or_404(Video, url=url)
         parent_id = request.POST.get('parent_id')

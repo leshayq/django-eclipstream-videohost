@@ -7,7 +7,11 @@ $(document).on('submit', 'form[method="POST"][data-user-subscribed]', (e) => {
     let isUserSubscribed = document.querySelector('form[method="POST"][data-user-subscribed]').dataset.userSubscribed === 'true';
     console.log(isUserSubscribed);
     if (!isUserSubscribed) {
-        subscribeToChannelAjax(e);
+        if (isAuthenticated) {
+            subscribeToChannelAjax(e);
+        } else {
+            window.location.href = `/u/login/?next=${encodeURIComponent(window.location.pathname)}`;
+        }
     } else {
         showChannelActions();
     }

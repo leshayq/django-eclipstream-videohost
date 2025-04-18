@@ -141,6 +141,9 @@ class ManageChannelCustomizationView(LoginRequiredMixin, PasswordChangeView):
 @login_required(login_url='/u/login/')
 def subscribe_to_channel(request, username):
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'unauthenticated', 'redirect_url': f'/u/login/?next={request.path}'}, status=401)
+         
         try:
             channel_name = username
             channel_object = get_object_or_404(User, username=channel_name)
@@ -225,13 +228,14 @@ def login_user(request):
                 user = authenticate(request, username=cd['username'], password=cd['password'])
                 if user is not None:
                     login(request, user)
-                    return redirect('videos:main-page')
+                    next_url = request.POST.get('next') or request.GET.get('next') or '/'
+                    return redirect(next_url)
             else:
                 form.add_error_css()
             return render(request, 'users/auth/login.html', {'form': form}) 
 
         form = UserLoginForm()
-        return render(request, 'users/auth/login.html', {'form': form, 'title': 'Авторизація'})
+        return render(request, 'users/auth/login.html', {'form': form, 'title': 'Авторизація', 'next': request.GET.get('next', '')})
 
 def email_verification(request):
     return render(request, 'users/verification/email_verification.html')
