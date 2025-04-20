@@ -5,29 +5,27 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from django.shortcuts import get_object_or_404
+import os
 
 def build_comment_tree(comments):
     grouped_comments = {}
     
     for comment in comments:
         if comment.parent is None:
-            # Добавляем корневой комментарий, если его ещё нет
             if comment.id not in grouped_comments:
                 grouped_comments[comment.id] = {
                     "main": comment,
                     "replies": []
                 }
         else:
-            # Находим корневой родительский комментарий
             root_parent = comment.parent
             while root_parent.parent is not None:
                 root_parent = root_parent.parent
             
-            # Добавляем ответ к корневому комментарию
             if root_parent.id in grouped_comments:
                 grouped_comments[root_parent.id]["replies"].append(comment)
             else:
-                # Если корневой родитель не найден, создаём запись (на случай ошибок в данных)
                 grouped_comments[root_parent.id] = {
                     "main": root_parent,
                     "replies": [comment]
@@ -57,8 +55,11 @@ def set_video_duration(video, duration):
     video.duration = duration
     video.save()
 
-def compress_image(self, *args, **kwargs):
+
+def compress_image(self):
+
     try:
+        original_path = self.thumbnail.path 
         img = Image.open(self.thumbnail)
         img = img.convert('RGB')
 
@@ -72,5 +73,10 @@ def compress_image(self, *args, **kwargs):
         
         self.thumbnail = InMemoryUploadedFile(output, 'FileField', f'{'.'.join(self.thumbnail.name.split('.')[:-1])}.jpg', 'image/jpeg',
                                     sys.getsizeof(output), None)
+
+        if os.path.exists(original_path):
+            os.remove(original_path)
+
     except Exception as e:
-        raise ValueError('Сталася помилка при відкритті та компресуванні файлу зображення.') from e
+        raise ValueError('Сталася помилка при відкритті та компресуванні файлу зображення.', e) from e
+    

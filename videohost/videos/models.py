@@ -6,6 +6,7 @@ import os
 from django.template.defaultfilters import slugify
 from django.utils.timezone import now
 from .utils import compress_image
+from .tasks import compress_image_delayed
 
 VISIBILITY_CHOICES = [
     ('Публічний', 'Публічний'),
@@ -70,13 +71,24 @@ class Video(models.Model):
         return count_of_comments
     
     def save(self, *args, **kwargs):
-        if self.pk:
-            old_video = Video.objects.get(pk=self.pk)
-            if old_video.thumbnail == self.thumbnail:
-                return super().save(*args, **kwargs)
-        compress_image(self)
+        is_new = self.pk is None
+        old_thumbnail = None
 
-        return super().save(*args, **kwargs)
+        disable_compression = kwargs.pop('disable_compression', False)
+
+        if not is_new:
+            try:
+                old_video = Video.objects.get(pk=self.pk)
+                old_thumbnail = old_video.thumbnail
+            except Video.DoesNotExist:
+                pass
+
+        super().save(*args, **kwargs)
+
+        if not disable_compression and (is_new or old_thumbnail != self.thumbnail):
+            compress_image_delayed.delay(self.pk)
+
+
 
 class Comment(models.Model):
     text = models.TextField(max_length=5000, null=False)

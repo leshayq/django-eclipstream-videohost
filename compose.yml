@@ -42,6 +42,11 @@ services:
       - db
       - redis
     restart: on-failure
+    volumes:
+      - ./videohost/:/usr/src/videohost/
+      - ./videohost/media/:/usr/src/videohost/media 
+    env_file:
+      - ./.env.dev
     networks:
       - default
 

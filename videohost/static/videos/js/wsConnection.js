@@ -30,6 +30,10 @@ function updateNotificationsBadge() {
         notificationsBadge.classList.toggle('show');
         notificationsBadge.textContent = 1;
     } else {
-        notificationsBadge.textContent = notifications_count + 1;
+        if (Number(notificationsBadge.textContent) < 9) {
+            notificationsBadge.textContent = notifications_count + 1;
+        } else {
+            notificationsBadge.textContent = '9+'
+        }
     }
 }

@@ -115,6 +115,12 @@ class VideoUploadView(LoginRequiredMixin, TemplateView):
     login_url = '/u/login/'
     redirect_field_name = 'redirect_to'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_active:
+            return redirect('videos:not-allowed')
+        return super().dispatch(request, *args, **kwargs)
+    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -225,8 +231,6 @@ def delete_video(request):
                 video = get_object_or_404(Video, pk=videos_list[i])
                 if video and video.creator == request.user:
                     video.delete()
-                else:
-                    print('відео не знайдено/немає доступу')
         return redirect('videos:main-page')
 
 
@@ -251,3 +255,4 @@ class UpdateVideoView(LoginRequiredMixin, UpdateView):
 
         context['title'] = self.object.title
         return context
+    

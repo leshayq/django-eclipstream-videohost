@@ -19,5 +19,4 @@ urlpatterns = [
 
     path('delete-video/', delete_video, name='delete-video'),
     path('edit-video/<uuid:url>/', UpdateVideoView.as_view(), name='edit-video'),
-
 ]

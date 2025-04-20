@@ -8,6 +8,7 @@ if (isAuthenticated) {
             const unreadNotificationsCount = count_unread_notifications(data);
 
             setNotificationsBadge(unreadNotificationsCount);
+
             
             if (data.notifications.length > 0) {
                 noItemsText.style.display = 'none';
@@ -91,7 +92,13 @@ function setNotificationsBadge(num) {
     if (badge) {
         if (typeof num === 'number' && num > 0) {
             badge.classList.add('show');
-            badge.textContent = num;
+
+            if (num <= 9) {
+                badge.textContent = num;
+            } else {
+                badge.textContent = '9+';
+            }
+
         } else {
             badge.classList.remove('show');
         }
