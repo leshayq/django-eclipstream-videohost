@@ -2,6 +2,8 @@ from django import forms
 from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 import re
+from django.contrib.auth.forms import PasswordResetForm
+from .tasks import send_email_async
 
 def add_class_to_error_message(self):
     """Додає клас error, якщо є помилки у формах. """
@@ -48,3 +50,20 @@ class UserLoginForm(AuthenticationForm):
 
     def add_error_css(self):
         add_class_to_error_message(self=self)
+
+class AsyncPasswordResetForm(PasswordResetForm):
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        from django.template.loader import render_to_string
+        from django.utils.html import strip_tags
+
+        subject = render_to_string(subject_template_name, context)
+        subject = ''.join(subject.splitlines())
+        message = render_to_string(email_template_name, context)
+        html_message = None
+        if html_email_template_name:
+            html_message = render_to_string(html_email_template_name, context)
+        else:
+            html_message = None
+
+        send_email_async.delay(subject, strip_tags(message), from_email, [to_email], html_message)

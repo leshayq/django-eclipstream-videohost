@@ -1,8 +1,6 @@
 from celery import shared_task
 from .utils import compress_image
 
-
-
 @shared_task
 def compress_image_delayed(video_id):
     from .models import Video

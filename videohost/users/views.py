@@ -21,7 +21,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser
-from django_email_verification import send_email
+from .tasks import send_verification_email_delayed
 
 User = get_user_model()
 
@@ -186,7 +186,8 @@ def register_user(request):
                 with transaction.atomic():
 
                     user.save()
-                    send_email(user)
+
+                    send_verification_email_delayed.delay(user)
 
                     Playlist.objects.create(
                         title="Переглянути пізніше",

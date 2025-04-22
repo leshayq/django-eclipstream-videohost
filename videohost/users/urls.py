@@ -2,6 +2,7 @@ from django.urls import path, include, reverse_lazy
 from .views import *
 from videos.views import delete_video_from_watch_history
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from .forms import AsyncPasswordResetForm
 
 app_name = 'users'
 
@@ -26,6 +27,7 @@ urlpatterns = [
     path('password-reset/', PasswordResetView.as_view(
         template_name='users/password_reset/password_reset_form.html',
         email_template_name='users/password_reset/password_reset_email.html',
+        form_class=AsyncPasswordResetForm,
         success_url = reverse_lazy('users:password-reset-done')
         ), name="password-reset"),
     path('password-reset/done/', PasswordResetDoneView.as_view(template_name='users/password_reset/password_reset_done.html'), name="password-reset-done"),
