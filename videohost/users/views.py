@@ -187,7 +187,8 @@ def register_user(request):
 
                     user.save()
 
-                    send_verification_email_delayed.delay(user)
+                    print('регистрация юзера', user.id)
+                    send_verification_email_delayed.delay(user.id)
 
                     Playlist.objects.create(
                         title="Переглянути пізніше",
@@ -206,9 +207,6 @@ def register_user(request):
                     )
 
                     return redirect('users:email-verification')
-                    
-                # except Exception as e:
-                    # return HttpResponseBadRequest(f"Помилка: {str(e)}")
                 
                 return redirect('videos:main-page')
             else:

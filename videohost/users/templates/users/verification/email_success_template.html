@@ -9,9 +9,18 @@
 <div class="auth__container password-reset__container success-password-reset__container">
     <h2>Підтвердження пошти</h2>
     <p>Вітаємо! Ви успішно активували акаунт.</p>
+    <p class="no-items" style="margin-top: 7.5px;">Автоматичний редирект через 5 секунд..</p>
     <p class="login-link">
         <a href="{% url 'users:login-user' %}"">Вхід в акаунт</a>
     </p>
 </div>
 
+<div class="success__countdown-timer">
+    <p>5</p>
+</div>
+
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'users/js/countdownTimer.js' %}"></script>
+{% endblock scripts %}

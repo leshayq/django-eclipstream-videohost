@@ -76,7 +76,7 @@
 }
 
 .success-password-reset__container {
-    box-shadow: 0 0 15px #8500ea7d;
+    box-shadow: 0 0 15px rgb(39 255 0 / 30%);
 }
 
 .auth__container h2 {
@@ -456,13 +456,12 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    border: 5px solid #232323;
+    border: 5px solid var(--main-purple);
     padding: 15px;
     background-color: inherit;
-    margin-top: 50px;
 }
 
 .success__countdown-timer p {
-    font-size: 40px;
+    font-size: 52px;
     color: var(--no-items);
 }

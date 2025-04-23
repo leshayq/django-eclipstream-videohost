@@ -76,7 +76,7 @@
 }
 
 .success-password-reset__container {
-    box-shadow: 0 0 15px rgb(39 255 0 / 30%);
+    box-shadow: 0 0 15px #8500ea7d;
 }
 
 .auth__container h2 {
@@ -445,5 +445,24 @@
 }
 
 .dashboard-form__field li:not(.errorlist li) {
+    color: var(--no-items);
+}
+
+.success__countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 5px solid #232323;
+    padding: 15px;
+    background-color: inherit;
+    margin-top: 50px;
+}
+
+.success__countdown-timer p {
+    font-size: 40px;
     color: var(--no-items);
 }
