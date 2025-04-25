@@ -22,6 +22,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser
 from .tasks import send_verification_email_delayed
+from django.core.cache import cache
 
 User = get_user_model()
 
@@ -35,7 +36,12 @@ class ChannelDetail(TemplateView):
         channel_name = self.kwargs.get('username')
         channel_object = get_object_or_404(User, username=channel_name) 
         
-        subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
+        cached_subscribers_count = cache.get(f'{channel_name}_subs_count')
+        if cached_subscribers_count is not None:
+            subscribers_count = cached_subscribers_count
+        else:
+            subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
+            cache.set(f'{channel_name}_subs_count', subscribers_count, 60)
 
         is_user_subscribed = False
 
@@ -56,11 +62,24 @@ class ChannelDetail(TemplateView):
             is_owner = False
         
         if is_owner:
-            playlists = Playlist.objects.filter(creator=channel_object)
-            videos = Video.objects.filter(creator__username=channel_name)
+            playlists = Playlist.objects.filter(creator=channel_object).order_by('-created_at')
+            videos = Video.objects.filter(creator__username=channel_name).order_by('-created_at')
         else:
-            playlists = Playlist.objects.filter(creator=channel_object, visibility='Публічний')
-            videos = Video.objects.filter(creator__username=channel_name, visibility='Публічний')
+            cached_videos = cache.get(f'{channel_name}_videos')
+            cached_playlists = cache.get(f'{channel_name}_playlists')
+
+            if cached_videos:
+                videos = cached_videos
+            else:
+                videos = list(Video.objects.filter(creator__username=channel_name, visibility='Публічний').order_by('created_at'))
+                cache.set(f'{channel_name}_videos', videos, 60)
+
+            if cached_playlists:
+                playlists = cached_playlists
+            else:
+                playlists = list(Playlist.objects.filter(creator=channel_object, visibility='Публічний').order_by('-created_at'))
+                cache.set(f'{channel_name}_playlists', playlists, 60)
+
 
         video_count = videos.count()
 

@@ -115,6 +115,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "videos/static"),
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.getenv('REDIS_LOCATION_URL'),
+        "OPTIONS": {
+            "db": "1",
+        },
+    }
+}
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.CustomUser"

@@ -40,11 +40,6 @@ class Playlist(models.Model):
 
         super().save(*args, **kwargs)   
     
-
-    # def delete(self, using = ..., keep_parents = ...):
-    #     pass
-    #   TODO: restrict deleting basic playlists
-
     def get_absolute_url(self):
         return reverse('playlists:playlist-detail', args=[str(self.creator.username), str(self.slug)])
     

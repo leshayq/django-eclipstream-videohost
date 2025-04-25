@@ -19,6 +19,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.edit import UpdateView
 from .forms import VideoEditForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 
 
 
@@ -31,7 +32,13 @@ class VideosListView(ListView):
     context_object_name = 'videos'
 
     def get_queryset(self):
-        queryset = self.model.objects.filter(visibility='Публічний')
+
+        popular_videos = cache.get('popular_videos')
+        if popular_videos:
+            queryset = popular_videos
+        else:
+            queryset = self.model.objects.filter(visibility='Публічний').order_by('-views')
+            cache.set('popular_videos', queryset, 60)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -99,10 +106,23 @@ class VideoDetailView(DetailView):
             context['is_user_subscribed'] = False
             context['user_has_liked'] = False
         
-        comments = Comment.objects.filter(video=video).select_related('parent', 'user').order_by('created_at')
-        grouped_comments = build_comment_tree(comments)
 
-        subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
+
+        cached_comments = cache.get(f'{video.url}_comments')
+        if cached_comments:
+            grouped_comments = cached_comments
+        else:
+            comments = Comment.objects.filter(video=video).select_related('parent', 'user').order_by('created_at')
+            grouped_comments = build_comment_tree(comments)
+            cache.set(f'{video.url}_comments', grouped_comments, 60)
+
+        cached_subscribers_count = cache.get(f'{channel_object.username}_subs_count')
+        if cached_subscribers_count is not None:
+            subscribers_count = cached_subscribers_count
+        else:
+            subscribers_count = Subscriptions.objects.filter(following=channel_object).count()
+            cache.set(f'{channel_object.username}_subs_count', subscribers_count, 60)
+
         context['subscribers_count'] = subscribers_count
         context['grouped_comments'] = grouped_comments
         context['title'] = video.title

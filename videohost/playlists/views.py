@@ -12,6 +12,7 @@ from unidecode import unidecode
 from django.template.defaultfilters import slugify
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 
 class PlaylistListView(LoginRequiredMixin, TemplateView):
     '''Сторінка перегляду списку плейлистів користувача'''
@@ -26,8 +27,22 @@ class PlaylistListView(LoginRequiredMixin, TemplateView):
         saved_by_user_playlists = None
 
         if self.request.user.is_authenticated:
-            created_by_user_playlists = Playlist.objects.filter(creator=self.request.user)
-            saved_by_user_playlists = Saving.objects.filter(user=self.request.user)
+
+            cached_created_by_user_playlists = cache.get(f'{self.request.user.username}_created_playlists')
+            cached_saved_by_user_playlists = cache.get(f'{self.request.user.username}_saved_playlists')
+
+            if cached_created_by_user_playlists:
+                created_by_user_playlists = cached_created_by_user_playlists
+            else:
+                created_by_user_playlists = list(Playlist.objects.filter(creator=self.request.user))
+                cache.set(f'{self.request.user.username}_created_playlists', created_by_user_playlists, 300)
+
+            if cached_saved_by_user_playlists:
+                saved_by_user_playlists = cached_saved_by_user_playlists
+            else:
+                saved_by_user_playlists = Saving.objects.filter(user=self.request.user)
+                cache.set(f'{self.request.user.username}_saved_playlists', saved_by_user_playlists, 300)
+
 
         context['title'] = 'Список плейлистів'
         context['created_by_user_playlists'] = created_by_user_playlists
@@ -60,10 +75,17 @@ class PlaylistDetailView(DetailView):
 
         context['user_is_owner'] = self.request.user == self.object.creator
         if context['user_is_owner']:
-            context['videos'] = self.object.videos.all()
+            playlist_videos = self.object.videos.all()
         else:
-            context['videos'] = self.object.videos.filter(visibility='Публічний')
+
+            cached_videos = cache.get(f'{self.request.user.username}_{self.object.title}_playlist_videos')
+            if cached_videos:
+                playlist_videos = cached_videos
+            else:
+                playlist_videos = list(self.object.videos.filter(visibility='Публічний'))
+                cache.set(f'{self.request.user.username}_{self.object.title}_playlist_videos', playlist_videos, 60)
         
+        context['videos'] = playlist_videos
         context['title'] = self.object.title
         context['form'] = PlaylistEditForm(instance=self.object) 
         return context
@@ -81,7 +103,7 @@ def create_new_playlist(request):
                 playlist.save()
             else:
                 return HttpResponseBadRequest("Базовий плейлист з таким ім'ям вже існує.")
-        return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
+        return HttpResponseRedirect(reverse('playlists:playlist-list'))
 
 
 @login_required(login_url='/u/login/')  
@@ -100,12 +122,12 @@ def edit_playlist(request, slug):
                 playlist.save()
             else:
                 return HttpResponseBadRequest("Базові плейлисти неможливо змінити.")
-        return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
+        return HttpResponseRedirect(reverse('playlists:playlist-list'))
     
 @login_required(login_url='/u/login/')  
 def delete_playlist(request, slug):
     playlist_object = Playlist.objects.get(creator__username=request.user.username, slug=slug).delete()
-    return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
+    return HttpResponseRedirect(reverse('playlists:playlist-list'))
 
 @login_required(login_url='/u/login/')  
 def add_video_to_playlist(request, url):
@@ -119,8 +141,9 @@ def add_video_to_playlist(request, url):
                 playlist.videos.add(video)
             else:
                 return HttpResponseBadRequest("Відео можна додавати тількі у свої плейлисти.")
-            return HttpResponseRedirect(reverse('playlists:playlist-list', args=[str(request.user.username)]))
-        return HttpResponseBadRequest("Відео вже додано до плейлисту.")
+            
+            return HttpResponseRedirect(reverse('playlists:playlist-list'))
+        return HttpResponseRedirect(reverse('playlists:playlist-list'))
     
 @login_required(login_url='/u/login/')  
 def save_playlist_to_favorites(request, username, slug):

@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import Video, Comment
 from notifications.models import Notification
@@ -6,6 +6,7 @@ from .utils import notification_comment_template
 from notifications.tasks import send_new_video_notification_to_all_followers
 from .utils import get_video_duration, set_video_duration
 from django.http import Http404
+from django.core.cache import cache
 
 @receiver(post_save, sender=Comment)
 def notificate_comment(sender, instance, created, **kwargs):
@@ -30,3 +31,11 @@ def validate_video_duration(sender, instance, created, **kwargs):
             raise Http404
         else:
             set_video_duration(video=instance, duration=duration)
+
+@receiver(post_save, sender=Comment)
+def delete_cached_comments_on_save(sender, instance, created, **kwargs):
+    cache.delete(f'{instance.video.slug}_comments')
+
+@receiver(post_delete, sender=Comment)
+def delete_cached_comments_on_delete(sender, instance, **kwargs):
+    cache.delete(f'{instance.video.slug}_comments')
