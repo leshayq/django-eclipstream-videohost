@@ -25,7 +25,7 @@ def notificate_new_video(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Video)
 def validate_video_duration(sender, instance, created, **kwargs):
     if created:
-        duration = get_video_duration(instance.video.path)
+        duration = get_video_duration(instance.video.url)
         if duration > 61:
             instance.delete()
             raise Http404
@@ -34,8 +34,8 @@ def validate_video_duration(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Comment)
 def delete_cached_comments_on_save(sender, instance, created, **kwargs):
-    cache.delete(f'{instance.video.slug}_comments')
+    cache.delete(f'{instance.video.url}_comments')
 
 @receiver(post_delete, sender=Comment)
 def delete_cached_comments_on_delete(sender, instance, **kwargs):
-    cache.delete(f'{instance.video.slug}_comments')
+    cache.delete(f'{instance.video.url}_comments')

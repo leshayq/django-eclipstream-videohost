@@ -33,14 +33,24 @@ services:
       - 6379:6379
     networks:
       - default
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"] 
+      interval: 5s
+      timeout: 30s
+      retries: 3   
 
   celery:
     build: ./videohost
-    command: celery worker --app=core --loglevel=info
+    entrypoint: []
+    command: ["celery", "-A", "videohost", "worker", "--loglevel=info"]
     depends_on:
-      - web
-      - db
-      - redis
+      web:
+        condition: service_started
+      db:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
     restart: on-failure
     volumes:
       - ./videohost/:/usr/src/videohost/
