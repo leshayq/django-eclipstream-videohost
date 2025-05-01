@@ -6,6 +6,25 @@
 {% endblock css %}
 {% block title %} {{ title }} {% endblock title %}
 {% block content %}
+<div>
+    <h2 class="section__title">Випадковий момент</h2>
+</div>
+<form method="POST" action="{% url 'videos:random-video' %}" id="randomVideoForm">
+    {% csrf_token %}
+    <div>
+        <button type="submit" class="refresh__button">
+            <i class="fa-solid fa-arrows-rotate" style="color: #ffffff;"></i>
+        </button>
+    </div>
+</form>
+{% with video=random_video %}
+<div class="random-video__container" id="random-video__container">
+    {% include 'videos/include/video_card.html' %}
+</div>
+{% endwith %}
+<div>
+    <h2 class="section__title">Популярні</h2>
+</div>
 <div class="media__container">
     {% for video in videos %}
 
@@ -16,3 +35,7 @@
     {% endfor %}
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'videos/js/randomVideo.js' %}" defer></script>
+{% endblock scripts %}

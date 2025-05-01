@@ -20,8 +20,9 @@ from django.views.generic.edit import UpdateView
 from .forms import VideoEditForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-
-
+from random import choice
+from django.views.decorators.http import require_POST
+from django.template.loader import render_to_string
 
 User = get_user_model()
 
@@ -43,8 +44,10 @@ class VideosListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        random_video = generate_random_video()
 
         context['title'] = 'EclipStream'
+        context['random_video'] = random_video
         return context
     
 class VideoDetailView(DetailView):
@@ -276,3 +279,24 @@ class UpdateVideoView(LoginRequiredMixin, UpdateView):
         context['title'] = self.object.title
         return context
     
+def generate_random_video():
+    pks = Video.objects.values_list('pk', flat=True)
+    random_pk = choice(pks)
+    random_obj = Video.objects.get(pk=random_pk)
+    return random_obj
+
+@require_POST
+def generate_random_video_html(request):
+    pks = Video.objects.filter(visibility='Публічний').values_list('pk', flat=True)
+    if not pks:
+        return JsonResponse({'status': 'Error', 'message': 'No videos found'}, status=404)
+
+    random_pk = choice(pks)
+    video = Video.objects.get(pk=random_pk)
+
+    html = render_to_string('videos/include/video_card.html', {'video': video}, request=request)
+
+    return JsonResponse({
+        'status': 'Success',
+        'html': html
+    })
