@@ -281,6 +281,8 @@ class UpdateVideoView(LoginRequiredMixin, UpdateView):
     
 def generate_random_video():
     pks = Video.objects.values_list('pk', flat=True)
+    if not pks:
+        return None
     random_pk = choice(pks)
     random_obj = Video.objects.get(pk=random_pk)
     return random_obj

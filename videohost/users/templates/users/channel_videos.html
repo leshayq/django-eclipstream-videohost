@@ -54,8 +54,12 @@
     </div>
 
     <div class="channel-menu">
-        <button class="menu-tab" data-tab="videos">Відео</button>
-        <button class="menu-tab" data-tab="playlists">Плейлiсти</button>
+        <a class="menu-tab active">
+            Відео
+        </a>
+        <a class="menu-tab" href="{% url 'users:channel-detail-playlists' channel_name %}">
+            Плейлисти
+        </a>
     </div>
 
     <div class="tab-content" id="videos">
@@ -68,40 +72,35 @@
         </div>
     </div>
 
-    <div class="tab-content" id="playlists" style="display: none;">
+    {% if videos.has_other_pages %}
+        <div class="pagination">
+            {% if videos.has_previous %}
+                <a href="?page={{ videos.previous_page_number }}">←</a>
+            {% else %}
+                <span class="disabled">←</span>
+            {% endif %}
 
-        <div class="media__container">
-        {% for playlist in playlists %}
-        {% include 'playlists/include/default_playlist.html' %}
-        {% empty %}
-        <p>Плейлисти користувача з'являться тут...</p>
-        {% endfor %}
+            {% for num in videos.paginator.page_range %}
+                {% if num == videos.number %}
+                    <span class="active-page">{{ num }}</span>
+                {% elif num >= videos.number|add:-2 and num <= videos.number|add:2 %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% elif num == 1 or num == videos.paginator.num_pages %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% elif num == videos.number|add:-3 or num == videos.number|add:3 %}
+                    <span>…</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if videos.has_next %}
+                <a href="?page={{ videos.next_page_number }}">→</a>
+            {% else %}
+                <span class="disabled">→</span>
+            {% endif %}
         </div>
-    </div>
+        {% endif %}
+
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".menu-tab");
-        const contents = document.querySelectorAll(".tab-content");
-
-        const defaultTab = document.querySelector("[data-tab='videos']");
-        const defaultContent = document.getElementById("videos");
-
-        defaultTab.classList.add("active");
-        defaultContent.style.display = "block";
-
-        tabs.forEach(tab => {
-            tab.addEventListener("click", function () {
-                tabs.forEach(t => t.classList.remove("active"));
-                contents.forEach(c => c.style.display = "none");
-
-                this.classList.add("active");
-                document.getElementById(this.dataset.tab).style.display = "block";
-            });
-        });
-    });
-</script>
 
 <script src="{% static 'users/js/channelActions.js' %}"></script>
 {% endblock %}

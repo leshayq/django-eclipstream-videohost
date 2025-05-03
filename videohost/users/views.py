@@ -23,19 +23,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CustomUser
 from .tasks import send_verification_email_delayed
 from django.core.cache import cache
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 User = get_user_model()
 
-# Перегляд сторінки каналу
-class ChannelDetail(TemplateView):
-    template_name = 'users/channel_detail.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
+class ChannelBaseMixin:
+    def get_channel_data(self):
         channel_name = self.kwargs.get('username')
-        channel_object = get_object_or_404(User, username=channel_name) 
-        
+        channel_object = get_object_or_404(User, username=channel_name)
+
         cached_subscribers_count = cache.get(f'{channel_name}_subs_count')
         if cached_subscribers_count is not None:
             subscribers_count = cached_subscribers_count
@@ -44,57 +40,94 @@ class ChannelDetail(TemplateView):
             cache.set(f'{channel_name}_subs_count', subscribers_count, 60)
 
         is_user_subscribed = False
+        subscription_id = None
+        enabled_notifications = False
 
-        if self.request.user.is_authenticated:
-            if self.request.user != channel_object:
-                try:
-                    user_subscription = Subscriptions.objects.get(follower=self.request.user, following=channel_object)
-                    is_user_subscribed = bool(user_subscription)
+        if self.request.user.is_authenticated and self.request.user != channel_object:
+            try:
+                user_subscription = Subscriptions.objects.get(follower=self.request.user, following=channel_object)
+                is_user_subscribed = True
+                subscription_id = user_subscription.id
+                enabled_notifications = user_subscription.notify
+            except Subscriptions.DoesNotExist:
+                pass
 
-                    context['subscription_id'] = user_subscription.id if user_subscription else None
-                    context['enabled_notifications'] = user_subscription.notify
-                except Subscriptions.DoesNotExist:
-                    context['subscription_id'] = None
+        is_owner = self.request.user == channel_object
 
-            is_owner = channel_object == self.request.user
+        return {
+            'channel_name': channel_name,
+            'channel_object': channel_object,
+            'subscribers_count': subscribers_count,
+            'is_user_subscribed': is_user_subscribed,
+            'subscription_id': subscription_id,
+            'enabled_notifications': enabled_notifications,
+            'is_owner': is_owner,
+        }
+    
+class ChannelVideosView(ChannelBaseMixin, TemplateView):
+    template_name = 'users/channel_videos.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        data = self.get_channel_data()
+
+        if data['is_owner']:
+            videos = Video.objects.filter(creator__username=data['channel_name']).order_by('-created_at')
         else:
-            is_owner = False
-        
-        if is_owner:
-            playlists = Playlist.objects.filter(creator=channel_object).order_by('-created_at')
-            videos = Video.objects.filter(creator__username=channel_name).order_by('-created_at')
-        else:
-            cached_videos = cache.get(f'{channel_name}_videos')
-            cached_playlists = cache.get(f'{channel_name}_playlists')
+            videos = cache.get(f"{data['channel_name']}_videos")
+            if not videos:
+                videos = list(Video.objects.filter(creator__username=data['channel_name'], visibility='Публічний').order_by('-created_at'))
+                cache.set(f"{data['channel_name']}_videos", videos, 60)
 
-            if cached_videos:
-                videos = cached_videos
-            else:
-                videos = list(Video.objects.filter(creator__username=channel_name, visibility='Публічний').order_by('created_at'))
-                cache.set(f'{channel_name}_videos', videos, 60)
+        paginator = Paginator(videos, 20)
+        page = self.request.GET.get('page')
 
-            if cached_playlists:
-                playlists = cached_playlists
-            else:
-                playlists = list(Playlist.objects.filter(creator=channel_object, visibility='Публічний').order_by('-created_at'))
-                cache.set(f'{channel_name}_playlists', playlists, 60)
+        try:
+            videos_page = paginator.page(page)
+        except PageNotAnInteger:
+            videos_page = paginator.page(1)
+        except EmptyPage:
+            videos_page = paginator.page(paginator.num_pages)
 
 
-        video_count = videos.count()
-
-        context['title'] = f'{channel_name} - EclipStream'
-        context['is_owner'] = is_owner
-        context['channel_name'] = channel_name
-        context['channel_object'] = channel_object
-        context['video_count'] = video_count
-        context['subscribers_count'] = subscribers_count
-        context['is_user_subscribed'] = is_user_subscribed
-        context['videos'] = videos
-        context['playlists'] = playlists
-
+        context.update(data)
+        context['videos'] = videos_page
+        context['video_count'] = len(videos)
+        context['title'] = f"{data['channel_name']} - Відео"
         return context
     
+class ChannelPlaylistsView(ChannelBaseMixin, TemplateView):
+    template_name = 'users/channel_playlists.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        data = self.get_channel_data()
+
+        if data['is_owner']:
+            playlists = Playlist.objects.filter(creator=data['channel_object']).order_by('-created_at')
+        else:
+            playlists = cache.get(f"{data['channel_name']}_playlists")
+            if not playlists:
+                playlists = list(Playlist.objects.filter(creator=data['channel_object'], visibility='Публічний').order_by('-created_at'))
+                cache.set(f"{data['channel_name']}_playlists", playlists, 60)
+
+        paginator = Paginator(playlists, 20)
+        page = self.request.GET.get('page')
+
+        try:
+            playlists_page = paginator.page(page)
+        except PageNotAnInteger:
+            playlists_page = paginator.page(1)
+        except EmptyPage:
+            playlists_page = paginator.page(paginator.num_pages)
+
+
+        context.update(data)
+        context['playlists'] = playlists_page
+        context['title'] = f"{data['channel_name']} - Плейлисти"
+        context['playlists_count'] = playlists.count()
+        return context
+        
 class SubscriptionsListView(LoginRequiredMixin, ListView):
     model =  CustomUser
     template_name = 'users/subscriptions_list.html'
@@ -102,30 +135,53 @@ class SubscriptionsListView(LoginRequiredMixin, ListView):
     login_url = '/u/login/'
     redirect_field_name = 'redirect_to'
 
-    def get_queryset(self):
-        queryset = Subscriptions.objects.filter(follower=self.request.user).only('following').select_related('following').annotate(subscribers_count=Count('following__followers'))
-        return queryset
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+
+        subscriptions = Subscriptions.objects.filter(follower=self.request.user).only('following').select_related('following').annotate(subscribers_count=Count('following__followers'))
+        paginator = Paginator(subscriptions, 40)
+        page = self.request.GET.get('page')
+
+        try:
+            subscriptions_page = paginator.page(page)
+        except PageNotAnInteger:
+            subscriptions_page = paginator.page(1)
+        except EmptyPage:
+            subscriptions_page = paginator.page(paginator.num_pages)
+
+        
+        
         context['title'] = 'EclipStream'
         context['section_title'] = f'Підписки @{self.request.user.username}'
+        context['subscriptions'] = subscriptions_page
         return context
     
-class WatchHistoryListView(LoginRequiredMixin, ListView):
+class WatchHistoryListView(LoginRequiredMixin, TemplateView):
     model =  WatchHistory
     template_name = 'users/watch_history.html'
     context_object_name = 'videos'
     login_url = '/u/login/'
     redirect_field_name = 'redirect_to'
 
-    def get_queryset(self):
-        return WatchHistoryItem.objects.filter(watch_history__user=self.request.user)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context['title'] = 'EclipStream'
+        videos = WatchHistoryItem.objects.filter(watch_history__user=self.request.user)
+
+        paginator = Paginator(videos, 20)
+        page = self.request.GET.get('page')
+
+        try:
+            videos_page = paginator.page(page)
+        except PageNotAnInteger:
+            videos_page = paginator.page(1)
+        except EmptyPage:
+            videos_page = paginator.page(paginator.num_pages)
+
+
+        context['videos'] = videos_page
         return context
     
 class ManageChannelContentView(LoginRequiredMixin, TemplateView):
@@ -137,8 +193,23 @@ class ManageChannelContentView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         
         context['title'] = 'EclipStream'
-        context['videos'] = Video.objects.filter(creator=self.request.user)
+        videos = Video.objects.filter(creator=self.request.user)
+
+        paginator = Paginator(videos, 10)
+        page = self.request.GET.get('page')
+
+        try:
+            videos_page = paginator.page(page)
+        except PageNotAnInteger:
+            videos_page = paginator.page(1)
+        except EmptyPage:
+            videos_page = paginator.page(paginator.num_pages)
+
+
+        context['videos'] = videos_page
+
         return context
+    
     
 class ManageChannelCustomizationView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'users/manage/manage_channel_customization.html'

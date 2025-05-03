@@ -8,7 +8,8 @@ app_name = 'users'
 
 urlpatterns = [
     #retrieve channel
-    path('@<slug:username>/', ChannelDetail.as_view(), name='channel-detail'),
+    path('@<slug:username>/', ChannelVideosView.as_view(), name='channel-detail'),
+    path('@<slug:username>/playlists/', ChannelPlaylistsView.as_view(), name='channel-detail-playlists'),
     #subscribe to channel
     path('subscribe/<slug:username>/', subscribe_to_channel, name='subscribe-to-channel'),
     #register new user

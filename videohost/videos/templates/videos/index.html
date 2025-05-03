@@ -6,6 +6,8 @@
 {% endblock css %}
 {% block title %} {{ title }} {% endblock title %}
 {% block content %}
+
+{% if random_video %}
 <div>
     <h2 class="section__title">Випадковий момент</h2>
 </div>
@@ -22,6 +24,8 @@
     {% include 'videos/include/video_card.html' %}
 </div>
 {% endwith %}
+
+{% endif %}
 <div>
     <h2 class="section__title">Популярні</h2>
 </div>

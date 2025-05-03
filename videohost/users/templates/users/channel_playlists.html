@@ -1,0 +1,106 @@
+{% extends 'videos/base.html' %}
+{% load static %}
+{% block css %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/users.css' %}?v=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'videos/css/shared.css' %}?v=1">
+{% endblock css %}
+{% block title %} {{ title }} {% endblock title %}
+{% block content %}
+<div class="channel-container">
+    <div class="channel-header">
+        <div class="channel-info">
+            <h2>@{{ channel_name }}</h2>
+            <p>{{ subscribers_count }} підписників · {{ playlists_count }} плейлистів</p>
+        </div>
+            <form method="POST" 
+                action="{% url 'users:subscribe-to-channel' channel_name %}" 
+                class="dropdown"
+                data-user-subscribed="{{ is_user_subscribed }}"
+                data-subscribe-url="{% url 'users:subscribe-to-channel' channel_name %}"
+            >
+            {% csrf_token %}
+
+            {% if request.user.is_authenticated %}
+                {% if not is_owner %}
+                    {% if is_user_subscribed %}
+
+                    <button type="button" class="subscribe__button {% if is_user_subscribed %}subscribed dropbtn{% else %}{% endif %}" {% if is_user_subscribed %}onclick="showChannelActions()" {% endif %}>
+                        {% if enabled_notifications %}
+                        <i class="fa-solid fa-bell" style="color: #ffffff; padding-right: 10px;"></i>
+                        {% else %}
+                        <i class="fa-regular fa-bell" style="color: #ffffff; padding-right: 10px;"></i>
+                        {% endif %}
+                        Ви підписані ▼
+                    </button>
+
+                    {% else %}
+
+                    <button type="submit" class="subscribe__button">
+                        Підписатися
+                    </button>
+
+                    {% endif %}
+
+                    {% include 'users/include/channel_actions_dropdown.html' %}
+                {% else %}
+                <button class="subscribe__button channel-owner__button" type="button" onclick="window.location.href='/u/manage/content/'">Редагувати</button>
+                {% endif %}
+            {% else %}
+            <button class="subscribe__button">
+                Підписатися
+            </button>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="channel-menu">
+        <a class="menu-tab" href="{% url 'users:channel-detail' channel_name %}">
+            Відео
+        </a>
+        <a class="menu-tab active">
+            Плейлисти
+        </a>
+    </div>
+
+    <div class="tab-content" id="playlists">
+
+        <div class="media__container">
+        {% for playlist in playlists %}
+        {% include 'playlists/include/default_playlist.html' %}
+        {% empty %}
+        <p>Плейлисти користувача з'являться тут...</p>
+        {% endfor %}
+        </div>
+    </div>
+
+    {% if playlists.has_other_pages %}
+        <div class="pagination">
+            {% if playlists.has_previous %}
+                <a href="?page={{ playlists.previous_page_number }}">←</a>
+            {% else %}
+                <span class="disabled">←</span>
+            {% endif %}
+
+            {% for num in playlists.paginator.page_range %}
+                {% if num == playlists.number %}
+                    <span class="active-page">{{ num }}</span>
+                {% elif num >= playlists.number|add:-2 and num <= playlists.number|add:2 %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% elif num == 1 or num == playlists.paginator.num_pages %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% elif num == playlists.number|add:-3 or num == playlists.number|add:3 %}
+                    <span>…</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if playlists.has_next %}
+                <a href="?page={{ playlists.next_page_number }}">→</a>
+            {% else %}
+                <span class="disabled">→</span>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<script src="{% static 'users/js/channelActions.js' %}"></script>
+{% endblock %}
