@@ -12,8 +12,8 @@ VISIBILITY_CHOICES = [
 ]
 
 class Playlist(models.Model):
-    title = models.CharField(max_length=80)
-    visibility = models.CharField(max_length=15, default=VISIBILITY_CHOICES[1][1], choices=VISIBILITY_CHOICES)
+    title = models.CharField('Назва', max_length=80)
+    visibility = models.CharField('Видимість', max_length=15, default=VISIBILITY_CHOICES[1][1], choices=VISIBILITY_CHOICES)
     slug = models.SlugField('URL', max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

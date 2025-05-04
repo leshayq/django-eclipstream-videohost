@@ -41,19 +41,19 @@ class Genre(models.Model):
         return self.name
 
 class Video(models.Model):
-    title = models.CharField(max_length=100, blank=False, null=False)
-    description = models.TextField(max_length=5000, blank=True, null=True)
+    title = models.CharField('Назва', max_length=100, blank=False, null=False)
+    description = models.TextField('Опис', max_length=5000, blank=True, null=True)
     url = models.UUIDField(default=uuid.uuid4, unique=True, null=False)
-    visibility = models.CharField(max_length=15, default=VISIBILITY_CHOICES[0][0], choices=VISIBILITY_CHOICES)
+    visibility = models.CharField('Видимість', max_length=15, default=VISIBILITY_CHOICES[0][0], choices=VISIBILITY_CHOICES)
     views = models.IntegerField(default=0)
     likes_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     duration = models.PositiveIntegerField(default=0, null=False)
 
-    video = models.FileField(upload_to=user_directory_path)
-    thumbnail = models.FileField(upload_to=user_thumbnail_path)
+    video = models.FileField('Відео', upload_to=user_directory_path)
+    thumbnail = models.FileField('Превью', upload_to=user_thumbnail_path)
 
-    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, blank=True)
+    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Жанр')
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:

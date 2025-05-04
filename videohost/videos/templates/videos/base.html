@@ -100,6 +100,14 @@
             <a href="{% url 'playlists:playlist-list' %}">
                 <li><i class="fas fa-list"></i><span>Плейлисти</span></li>
             </a>
+
+            <a href="{% url 'playlists:playlist-detail' username=request.user.username slug='pereglianuti-piznishe' %}">
+                <li><i class="fas fa-clock"></i><span>Переглянути пізніше</span></li>
+            </a>
+
+            <a href="{% url 'playlists:playlist-detail' username=request.user.username slug='spodobalisia' %}">
+                <li><i class="fas fa-thumbs-up"></i><span>Сподобалися</span></li>
+            </a>
             {% else %}
             <a href="{% url 'users:login-user' %}">
                 <li><i class="fas fa-user-friends"></i><span>Підписки</span></li>
@@ -110,9 +118,15 @@
             <a href="{% url 'users:login-user' %}">
                 <li><i class="fas fa-list"></i><span>Плейлисти</span></li>
             </a>
+            <a href="{% url 'users:login-user' %}">
+                <li><i class="fas fa-clock"></i><span>Переглянути пізніше</span></li>
+            </a>
+
+            <a href="{% url 'users:login-user' %}">
+                <li><i class="fas fa-thumbs-up"></i><span>Сподобалися</span></li>
+            </a>
             {% endif %}
-            <li><i class="fas fa-clock"></i><span>Переглянути пізніше</span></li>
-            <li><i class="fas fa-thumbs-up"></i><span>Сподобалися</span></li>
+
         </ul>
     </nav>
 

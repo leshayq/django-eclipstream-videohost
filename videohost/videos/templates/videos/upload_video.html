@@ -7,7 +7,7 @@
 {% block content %}
 <div>
     <div class="upload-form__container">
-        <h2>Upload Video</h2>
+        <h2>Завантажити відео</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% if form.non_field_errors %}
@@ -43,6 +43,13 @@
     </div>
 </div>
 
+<div id="videoUploadPopup" class="video-upload__overlay">
+    <div class="video-upload__overlay-content">
+        <p class="no-items" style="font-size: 28px;">Будь ласка, не закривайте сторінку.</p>
+        <p class="no-items" style="font-size: 28px;">Завантаження відео...</p>
+    </div>
+  </div>
+
 <script src="{% static 'videos/js/textAreaCharsCount.js' %}"></script>
 
 <script>
@@ -74,6 +81,7 @@
             return;
         }
 
+        openNav();
         uploadForm.submit();
     }
 
@@ -93,6 +101,16 @@
                 reject('Invalid video');
             };
         });
+    }
+</script>
+
+<script>
+    function openNav() {
+      document.getElementById("videoUploadPopup").style.width = "100%";
+    }
+    
+    function closeNav() {
+      document.getElementById("videoUploadPopup").style.width = "0%";
     }
 </script>
 {% endblock %}
